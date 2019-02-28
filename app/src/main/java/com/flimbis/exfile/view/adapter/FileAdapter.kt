@@ -1,13 +1,12 @@
-package com.flimbis.exfile.adapter
+package com.flimbis.exfile.view.adapter
 
 import android.databinding.DataBindingUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import com.flimbis.exfile.R
 import com.flimbis.exfile.databinding.ItemsFileBinding
-import com.flimbis.exfile.domain.model.FileModel
+import com.flimbis.exfile.model.FileModel
 import com.flimbis.exfile.viewmodel.FilesViewModel
 
 class FileAdapter(val items: List<FileModel>) : RecyclerView.Adapter<FileAdapter.FileViewHolder>() {

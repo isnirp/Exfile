@@ -1,4 +1,4 @@
-package com.flimbis.exfile.ui
+package com.flimbis.exfile.view
 
 import android.content.Context
 import android.net.Uri

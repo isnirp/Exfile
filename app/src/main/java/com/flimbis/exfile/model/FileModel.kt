@@ -1,4 +1,4 @@
-package com.flimbis.exfile.domain.model
+package com.flimbis.exfile.model
 
 data class FileModel(val path: String,
                      val type: String,

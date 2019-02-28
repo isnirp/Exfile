@@ -2,9 +2,7 @@ package com.flimbis.exfile
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import com.flimbis.exfile.ui.ListFilesFragment
-import kotlinx.android.synthetic.main.*
-import kotlinx.android.synthetic.main.activity_main.*
+import com.flimbis.exfile.view.ListFilesFragment
 
 class MainActivity : AppCompatActivity() {
 
