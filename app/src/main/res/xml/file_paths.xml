@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--A FileProvider can only generate a content URI for files in directories that you specify beforehand.-->
 <paths xmlns:android="http://schemas.android.com/apk/res-auto">
+    <!--Represents files in the root of the external storage area. The root path of this subdirectory is the same as the value returned by Environment.getExternalStorageDirectory()-->
     <external-path
         name="external_files"
         path="." />
-    <!--Represents files in the root of the external storage area. The root path of this subdirectory is the same as the value returned by Environment.getExternalStorageDirectory()-->
 </paths>
