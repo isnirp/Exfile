@@ -1,8 +1,8 @@
 package com.flimbis.exfile
 
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.flimbis.exfile.view.home.HomeFragment
+import com.flimbis.exfile.view.home.ExFilesFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -10,8 +10,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //transactions; add, remove, replace
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.add(R.id.container, HomeFragment())
-        fragmentTransaction.commit()
+        fragmentTransaction.add(R.id.container, ExFilesFragment())
+        fragmentTransaction.commit()//apply fragment
     }
 }

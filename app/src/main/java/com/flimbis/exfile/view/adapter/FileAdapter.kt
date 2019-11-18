@@ -1,33 +1,43 @@
 package com.flimbis.exfile.view.adapter
 
-import android.databinding.DataBindingUtil
-import android.support.v7.widget.RecyclerView
+import androidx.databinding.DataBindingUtil
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.flimbis.exfile.R
 import com.flimbis.exfile.ctx
 import com.flimbis.exfile.databinding.ItemsFileBinding
 import com.flimbis.exfile.model.FileModel
-import com.flimbis.exfile.viewmodel.FilesViewModel
+import com.flimbis.exfile.viewmodel.FileViewModel
 
-class FileAdapter : RecyclerView.Adapter<FileAdapter.FileViewHolder>() {
-     var items = listOf<FileModel>()
+class FileAdapter(val items: List<FileModel>, val itemClick: (FileModel)-> Unit) : androidx.recyclerview.widget.RecyclerView.Adapter<FileAdapter.FileViewHolder>() {
+    //var items = listOf<FileModel>()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FileViewHolder {
-        val fileBinding: ItemsFileBinding  = DataBindingUtil.inflate(LayoutInflater.from(parent?.ctx), R.layout.items_file,parent, false)
-        return FileViewHolder(fileBinding)
+        val fileBinding: ItemsFileBinding  = DataBindingUtil.inflate(LayoutInflater.from(parent.ctx), R.layout.items_file,parent, false)
+        return FileViewHolder(fileBinding, itemClick )
     }
 
     override fun getItemCount(): Int = items.size
 
     override fun onBindViewHolder(holder: FileViewHolder, position: Int) {
-        val binding: ItemsFileBinding = holder.binding
-        binding.viewModel = FilesViewModel(items[position])
+        val fileModel = items[position]
+
+        //val binding: ItemsFileBinding = holder.binding
+        //binding.fileModel = FileViewModel(fileModel)
+        holder.bind(fileModel)
+        //holder.binding.root.setOnClickListener()
+
     }
 
-    fun fetchFiles(filesList: List<FileModel>){
+    /*fun fetchFiles(filesList: List<FileModel>){
         this.items = filesList
         notifyDataSetChanged()
-    }
+    }*/
 
-    class FileViewHolder(var binding: ItemsFileBinding) : RecyclerView.ViewHolder(binding.lnrLayout)
+    class FileViewHolder(var binding: ItemsFileBinding, val itemClick: (FileModel)-> Unit) : androidx.recyclerview.widget.RecyclerView.ViewHolder(binding.lnrLayout){
+        fun bind(fileModel: FileModel){
+            binding.fileModel = FileViewModel(fileModel)
+            binding.root.setOnClickListener{itemClick(fileModel)}
+        }
+    }
 }
