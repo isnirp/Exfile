@@ -7,4 +7,6 @@ class FileViewModel(val fileModel: FileModel): BaseObservable() {
     fun getName(): String = fileModel.name
 
     fun getType(): String = fileModel.type
+
+    fun getSize(): Double = fileModel.size
 }

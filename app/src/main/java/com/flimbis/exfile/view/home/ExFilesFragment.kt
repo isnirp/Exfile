@@ -31,9 +31,14 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), FileAdapter.OnItemClic
     lateinit var listHomeFiles: androidx.recyclerview.widget.RecyclerView
     lateinit var adapter: FileAdapter
     var filesList = listOf<FileModel>()
-    val PATH = Environment.getExternalStorageDirectory().absolutePath
+    //val PATH = Environment.getExternalStorageDirectory().absolutePath
 
     private var listener: OnFileSelectedListener? = null
+
+    companion object {
+        private const val PATH = "pathFinder"
+        fun build(block: Builder.() -> Unit) = Builder().apply(block).build()
+    }
 
     /*
     * initialize essential components of the fragment that you want to retain
@@ -53,7 +58,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), FileAdapter.OnItemClic
         listHomeFiles = view.findViewById(R.id.lst_home_files)
         listHomeFiles.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(view.ctx)
         //adapter = FileAdapter(getFileModelList()){showMsg(it.name)}
-        adapter = FileAdapter(getFileModelList())
+        adapter = FileAdapter(getFileModelList(arguments!!.getString(PATH)))
         adapter.registerItemClickListener(this)
         listHomeFiles.adapter = adapter
 
@@ -105,12 +110,25 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), FileAdapter.OnItemClic
 
     private fun getPathType(file: File): String = if(file.isDirectory) "FOLDER" else "FILE"
 
-    private fun getFileModelList(): List<FileModel> {
-        var files: List<File> = getFilesFromPath(PATH)
+    private fun getFileModelList(path: String): List<FileModel> {
+        var files: List<File> = getFilesFromPath(path)
         return files.map { FileModel(path = it.path, type = getPathType(it),name = it.name, ext = it.extension) }
     }
 
     interface OnFileSelectedListener {
         fun onFileSelected(fileModel: FileModel)
+    }
+
+
+    class Builder{
+        var path: String = ""
+
+        fun build(): ExFilesFragment {
+            val fragment = ExFilesFragment()
+            val args = Bundle()
+            args.putString(PATH, path)
+            fragment.arguments = args
+            return fragment
+        }
     }
 }
