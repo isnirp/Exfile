@@ -10,6 +10,7 @@ import com.flimbis.exfile.view.home.ExFilesFragment
 class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme_White)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
