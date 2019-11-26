@@ -20,17 +20,19 @@
             android:layout_height="wrap_content">
 
             <ImageView
+                android:id="@+id/img_file"
                 android:layout_width="25dp"
                 android:layout_height="25dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/img_file"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/txt_file"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@{fileModel.name}" />
 
@@ -48,7 +50,8 @@
                         android:id="@+id/txt_file_size"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{fileModel.size}" />
+                        android:layout_toRightOf="@+id/txt_file_type"
+                        android:text="@{Double.toString(fileModel.size)}" />
 
                 </RelativeLayout>
 

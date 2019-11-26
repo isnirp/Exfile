@@ -11,7 +11,7 @@ import com.flimbis.exfile.viewmodel.FileViewModel
 
 //class FileAdapter(val items: List<FileModel>, val itemClick: (FileModel)-> Unit) : androidx.recyclerview.widget.RecyclerView.Adapter<FileAdapter.FileViewHolder>() {
 class FileAdapter(val items: List<FileModel>) : androidx.recyclerview.widget.RecyclerView.Adapter<FileAdapter.FileViewHolder>() {
-    //var items = listOf<FileModel>()
+ 
     private var listener: OnItemClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FileViewHolder {

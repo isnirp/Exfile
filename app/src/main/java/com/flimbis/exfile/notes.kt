@@ -16,6 +16,7 @@ package com.flimbis.exfile
 //allows you to make objects, fields observable
 /*
 * https://medium.com/androiddevelopers/android-data-binding-recyclerview-db7c40d9f0e4
+* https://www.vogella.com/tutorials/AndroidDatabinding/article.html
 * */
 
 
@@ -37,3 +38,9 @@ package com.flimbis.exfile
 * */
 //The view model may expose the model directly, or properties related to the model, for data-binding
 //The view model can contain interfaces to services, configuration data, etc in order to fetch and manipulate the properties it exposes to the view
+
+/*
+* ENUM
+* https://www.baeldung.com/kotlin-enum
+*
+* */

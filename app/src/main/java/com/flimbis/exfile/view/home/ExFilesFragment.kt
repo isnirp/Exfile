@@ -3,7 +3,6 @@ package com.flimbis.exfile.view.home
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Environment
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -28,10 +27,9 @@ private const val ARG_PARAM2 = "param2"
  */
 class ExFilesFragment : androidx.fragment.app.Fragment(), FileAdapter.OnItemClickListener {
 
-    lateinit var listHomeFiles: androidx.recyclerview.widget.RecyclerView
+    lateinit var listFiles: androidx.recyclerview.widget.RecyclerView
     lateinit var adapter: FileAdapter
-    var filesList = listOf<FileModel>()
-    //val PATH = Environment.getExternalStorageDirectory().absolutePath
+    //var filesList = listOf<FileModel>()
 
     private var listener: OnFileSelectedListener? = null
 
@@ -52,15 +50,14 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), FileAdapter.OnItemClic
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_files_ex, container, false)
-        //initView(view)
-        //adapter.fetchFiles(getFileModelList())
 
-        listHomeFiles = view.findViewById(R.id.lst_home_files)
-        listHomeFiles.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(view.ctx)
-        //adapter = FileAdapter(getFileModelList()){showMsg(it.name)}
+        listFiles = view.findViewById(R.id.lst_home_files)
+        listFiles.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(view.ctx)
+
         adapter = FileAdapter(getFileModelList(arguments!!.getString(PATH)))
         adapter.registerItemClickListener(this)
-        listHomeFiles.adapter = adapter
+
+        listFiles.adapter = adapter
 
 
         return view
@@ -91,13 +88,6 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), FileAdapter.OnItemClic
         listener?.onFileSelected(fileModel)
     }
 
-    /*private fun initView(view: View) {
-        listHomeFiles = view.findViewById(R.id.lst_home_files)
-        listHomeFiles.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(view.ctx)
-        adapter = FileAdapter()
-        listHomeFiles.adapter = adapter
-    }*/
-
     private fun showMsg(msg: String){
         //longToast(msg)
         Toast.makeText(context,msg, Toast.LENGTH_SHORT).show()
@@ -108,11 +98,9 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), FileAdapter.OnItemClic
         return file.listFiles().toList()
     }
 
-    private fun getPathType(file: File): String = if(file.isDirectory) "FOLDER" else "FILE"
-
     private fun getFileModelList(path: String): List<FileModel> {
         var files: List<File> = getFilesFromPath(path)
-        return files.map { FileModel(path = it.path, type = getPathType(it),name = it.name, ext = it.extension) }
+        return files.map { FileModel(path = it.path, isDirectory = it.isDirectory, name = it.name, size = it.totalSpace, ext = it.extension, lastModified = it.lastModified()) }
     }
 
     interface OnFileSelectedListener {
