@@ -6,11 +6,18 @@
     android:orientation="vertical"
     tools:context=".view.home.ExFilesFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/lst_home_files"
+    <ListView
+        android:id="@+id/lst_ex_files"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"/>
+        android:divider="@color/grey"
+        android:dividerHeight="0.5dp"/>
 
 </LinearLayout>
+
+    <!--<androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/lst_ex_files"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"/>-->

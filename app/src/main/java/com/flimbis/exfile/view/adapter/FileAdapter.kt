@@ -9,6 +9,10 @@ import com.flimbis.exfile.databinding.ItemsFileBinding
 import com.flimbis.exfile.model.FileModel
 import com.flimbis.exfile.viewmodel.FileViewModel
 
+
+/*
+* DEPRECATED
+* */
 //class FileAdapter(val items: List<FileModel>, val itemClick: (FileModel)-> Unit) : androidx.recyclerview.widget.RecyclerView.Adapter<FileAdapter.FileViewHolder>() {
 class FileAdapter(val items: List<FileModel>) : androidx.recyclerview.widget.RecyclerView.Adapter<FileAdapter.FileViewHolder>() {
  

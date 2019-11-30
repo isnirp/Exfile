@@ -6,12 +6,14 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.AbsListView
+import android.widget.ListView
 import android.widget.Toast
 
 import com.flimbis.exfile.R
 import com.flimbis.exfile.ctx
 import com.flimbis.exfile.model.FileModel
 import com.flimbis.exfile.util.SimpleDividerItemDecoration
+import com.flimbis.exfile.view.adapter.ExFileAdapter
 import com.flimbis.exfile.view.adapter.FileAdapter
 import java.io.File
 
@@ -20,11 +22,11 @@ import java.io.File
  * A simple [Fragment] subclass.
  *major lifecycle methods of a fragment to implement; onCreate, onCreateView, onPause
  */
-class ExFilesFragment : androidx.fragment.app.Fragment(), FileAdapter.OnItemClickListener, AbsListView.MultiChoiceModeListener {
+class ExFilesFragment : androidx.fragment.app.Fragment(), AbsListView.MultiChoiceModeListener {
 
-    lateinit var listFiles: androidx.recyclerview.widget.RecyclerView
-    lateinit var adapter: FileAdapter
-    //var filesList = listOf<FileModel>()
+    //lateinit var listFiles: androidx.recyclerview.widget.RecyclerView
+    lateinit var listFiles: ListView
+    lateinit var adapter: ExFileAdapter
 
     private var listener: OnFileSelectedListener? = null
 
@@ -46,13 +48,14 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), FileAdapter.OnItemClic
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_files_ex, container, false)
 
-        listFiles = view.findViewById(R.id.lst_home_files)
-        listFiles.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(view.ctx)
+        listFiles = view.findViewById(R.id.lst_ex_files)
+        /*listFiles.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(view.ctx)
         listFiles.addItemDecoration(SimpleDividerItemDecoration(context))
 
         adapter = FileAdapter(getFileModelList(arguments!!.getString(PATH)))
-        adapter.registerItemClickListener(this)
+        adapter.registerItemClickListener(this)*/
 
+        adapter = ExFileAdapter(context, getFileModelList(arguments!!.getString(PATH)))
         listFiles.adapter = adapter
 
 
@@ -78,10 +81,6 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), FileAdapter.OnItemClic
     override fun onDetach() {
         super.onDetach()
         listener = null
-    }
-
-    override fun onItemClicked(fileModel: FileModel) {
-        listener?.onFileSelected(fileModel)
     }
 
     private fun showMsg(msg: String) {
