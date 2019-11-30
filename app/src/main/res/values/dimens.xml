@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="fnt_size">13sp</dimen>
+    <dimen name="fnt_size_lg">16sp</dimen>
+    <dimen name="fnt_size_sm">11sp</dimen>
+</resources>

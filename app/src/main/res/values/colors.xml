@@ -10,4 +10,7 @@
     <color name="whiteNavText">#000000</color>
     <color name="whiteNavChecked">#4682B4</color>
     <color name="white_background_holo_light">#fff3f3f3</color>
+    <color name="black">#000000</color>
+<!--    <color name="grey">#D6DBDF</color>-->
+    <color name="grey">#d8d8d8</color>
 </resources>

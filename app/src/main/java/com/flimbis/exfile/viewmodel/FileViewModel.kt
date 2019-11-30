@@ -15,5 +15,6 @@ class FileViewModel(val fileModel: FileModel): BaseObservable() {
 
     fun getPath(): String = fileModel.path
 
-    //fun getDateModified(): String = fileModel.lastModified
+    fun getLastModified(): String = "23/12/2019"
+    //fun getLastModified(): String = fileModel.lastModified
 }

@@ -8,6 +8,6 @@ data class FileModel(val path: String,
                      val lastModified: Long)
 
 enum class FileType(val type: String){
-    DIRECTORY("FOLDER"),
-    FILE("FILE")
+    DIRECTORY("folder"),
+    FILE("file")
 }
