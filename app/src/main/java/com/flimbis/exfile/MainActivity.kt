@@ -7,20 +7,16 @@ import android.os.Environment
 import com.flimbis.exfile.model.FileModel
 import com.flimbis.exfile.view.home.ExFilesFragment
 
-import androidx.core.app.ComponentActivity
-import androidx.core.app.ComponentActivity.ExtraData
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.net.Uri
 import android.view.*
 import android.widget.*
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.FileProvider
 import androidx.core.content.FileProvider.getUriForFile
-import com.flimbis.exfile.databinding.ItemsFileBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.io.File
 import kotlinx.android.synthetic.main.bottom_sheet.*
+import kotlinx.android.synthetic.main.bottom_sheet_views.*
 
 //class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener, AbsListView.MultiChoiceModeListener {
 class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener, ActionMode.Callback {
@@ -154,7 +150,7 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
     * contextual action bar ends
     * */
 
-    override fun onFileSelected(fileModel: FileModel) {
+    override fun onItemFileSelected(fileModel: FileModel) {
         if (fileModel.isDirectory)
             toFolder(fileModel.path)
         else toFileIntent(fileModel.path)
@@ -172,6 +168,21 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
         prop_last_modified.text = "23/12/2019"
 
         sheetBehaviour.state = BottomSheetBehavior.STATE_EXPANDED
+    }
+
+    override fun onItemViewSelected() {
+        val sheetDialog: BottomSheetDialog = BottomSheetDialog(this)
+        val sheetView: View = getLayoutInflater().inflate(R.layout.bottom_sheet_views, null)
+        sheetDialog.setContentView(sheetView)
+
+        val selectListView = sheetView.findViewById<LinearLayout>(R.id.select_list_view)
+        val selectDetailView = sheetView.findViewById<LinearLayout>(R.id.select_detail_view)
+        val selectGridView = sheetView.findViewById<LinearLayout>(R.id.select_grid_view)
+        
+        selectListView.setOnClickListener(View.OnClickListener { Toast.makeText(this,"list selected",Toast.LENGTH_SHORT).show() })
+
+        sheetDialog.show()
+
     }
 
     override fun onActionModeActivated(fileModel: FileModel) {

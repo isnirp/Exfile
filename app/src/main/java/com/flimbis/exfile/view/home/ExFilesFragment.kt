@@ -86,7 +86,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
                 true
             }
             R.id.action_view -> {
-                Toast.makeText(context,"view", Toast.LENGTH_SHORT).show()
+                listener!!.onItemViewSelected()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -108,7 +108,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
     }
 
     override fun onFileClicked(fileModel: FileModel) {
-        listener!!.onFileSelected(fileModel)
+        listener!!.onItemFileSelected(fileModel)
     }
 
     override fun onPopMenuClicked(v: View,fileModel: FileModel) {
@@ -155,9 +155,11 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
     }
 
     interface OnFileSelectedListener {
-        fun onFileSelected(fileModel: FileModel)
+        fun onItemFileSelected(fileModel: FileModel)
 
         fun onItemPropertySelected(fileModel: FileModel)
+
+        fun onItemViewSelected()
 
         fun onActionModeActivated(fileModel: FileModel)
     }
