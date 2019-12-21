@@ -20,8 +20,7 @@ import java.io.File
 import android.widget.AdapterView.OnItemLongClickListener
 import androidx.appcompat.widget.PopupMenu
 import android.R.attr.name
-
-
+import com.flimbis.exfile.util.getFilesFromPath
 
 
 /**
@@ -123,12 +122,6 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
 
     private fun showMsg(msg: String) {
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun getFilesFromPath(path: String): List<File> {
-        val file = File(path)//Creates a new File instance by converting the given pathname string into an abstract pathname.
-        //listFiles(); Returns an array of abstract path names denoting the files in the directory denoted by this abstract pathname.
-        return file.listFiles().toList()
     }
 
     private fun getFileModelList(path: String): List<FileModel> {
