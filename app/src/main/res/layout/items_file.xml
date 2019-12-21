@@ -9,101 +9,124 @@
             type="com.flimbis.exfile.viewmodel.FileViewModel" />
     </data>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/lnr_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:orientation="horizontal">
+        android:paddingBottom="10dp">
 
-            <ImageView
-                android:id="@+id/img_file"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_action_folder"/>
+        <ImageView
+            android:id="@+id/img_file"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_action_folder" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/img_file"
+            android:orientation="vertical"
+            android:paddingLeft="5dp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/txt_file"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="2"
+                    android:text="@{fileModel.name}"
+                    android:textAppearance="@style/CustomTitle" />
+                <ImageButton
+                    android:id="@+id/pop"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_alignParentRight="true"
+                    android:contentDescription="@string/descr_overflow"
+                    android:src="@drawable/ic_action_overflow" />
+
+            </RelativeLayout>
+
+            <!--                attributes-->
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="5dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/txt_file"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="@style/CustomTitle"
-                    android:text="@{fileModel.name}" />
-
-<!--                attributes-->
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:weightSum="3">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:weightSum="3"
-                    android:layout_gravity="center_horizontal"
-                    android:orientation="horizontal">
-                    <LinearLayout
-                        android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="@style/SmallText.Title"
-                            android:text="@string/cap_type"/>
-                        <TextView
-                            android:id="@+id/txt_file_type"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="@style/SmallText"
-                            android:text="@{fileModel.type}" />
+                        android:text="@string/cap_type"
+                        android:textAppearance="@style/SmallText.Title" />
 
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="0dp"
+                    <TextView
+                        android:id="@+id/txt_file_type"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="@style/SmallText.Title"
-                            android:text="@string/cap_size"/>
-                        <TextView
-                            android:id="@+id/txt_file_size"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="@style/SmallText"
-                            android:text="@{Double.toString(fileModel.size)}" />
+                        android:text="@{fileModel.type}"
+                        android:textAppearance="@style/SmallText" />
 
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="0dp"
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="@style/SmallText.Title"
-                            android:text="@string/cap_modified"/>
-                        <TextView
-                            android:id="@+id/txt_file_lastModified"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="@style/SmallText"
-                            android:text="@{fileModel.lastModified}" />
+                        android:text="@string/cap_size"
+                        android:textAppearance="@style/SmallText.Title" />
 
-                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/txt_file_size"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{Double.toString(fileModel.size)}"
+                        android:textAppearance="@style/SmallText" />
 
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cap_modified"
+                        android:textAppearance="@style/SmallText.Title" />
+
+                    <TextView
+                        android:id="@+id/txt_file_lastModified"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{fileModel.lastModified}"
+                        android:textAppearance="@style/SmallText" />
 
                 </LinearLayout>
 
             </LinearLayout>
 
-    </LinearLayout>
+        </LinearLayout>
+
+
+    </RelativeLayout>
 </layout>

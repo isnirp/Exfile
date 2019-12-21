@@ -13,6 +13,13 @@ package com.flimbis.exfile
 // facilitates secure sharing of files associated with an app by creating a content:// Uri for a file instead of a file:/// Uri.
 //A content URI allows you to grant read and write access using temporary access permissions.
 
+/*
+* INTENT
+* An intent is a messenger object that requests an action from another app component
+* properties; component name, action, data(data and mime type), category, extras, flag
+* https://stackoverflow.com/questions/6265298/action-view-intent-for-a-file-with-unknown-mimetype
+* */
+
 
 /*
 * DATA BINDING
@@ -48,4 +55,12 @@ package com.flimbis.exfile
 * ENUM
 * https://www.baeldung.com/kotlin-enum
 *
+* */
+
+
+/*
+* BOTTOM SHEET BEHAVIOUR
+*
+* The Persistent bottom sheet(BottomSheetBehavior) displays in-app content
+* The modal bottom sheets(BottomSheetDialogFragment) used to show deep-linked content from other apps
 * */

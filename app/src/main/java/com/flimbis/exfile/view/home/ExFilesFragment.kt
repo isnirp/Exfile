@@ -4,8 +4,9 @@ package com.flimbis.exfile.view.home
 import android.content.Context
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
 import android.widget.AbsListView
+import android.widget.AdapterView
+import androidx.fragment.app.Fragment
 import android.widget.ListView
 import android.widget.Toast
 
@@ -16,15 +17,19 @@ import com.flimbis.exfile.util.SimpleDividerItemDecoration
 import com.flimbis.exfile.view.adapter.ExFileAdapter
 import com.flimbis.exfile.view.adapter.FileAdapter
 import java.io.File
+import android.widget.AdapterView.OnItemLongClickListener
+import androidx.appcompat.widget.PopupMenu
+import android.R.attr.name
+
+
 
 
 /**
  * A simple [Fragment] subclass.
  *major lifecycle methods of a fragment to implement; onCreate, onCreateView, onPause
  */
-class ExFilesFragment : androidx.fragment.app.Fragment(), AbsListView.MultiChoiceModeListener {
+class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileClickedListener {
 
-    //lateinit var listFiles: androidx.recyclerview.widget.RecyclerView
     lateinit var listFiles: ListView
     lateinit var adapter: ExFileAdapter
 
@@ -49,15 +54,10 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), AbsListView.MultiChoic
         val view = inflater.inflate(R.layout.fragment_files_ex, container, false)
 
         listFiles = view.findViewById(R.id.lst_ex_files)
-        /*listFiles.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(view.ctx)
-        listFiles.addItemDecoration(SimpleDividerItemDecoration(context))
 
-        adapter = FileAdapter(getFileModelList(arguments!!.getString(PATH)))
-        adapter.registerItemClickListener(this)*/
-
-        adapter = ExFileAdapter(context, getFileModelList(arguments!!.getString(PATH)))
+        adapter = ExFileAdapter(this, context, getFileModelList(arguments!!.getString(PATH)))
+        adapter.setFileClickedListener(this)
         listFiles.adapter = adapter
-
 
         return view
     }
@@ -83,13 +83,51 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), AbsListView.MultiChoic
         listener = null
     }
 
+    override fun onFileClicked(fileModel: FileModel) {
+        listener!!.onFileSelected(fileModel)
+    }
+
+    override fun onPopMenuClicked(v: View,fileModel: FileModel) {
+        val popup = PopupMenu(context!!, v)
+        val inflater: MenuInflater = popup.menuInflater
+        inflater.inflate(R.menu.menu_pop, popup.menu)
+
+        popup.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener {
+            override fun onMenuItemClick(item: MenuItem?): Boolean {
+                return when (item?.itemId) {
+                    R.id.menu_pop_rename -> {
+                        //Todo a dialog that allows file rename
+                        popup.dismiss()
+                        true
+                    }
+                    R.id.menu_pop_property -> {
+                        listener?.onItemPropertySelected(fileModel)
+                        popup.dismiss()
+                        true
+                    }
+                    else -> false
+                }
+            }
+        })
+        popup.show()
+    }
+
+    fun initMultiChoiceMode(listener: AbsListView.MultiChoiceModeListener){
+        listFiles.choiceMode = ListView.CHOICE_MODE_MULTIPLE_MODAL
+        listFiles.setMultiChoiceModeListener(listener)
+    }
+
+    fun actionModeActivated(fileModel: FileModel){
+        listener!!.onActionModeActivated(fileModel)
+    }
+
     private fun showMsg(msg: String) {
-        //longToast(msg)
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
     }
 
     private fun getFilesFromPath(path: String): List<File> {
-        val file = File(path)
+        val file = File(path)//Creates a new File instance by converting the given pathname string into an abstract pathname.
+        //listFiles(); Returns an array of abstract path names denoting the files in the directory denoted by this abstract pathname.
         return file.listFiles().toList()
     }
 
@@ -98,57 +136,17 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), AbsListView.MultiChoic
         return files.map { FileModel(path = it.path, isDirectory = it.isDirectory, name = it.name, size = it.length(), ext = it.extension, lastModified = it.lastModified()) }
     }
 
+
     /*fun convertFileSizeToMB(sizeInBytes: Long): Double {
         return (sizeInBytes.toDouble()) / (1024 * 1024)
     }*/
 
-    /*
-    * contextual menu
-    * */
-    override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
-        // Respond to clicks on the actions in the CAB
-        return when (item?.itemId) {
-
-            R.id.menu_cut -> {
-                mode?.finish()
-                true
-            }
-            R.id.menu_copy -> {
-                mode?.finish()
-                true
-            }
-            R.id.menu_delete -> {
-                //deleteSelectedItems()
-                mode?.finish() // Action picked, so close the CAB
-                true
-            }
-            else -> false
-        }
-    }
-
-    override fun onItemCheckedStateChanged(mode: ActionMode?, position: Int, id: Long, checked: Boolean) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-        val inflater = mode?.menuInflater
-        inflater?.inflate(R.menu.contextual_menu, menu)
-        return true
-    }
-
-    override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onDestroyActionMode(mode: ActionMode?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    /*
-    * contextual menu ends
-    * */
     interface OnFileSelectedListener {
         fun onFileSelected(fileModel: FileModel)
+
+        fun onItemPropertySelected(fileModel: FileModel)
+
+        fun onActionModeActivated(fileModel: FileModel)
     }
 
 
@@ -163,4 +161,5 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), AbsListView.MultiChoic
             return fragment
         }
     }
+
 }

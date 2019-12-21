@@ -11,4 +11,8 @@
     <string name="menu_cut">cut</string>
     <string name="menu_copy">copy</string>
     <string name="menu_delete">delete</string>
+    <string name="descr_overflow">menu_popup</string>
+    <string name="menu_pop_rename">Rename</string>
+    <string name="menu_pop_prop">Properties</string>
+    <string name="menu_pop_move">Move</string>
 </resources>
