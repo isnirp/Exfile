@@ -52,6 +52,8 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_files_ex, container, false)
 
+        setHasOptionsMenu(true)
+
         listFiles = view.findViewById(R.id.lst_ex_files)
 
         adapter = ExFileAdapter(this, context, getFileModelList(arguments!!.getString(PATH)))
@@ -66,6 +68,29 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
     * */
     override fun onPause() {
         super.onPause()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater?.inflate(R.menu.menu_main, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            R.id.action_search -> {
+                Toast.makeText(context,"search", Toast.LENGTH_SHORT).show()
+                true
+            }
+            R.id.action_new -> {
+                Toast.makeText(context,"new", Toast.LENGTH_SHORT).show()
+                true
+            }
+            R.id.action_view -> {
+                Toast.makeText(context,"view", Toast.LENGTH_SHORT).show()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onAttach(context: Context) {
@@ -128,11 +153,6 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
         var files: List<File> = getFilesFromPath(path)
         return files.map { FileModel(path = it.path, isDirectory = it.isDirectory, name = it.name, size = it.length(), ext = it.extension, lastModified = it.lastModified()) }
     }
-
-
-    /*fun convertFileSizeToMB(sizeInBytes: Long): Double {
-        return (sizeInBytes.toDouble()) / (1024 * 1024)
-    }*/
 
     interface OnFileSelectedListener {
         fun onFileSelected(fileModel: FileModel)

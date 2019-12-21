@@ -7,3 +7,7 @@ fun getFilesFromPath(path: String): List<File> {
     //listFiles(); Returns an array of abstract path names denoting the files in the directory denoted by this abstract pathname.
     return file.listFiles().toList()
 }
+
+fun convertFileSizeToMB(sizeInBytes: Long): Double {
+    return (sizeInBytes.toDouble()) / (1024 * 1024)
+}
