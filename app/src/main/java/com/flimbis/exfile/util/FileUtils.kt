@@ -8,6 +8,26 @@ fun getFilesFromPath(path: String): List<File> {
     return file.listFiles().toList()
 }
 
+fun createFolderAtDirectory(path: String, folderName: String): Boolean {
+    val file = File(path, folderName)//Creates a new File instance from a parent pathname string and a child pathname string
+    return try {
+        file.mkdir()
+    } catch (e: Exception) {
+        e.printStackTrace()
+        false
+    }
+}
+
+fun createFileAtDirectory(path: String, fileName: String): Boolean {
+    val file = File(path, fileName)
+    return try {
+        file.createNewFile()
+    } catch (e: Exception) {
+        e.printStackTrace()
+        false
+    }
+}
+
 fun convertFileSizeToMB(sizeInBytes: Long): Double {
     return (sizeInBytes.toDouble()) / (1024 * 1024)
 }

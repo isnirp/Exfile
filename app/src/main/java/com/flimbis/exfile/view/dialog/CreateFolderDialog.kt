@@ -25,11 +25,12 @@ class CreateFolderDialog(val type: Int) : DialogFragment() {
             val createFolder = view.findViewById<Button>(R.id.bttn_create_folder)
             createFolder.setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View?) {
-                    when{
-                        type == 0 -> listener!!.onCreateFolder(name.text.toString())
-                        type == 1 -> listener!!.onCreateFile(name.text.toString())
+                    when (type) {
+                        0 -> listener!!.onCreateFolder(name.text.toString())
+                        1 -> listener!!.onCreateFile(name.text.toString())
                     }
 
+                    dialog.cancel()
                 }
             })
             builder.create()
@@ -51,8 +52,8 @@ class CreateFolderDialog(val type: Int) : DialogFragment() {
     }
 
     interface OnCreateDialogClickListener {
-        fun onCreateFolder(folderName: String)
+        fun onCreateFolder(name: String)
 
-        fun onCreateFile(folderName: String)
+        fun onCreateFile(name: String)
     }
 }

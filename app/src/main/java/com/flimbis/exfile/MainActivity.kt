@@ -12,6 +12,8 @@ import android.view.*
 import android.widget.*
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.FileProvider.getUriForFile
+import com.flimbis.exfile.util.createFileAtDirectory
+import com.flimbis.exfile.util.createFolderAtDirectory
 import com.flimbis.exfile.view.dialog.CreateFolderDialog
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -22,9 +24,8 @@ import kotlinx.android.synthetic.main.bottom_sheet_views.*
 //class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener, AbsListView.MultiChoiceModeListener {
 class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener, ActionMode.Callback, CreateFolderDialog.OnCreateDialogClickListener {
     lateinit var sheetBehaviour: BottomSheetBehavior<LinearLayout>
-    var currentIndex: Int? = null
+    var currentPath: String? = null //tracks file path
     var actionMode: ActionMode? = null
-    //lateinit var exFilesFragment: ExFilesFragment
     lateinit var mFileModel: FileModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +38,8 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
 
         if (savedInstanceState == null) {
             val exFilesFragment = ExFilesFragment.build { path = Environment.getExternalStorageDirectory().absolutePath }
+
+            currentPath = Environment.getExternalStorageDirectory().absolutePath
 
             //transactions; add, remove, replace
             val fragmentTransaction = supportFragmentManager.beginTransaction()
@@ -211,17 +214,26 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
         this.mFileModel = fileModel
     }
 
-    override fun onCreateFolder(folderName: String) {
-        Toast.makeText(this, "creating ${folderName}", Toast.LENGTH_SHORT).show()
+    override fun onCreateFolder(name: String) {
+        if (createFolderAtDirectory(currentPath!!, name)) {
+            Toast.makeText(this, "Directory ${name} created", Toast.LENGTH_SHORT).show()
+            toFolder(currentPath!!)
+        } else
+            Toast.makeText(this, "Failed to create directory ${name}", Toast.LENGTH_SHORT).show()
     }
 
-    override fun onCreateFile(folderName: String) {
-        Toast.makeText(this, "creating file ${folderName}", Toast.LENGTH_SHORT).show()
+    override fun onCreateFile(name: String) {
+        if (createFileAtDirectory(currentPath!!, name)) {
+            Toast.makeText(this, "File ${name} created", Toast.LENGTH_SHORT).show()
+            toFolder(currentPath!!)
+        } else
+            Toast.makeText(this, "Failed to create file ${name}", Toast.LENGTH_SHORT).show()
 
     }
 
     private fun toFolder(folder: String) {
         val exFilesFragment = ExFilesFragment.build { path = folder }
+        currentPath = folder
 
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.container, exFilesFragment)
