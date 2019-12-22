@@ -10,10 +10,36 @@
         android:id="@+id/action_new"
         android:icon="@drawable/ic_action_create_folder"
         android:title="@string/menu_action_new"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom" >
+        <menu>
+            <item
+                android:id="@+id/action_new_folder"
+                android:icon="@drawable/ic_action_create_folder"
+                android:title="@string/menu_action_new_folder"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_new_file"
+                android:icon="@drawable/ic_action_create_file"
+                android:title="@string/menu_action_new_file"
+                app:showAsAction="never" />
+        </menu>
+    </item>
     <item
         android:id="@+id/action_view"
         android:icon="@drawable/ic_action_view_list"
         android:title="@string/menu_action_view"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom">
+        <menu>
+            <item
+                android:id="@+id/action_view_list"
+                android:icon="@drawable/ic_action_view_list"
+                android:title="@string/menu_action_view_list"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_view_grid"
+                android:icon="@drawable/ic_action_view_grid"
+                android:title="@string/menu_action_view_grid"
+                app:showAsAction="never" />
+        </menu>
+    </item>
 </menu>

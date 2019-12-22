@@ -18,4 +18,8 @@
     <string name="menu_action_search">Search</string>
     <string name="menu_action_new">New</string>
     <string name="menu_action_view">View</string>
+    <string name="menu_action_new_folder">New Folder</string>
+    <string name="menu_action_new_file">New File</string>
+    <string name="menu_action_view_list">List</string>
+    <string name="menu_action_view_grid">Grid</string>
 </resources>

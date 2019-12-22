@@ -172,7 +172,9 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
     }
 
     override fun onItemViewSelected() {
-        val sheetDialog = BottomSheetDialog(this)
+        Toast.makeText(this, "List View", Toast.LENGTH_SHORT).show()
+
+        /*val sheetDialog = BottomSheetDialog(this)
         val sheetView: View = layoutInflater.inflate(R.layout.bottom_sheet_views, null)
         sheetDialog.setContentView(sheetView)
 
@@ -182,35 +184,22 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
 
         selectListView.setOnClickListener(View.OnClickListener { Toast.makeText(this, "list selected", Toast.LENGTH_SHORT).show() })
 
-        sheetDialog.show()
+        sheetDialog.show()*/
 
     }
 
+    override fun onItemViewGridSelected() {
+        Toast.makeText(this, "Grid View", Toast.LENGTH_SHORT).show()
+    }
+
     override fun onItemCreateFolderSelected() {
-        val sheetDialog = BottomSheetDialog(this)
-        val sheetView: View = layoutInflater.inflate(R.layout.bottom_sheet_new_folder, null)
-        sheetDialog.setContentView(sheetView)
+        val openCreateFolderDialog = CreateFolderDialog(0)
+        openCreateFolderDialog.show(supportFragmentManager, "create folder")
+    }
 
-        val createFolderDialog = sheetView.findViewById<LinearLayout>(R.id.select_new_folder)
-        val createFileDialog = sheetView.findViewById<LinearLayout>(R.id.select_new_file)
-
-        createFolderDialog.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(v: View?) {
-                val openCreateFolderDialog = CreateFolderDialog(0)
-                openCreateFolderDialog.show(supportFragmentManager, "create folder")
-                sheetDialog.dismiss()
-            }
-        })
-
-        createFileDialog.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(v: View?) {
-                val openCreateFileDialog = CreateFolderDialog(1)
-                openCreateFileDialog.show(supportFragmentManager, "create file")
-                sheetDialog.dismiss()
-            }
-        })
-
-        sheetDialog.show()
+    override fun onItemCreateFileSelected() {
+        val openCreateFileDialog = CreateFolderDialog(1)
+        openCreateFileDialog.show(supportFragmentManager, "create file")
     }
 
     override fun onItemSearchSelected() {

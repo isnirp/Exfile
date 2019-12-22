@@ -81,12 +81,20 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
                 listener!!.onItemSearchSelected()
                 true
             }
-            R.id.action_new -> {
+            R.id.action_new_folder -> {
                 listener!!.onItemCreateFolderSelected()
                 true
             }
-            R.id.action_view -> {
+            R.id.action_new_file-> {
+                listener!!.onItemCreateFileSelected()
+                true
+            }
+            R.id.action_view_list -> {
                 listener!!.onItemViewSelected()
+                true
+            }
+            R.id.action_view_grid -> {
+                listener!!.onItemViewGridSelected()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -161,7 +169,11 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
 
         fun onItemViewSelected()
 
+        fun onItemViewGridSelected()
+
         fun onItemCreateFolderSelected()
+
+        fun onItemCreateFileSelected()
 
         fun onItemSearchSelected()
 
