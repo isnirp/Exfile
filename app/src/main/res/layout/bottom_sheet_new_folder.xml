@@ -18,77 +18,50 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="Select View"
+            android:text="Add"
             android:textAppearance="@style/SmallText.Title" />
 
     </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/select_list_view"
+        android:id="@+id/select_new_folder"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/img_view_selection"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_gravity="center_vertical"
             android:src="@drawable/ic_action_view_list" />
 
         <TextView
-            android:id="@+id/txt_selection_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="5dp"
-            android:text="List"
+            android:text="New Folder"
             android:textAppearance="@style/SmallText" />
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/select_detail_view"
+        android:id="@+id/select_new_file"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/img_view_selection_dtl"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_gravity="center_vertical"
             android:src="@drawable/ic_action_view_list" />
 
         <TextView
-            android:id="@+id/txt_selection_list_dtl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="5dp"
-            android:text="Detail"
-            android:textAppearance="@style/SmallText" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/select_grid_view"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/img_view_selection_grid"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_action_view_list" />
-
-        <TextView
-            android:id="@+id/txt_selection_grid"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="5dp"
-            android:text="Grid"
+            android:text="New File"
             android:textAppearance="@style/SmallText" />
     </LinearLayout>
 

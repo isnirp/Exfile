@@ -78,11 +78,11 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             R.id.action_search -> {
-                Toast.makeText(context,"search", Toast.LENGTH_SHORT).show()
+                listener!!.onItemSearchSelected()
                 true
             }
             R.id.action_new -> {
-                Toast.makeText(context,"new", Toast.LENGTH_SHORT).show()
+                listener!!.onItemCreateFolderSelected()
                 true
             }
             R.id.action_view -> {
@@ -98,7 +98,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
         if (context is OnFileSelectedListener) {
             listener = context
         } else {
-            throw RuntimeException(context.toString() + " must implement onItemClickListener")
+            throw RuntimeException(context.toString() + " must implement OnFileSelectedListener")
         }
     }
 
@@ -160,6 +160,10 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
         fun onItemPropertySelected(fileModel: FileModel)
 
         fun onItemViewSelected()
+
+        fun onItemCreateFolderSelected()
+
+        fun onItemSearchSelected()
 
         fun onActionModeActivated(fileModel: FileModel)
     }

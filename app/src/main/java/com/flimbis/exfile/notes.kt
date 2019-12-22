@@ -64,3 +64,15 @@ package com.flimbis.exfile
 * The Persistent bottom sheet(BottomSheetBehavior) displays in-app content
 * The modal bottom sheets(BottomSheetDialogFragment) used to show deep-linked content from other apps
 * */
+
+/*
+* CLIP BOARD
+*
+* https://developer.android.com/guide/topics/text/copy-paste
+* */
+
+/*
+* BUBBLES
+*
+* https://developer.android.com/guide/topics/ui/bubbles
+* */

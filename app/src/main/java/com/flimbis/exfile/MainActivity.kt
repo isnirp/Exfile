@@ -12,6 +12,7 @@ import android.view.*
 import android.widget.*
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.FileProvider.getUriForFile
+import com.flimbis.exfile.view.dialog.CreateFolderDialog
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.io.File
@@ -19,7 +20,7 @@ import kotlinx.android.synthetic.main.bottom_sheet.*
 import kotlinx.android.synthetic.main.bottom_sheet_views.*
 
 //class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener, AbsListView.MultiChoiceModeListener {
-class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener, ActionMode.Callback {
+class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener, ActionMode.Callback, CreateFolderDialog.OnCreateDialogClickListener {
     lateinit var sheetBehaviour: BottomSheetBehavior<LinearLayout>
     var currentIndex: Int? = null
     var actionMode: ActionMode? = null
@@ -35,7 +36,7 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
         setSupportActionBar(toolbar)
 
         if (savedInstanceState == null) {
-           val exFilesFragment = ExFilesFragment.build { path = Environment.getExternalStorageDirectory().absolutePath }
+            val exFilesFragment = ExFilesFragment.build { path = Environment.getExternalStorageDirectory().absolutePath }
 
             //transactions; add, remove, replace
             val fragmentTransaction = supportFragmentManager.beginTransaction()
@@ -171,23 +172,63 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
     }
 
     override fun onItemViewSelected() {
-        val sheetDialog: BottomSheetDialog = BottomSheetDialog(this)
-        val sheetView: View = getLayoutInflater().inflate(R.layout.bottom_sheet_views, null)
+        val sheetDialog = BottomSheetDialog(this)
+        val sheetView: View = layoutInflater.inflate(R.layout.bottom_sheet_views, null)
         sheetDialog.setContentView(sheetView)
 
         val selectListView = sheetView.findViewById<LinearLayout>(R.id.select_list_view)
         val selectDetailView = sheetView.findViewById<LinearLayout>(R.id.select_detail_view)
         val selectGridView = sheetView.findViewById<LinearLayout>(R.id.select_grid_view)
-        
-        selectListView.setOnClickListener(View.OnClickListener { Toast.makeText(this,"list selected",Toast.LENGTH_SHORT).show() })
+
+        selectListView.setOnClickListener(View.OnClickListener { Toast.makeText(this, "list selected", Toast.LENGTH_SHORT).show() })
 
         sheetDialog.show()
 
     }
 
+    override fun onItemCreateFolderSelected() {
+        val sheetDialog = BottomSheetDialog(this)
+        val sheetView: View = layoutInflater.inflate(R.layout.bottom_sheet_new_folder, null)
+        sheetDialog.setContentView(sheetView)
+
+        val createFolderDialog = sheetView.findViewById<LinearLayout>(R.id.select_new_folder)
+        val createFileDialog = sheetView.findViewById<LinearLayout>(R.id.select_new_file)
+
+        createFolderDialog.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View?) {
+                val openCreateFolderDialog = CreateFolderDialog(0)
+                openCreateFolderDialog.show(supportFragmentManager, "create folder")
+                sheetDialog.dismiss()
+            }
+        })
+
+        createFileDialog.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View?) {
+                val openCreateFileDialog = CreateFolderDialog(1)
+                openCreateFileDialog.show(supportFragmentManager, "create file")
+                sheetDialog.dismiss()
+            }
+        })
+
+        sheetDialog.show()
+    }
+
+    override fun onItemSearchSelected() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun onActionModeActivated(fileModel: FileModel) {
         actionMode = startActionMode(this)
         this.mFileModel = fileModel
+    }
+
+    override fun onCreateFolder(folderName: String) {
+        Toast.makeText(this, "creating ${folderName}", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onCreateFile(folderName: String) {
+        Toast.makeText(this, "creating file ${folderName}", Toast.LENGTH_SHORT).show()
+
     }
 
     private fun toFolder(folder: String) {
