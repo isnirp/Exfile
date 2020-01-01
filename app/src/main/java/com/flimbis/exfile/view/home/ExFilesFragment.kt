@@ -5,22 +5,21 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.AbsListView
-import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import android.widget.ListView
 import android.widget.Toast
 
 import com.flimbis.exfile.R
-import com.flimbis.exfile.ctx
 import com.flimbis.exfile.model.FileModel
-import com.flimbis.exfile.util.SimpleDividerItemDecoration
 import com.flimbis.exfile.view.adapter.ExFileAdapter
-import com.flimbis.exfile.view.adapter.FileAdapter
 import java.io.File
-import android.widget.AdapterView.OnItemLongClickListener
 import androidx.appcompat.widget.PopupMenu
-import android.R.attr.name
+import android.content.IntentFilter
+import com.flimbis.exfile.common.ExFileBroadcastReceiver
 import com.flimbis.exfile.util.getFilesFromPath
+import android.content.Intent
+import android.content.BroadcastReceiver
+import android.os.Environment
 
 
 /**
@@ -29,14 +28,16 @@ import com.flimbis.exfile.util.getFilesFromPath
  */
 class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileClickedListener {
 
-    lateinit var listFiles: ListView
-    lateinit var adapter: ExFileAdapter
+    private lateinit var listFiles: ListView
+    private lateinit var adapter: ExFileAdapter
 
     private var listener: OnFileSelectedListener? = null
+    private lateinit var bReceiver: BroadcastReceiver
 
     companion object {
-        private const val PATH = "pathFinder"
+        private const val PATH = "com.flimbis.exfile.PATH_FINDER"
         fun build(block: Builder.() -> Unit) = Builder().apply(block).build()
+        var currentDirectory: String? = null //tracks file path (directory)
     }
 
     /*
@@ -45,6 +46,19 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
     * */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //update current path
+        currentDirectory = arguments!!.getString(PATH)
+
+        bReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, i: Intent) {
+                if (i.getStringExtra(ExFileBroadcastReceiver.DIR_PATH_KEY) == "EX_FILE_COPY")
+                    listener!!.onClipboardActivated()
+                else
+                    adapter.updateDirectory(getFileModelList(i.getStringExtra(ExFileBroadcastReceiver.DIR_PATH_KEY)))
+
+                showMsg("Broadcast Receiver")
+            }
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -56,11 +70,19 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
 
         listFiles = view.findViewById(R.id.lst_ex_files)
 
-        adapter = ExFileAdapter(this, context, getFileModelList(arguments!!.getString(PATH)))
+        adapter = ExFileAdapter(this, context)
+        adapter.updateDirectory(getFileModelList(arguments!!.getString(PATH)))
+
         adapter.setFileClickedListener(this)
+
         listFiles.adapter = adapter
 
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        context?.registerReceiver(bReceiver, IntentFilter(ExFileBroadcastReceiver.DIR_UPDATE))
     }
 
     /*
@@ -68,6 +90,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
     * */
     override fun onPause() {
         super.onPause()
+        context?.unregisterReceiver(bReceiver)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -85,7 +108,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
                 listener!!.onItemCreateFolderSelected()
                 true
             }
-            R.id.action_new_file-> {
+            R.id.action_new_file -> {
                 listener!!.onItemCreateFileSelected()
                 true
             }
@@ -119,7 +142,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
         listener!!.onItemFileSelected(fileModel)
     }
 
-    override fun onPopMenuClicked(v: View,fileModel: FileModel) {
+    override fun onPopMenuClicked(v: View, fileModel: FileModel) {
         val popup = PopupMenu(context!!, v)
         val inflater: MenuInflater = popup.menuInflater
         inflater.inflate(R.menu.menu_pop, popup.menu)
@@ -144,12 +167,12 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
         popup.show()
     }
 
-    fun initMultiChoiceMode(listener: AbsListView.MultiChoiceModeListener){
+    fun initMultiChoiceMode(listener: AbsListView.MultiChoiceModeListener) {
         listFiles.choiceMode = ListView.CHOICE_MODE_MULTIPLE_MODAL
         listFiles.setMultiChoiceModeListener(listener)
     }
 
-    fun actionModeActivated(fileModel: FileModel){
+    fun actionModeActivated(fileModel: FileModel) {
         listener!!.onActionModeActivated(fileModel)
     }
 
@@ -161,6 +184,34 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
         var files: List<File> = getFilesFromPath(path)
         return files.map { FileModel(path = it.path, isDirectory = it.isDirectory, name = it.name, size = it.length(), ext = it.extension, lastModified = it.lastModified()) }
     }
+
+    /*private fun scheduleBroadcastOnNewFile(path: String) {
+        val contentUri: Uri = Uri.parse("content://com.flimbis.exfile.MyFileProvider/external_files/Pictures/")
+        //val contentUri: Uri = FileProvider.getUriForFile(context!!, "com.flimbis.exfile.MyFileProvider", File(path))
+        //Toast.makeText(context, "content URI " + contentUri, Toast.LENGTH_SHORT).show()
+
+        val bundle = PersistableBundle()
+        bundle.putString("FILE_PATH", path)
+
+        val componentName = ComponentName(context, ExFileJobService::class.java)
+
+        val jobInfo = JobInfo.Builder(1111, componentName)
+                .addTriggerContentUri(JobInfo.TriggerContentUri(contentUri, 0))
+                .addTriggerContentUri(JobInfo.TriggerContentUri(contentUri, JobInfo.TriggerContentUri.FLAG_NOTIFY_FOR_DESCENDANTS))
+                .build()
+
+        val jobScheduler: JobScheduler = context?.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+        val resultCode = jobScheduler.schedule(jobInfo)
+
+        if (resultCode == JobScheduler.RESULT_SUCCESS) {
+            Log.i("TAG_SCHED", "successful job-->" + contentUri)
+            Toast.makeText(context, "successful job", Toast.LENGTH_SHORT).show()
+        } else {
+            Log.i("TAG_SCHED", "failed job")
+            //Toast.makeText(this, "failed job", Toast.LENGTH_SHORT).show()
+        }
+
+    }*/
 
     interface OnFileSelectedListener {
         fun onItemFileSelected(fileModel: FileModel)
@@ -177,12 +228,15 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
 
         fun onItemSearchSelected()
 
+        fun onClipboardActivated()
+
         fun onActionModeActivated(fileModel: FileModel)
     }
 
 
     class Builder {
-        var path: String = ""
+        var path: String = Environment.getExternalStorageDirectory().absolutePath
+        //var path: String = " "
 
         fun build(): ExFilesFragment {
             val fragment = ExFilesFragment()

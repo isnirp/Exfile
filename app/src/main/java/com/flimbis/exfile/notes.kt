@@ -5,13 +5,30 @@ package com.flimbis.exfile
 * ANDROID X
 * https://material.io/develop/android/docs/getting-started/
 * */
+
+/*
+* FRAGMENT
+*
+* https://www.netguru.com/codestories/whats-new-in-fragments
+* */
+
 /*
 * FILE PROVIDER
+*
+* https://developer.android.com/training/secure-file-sharing/retrieve-info
 * https://developer.android.com/reference/android/support/v4/content/FileProvider
 * */
 //FileProvider is a special subclass of ContentProvider
 // facilitates secure sharing of files associated with an app by creating a content:// Uri for a file instead of a file:/// Uri.
 //A content URI allows you to grant read and write access using temporary access permissions.
+
+/*
+* JOB SCHEDULER
+*
+* http://midhunhk.github.io/dev/2018/08/05/content-observer-service/
+*https://developer.android.com/reference/android/app/job/JobInfo.Builder
+* https://developer.android.com/reference/android/app/job/JobInfo.Builder.html?utm_campaign=adp_series_job_scheduler_092216&utm_source=medium&utm_medium=blog#addTriggerContentUri(android.app.job.JobInfo.TriggerContentUri)
+* */
 
 /*
 * INTENT
@@ -69,6 +86,7 @@ package com.flimbis.exfile
 * CLIP BOARD
 *
 * https://developer.android.com/guide/topics/text/copy-paste
+* https://developer.android.com/reference/android/content/ClipData.html#newPlainText%28java.lang.CharSequence,%20java.lang.CharSequence%29
 * */
 
 /*

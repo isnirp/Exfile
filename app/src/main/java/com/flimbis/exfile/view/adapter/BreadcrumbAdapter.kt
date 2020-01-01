@@ -13,13 +13,14 @@ import com.flimbis.exfile.viewmodel.FileViewModel
 /*
 * DEPRECATED
 * */
-//class FileAdapter(val items: List<FileModel>, val itemClick: (FileModel)-> Unit) : androidx.recyclerview.widget.RecyclerView.Adapter<FileAdapter.FileViewHolder>() {
-class FileAdapter(val items: List<FileModel>) : androidx.recyclerview.widget.RecyclerView.Adapter<FileAdapter.FileViewHolder>() {
+//class BreadcrumbAdapter(val items: List<FileModel>, val itemClick: (FileModel)-> Unit) : androidx.recyclerview.widget.RecyclerView.Adapter<BreadcrumbAdapter.FileViewHolder>() {
+class BreadcrumbAdapter() : androidx.recyclerview.widget.RecyclerView.Adapter<BreadcrumbAdapter.FileViewHolder>() {
  
+    private var items: List<FileModel> = listOf()
     private var listener: OnItemClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FileViewHolder {
-        val fileBinding: ItemsFileBinding  = DataBindingUtil.inflate(LayoutInflater.from(parent.ctx), R.layout.items_file,parent, false)
+        val fileBinding: ItemsFileBinding  = DataBindingUtil.inflate(LayoutInflater.from(parent.ctx), R.layout.items_breadcrumb,parent, false)
         return FileViewHolder(fileBinding)
     }
 
@@ -28,32 +29,29 @@ class FileAdapter(val items: List<FileModel>) : androidx.recyclerview.widget.Rec
     override fun onBindViewHolder(holder: FileViewHolder, position: Int) {
         val fileModel = items[position]
 
-        //val binding: ItemsFileBinding = holder.binding
-        //binding.fileModel = FileViewModel(fileModel)
         holder.bind(fileModel)
-        holder.binding.root.setOnClickListener{listener!!.onItemClicked(fileModel)}
+        holder.binding.root.setOnClickListener{listener!!.onBreadcrumbItemClicked(fileModel)}
 
     }
 
-    /*fun fetchFiles(filesList: List<FileModel>){
+    fun updateBreadcrumbList(filesList: List<FileModel>){
         this.items = filesList
         notifyDataSetChanged()
-    }*/
+    }
 
-    fun registerItemClickListener(itemListener: OnItemClickListener?){
-        listener = itemListener
+    fun registerBreadcrumbItemClickListener(itemListener: OnItemClickListener?){
+        this.listener = itemListener
     }
 
     //class FileViewHolder(var binding: ItemsFileBinding, val itemClick: (FileModel)-> Unit) : androidx.recyclerview.widget.RecyclerView.ViewHolder(binding.lnrLayout){
     class FileViewHolder(var binding: ItemsFileBinding) : androidx.recyclerview.widget.RecyclerView.ViewHolder(binding.root){
         fun bind(fileModel: FileModel){
             binding.fileModel = FileViewModel(fileModel)
-            //binding.root.setOnClickListener{itemClick(fileModel)}
 
         }
     }
 
     interface OnItemClickListener {
-        fun onItemClicked(fileModel: FileModel)
+        fun onBreadcrumbItemClicked(fileModel: FileModel)
     }
 }

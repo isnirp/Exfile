@@ -1,6 +1,8 @@
 package com.flimbis.exfile
 
-import android.content.Intent
+import android.app.job.JobInfo
+import android.app.job.JobScheduler
+import android.content.*
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
@@ -8,13 +10,18 @@ import com.flimbis.exfile.model.FileModel
 import com.flimbis.exfile.view.home.ExFilesFragment
 
 import android.net.Uri
+import android.os.PersistableBundle
+import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.FileProvider
 import androidx.core.content.FileProvider.getUriForFile
-import com.flimbis.exfile.util.createFileAtDirectory
-import com.flimbis.exfile.util.createFolderAtDirectory
+import com.flimbis.exfile.common.ExFileBroadcastReceiver
+import com.flimbis.exfile.service.ExFileJobService
+import com.flimbis.exfile.util.*
 import com.flimbis.exfile.view.dialog.CreateFolderDialog
+import com.flimbis.exfile.view.home.ExFilesFragment.Companion.currentDirectory
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.io.File
@@ -24,9 +31,10 @@ import kotlinx.android.synthetic.main.bottom_sheet_views.*
 //class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener, AbsListView.MultiChoiceModeListener {
 class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener, ActionMode.Callback, CreateFolderDialog.OnCreateDialogClickListener {
     lateinit var sheetBehaviour: BottomSheetBehavior<LinearLayout>
-    var currentPath: String? = null //tracks file path
-    var actionMode: ActionMode? = null
+
     lateinit var mFileModel: FileModel
+    lateinit var clipboard: ClipboardManager
+    var actionMode: ActionMode? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme_White)
@@ -38,8 +46,6 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
 
         if (savedInstanceState == null) {
             val exFilesFragment = ExFilesFragment.build { path = Environment.getExternalStorageDirectory().absolutePath }
-
-            currentPath = Environment.getExternalStorageDirectory().absolutePath
 
             //transactions; add, remove, replace
             val fragmentTransaction = supportFragmentManager.beginTransaction()
@@ -55,11 +61,11 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
 
         }
 
+        clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         //exFilesFragment.initMultiChoiceMode(this)
 
-        val bottom_sheet = findViewById<LinearLayout>(R.id.lnr_bottom_sheet)
-        sheetBehaviour = BottomSheetBehavior.from(bottom_sheet)
-
+        val bottomSheet = findViewById<LinearLayout>(R.id.lnr_bottom_sheet)
+        sheetBehaviour = BottomSheetBehavior.from(bottomSheet)
 
     }
 
@@ -117,17 +123,31 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
         return when (item?.itemId) {
             R.id.menu_cut -> {
                 //shareCurrentItem()
-                Toast.makeText(this, mFileModel.name, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, currentDirectory!!, Toast.LENGTH_SHORT).show()
                 mode?.finish() // Action picked, so close the CAB
                 true
             }
             R.id.menu_copy -> {
-                Toast.makeText(this, mFileModel.path, Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this, mFileModel.path, Toast.LENGTH_SHORT).show()
+                val contentUri: Uri = FileProvider.getUriForFile(this, "com.flimbis.exfile.MyFileProvider", File(mFileModel.path))
+                copyFileToDirectory(contentUri, this)
+                if (clipboard.hasPrimaryClip()) {
+                    sendCopyBroadcastIntent()
+                }
+
                 mode?.finish()
                 true
             }
             R.id.menu_delete -> {
-                //deleteSelectedItems()
+                if (mFileModel.isDirectory) {
+                    if (deleteDirectory(mFileModel.path)) sendBroadcastIntent(currentDirectory!!)
+                    else
+                        Toast.makeText(this, "Failed to delete directory", Toast.LENGTH_SHORT).show()
+                } else {
+                    if (deleteFileAtPath(mFileModel.path)) sendBroadcastIntent(currentDirectory!!)
+                    else
+                        Toast.makeText(this, "Failed to delete file", Toast.LENGTH_SHORT).show()
+                }
                 mode?.finish() // Action picked, so close the CAB
                 true
             }
@@ -155,10 +175,8 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
     * */
 
     override fun onItemFileSelected(fileModel: FileModel) {
-        if (fileModel.isDirectory)
-            toFolder(fileModel.path)
+        if (fileModel.isDirectory) toFolder(fileModel.path)
         else toFileIntent(fileModel.path)
-        //Toast.makeText(this, fileModel.name, Toast.LENGTH_SHORT).show()
     }
 
     override fun onItemPropertySelected(fileModel: FileModel) {
@@ -209,31 +227,31 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
+    override fun onClipboardActivated() {
+    }
+
     override fun onActionModeActivated(fileModel: FileModel) {
         actionMode = startActionMode(this)
         this.mFileModel = fileModel
     }
 
     override fun onCreateFolder(name: String) {
-        if (createFolderAtDirectory(currentPath!!, name)) {
-            Toast.makeText(this, "Directory ${name} created", Toast.LENGTH_SHORT).show()
-            toFolder(currentPath!!)
-        } else
+        //scheduleJob(currentPath!!, name, "FOLDER")
+        if (createFolderAtDirectory(currentDirectory!!, name)) sendBroadcastIntent(currentDirectory!!)
+        else
             Toast.makeText(this, "Failed to create directory ${name}", Toast.LENGTH_SHORT).show()
     }
 
     override fun onCreateFile(name: String) {
-        if (createFileAtDirectory(currentPath!!, name)) {
-            Toast.makeText(this, "File ${name} created", Toast.LENGTH_SHORT).show()
-            toFolder(currentPath!!)
-        } else
+        //scheduleJob(currentPath!!, name, "FILE")
+        if (createFileAtDirectory(currentDirectory!!, name)) sendBroadcastIntent(currentDirectory!!)
+        else
             Toast.makeText(this, "Failed to create file ${name}", Toast.LENGTH_SHORT).show()
 
     }
 
     private fun toFolder(folder: String) {
         val exFilesFragment = ExFilesFragment.build { path = folder }
-        currentPath = folder
 
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.container, exFilesFragment)
@@ -244,9 +262,73 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
 
     private fun toFileIntent(path: String) {
         val intent = Intent(Intent.ACTION_VIEW)
-        val contentUri: Uri = getUriForFile(this, packageName, File(path))
+        val contentUri: Uri = getUriForFile(this, "com.flimbis.exfile.MyFileProvider", File(path))
         intent.data = contentUri
         intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
         startActivity(Intent.createChooser(intent, "Select Application"))
+    }
+
+    private fun sendBroadcastIntent(path: String) {
+        val intent = Intent(ExFileBroadcastReceiver.DIR_UPDATE)
+        intent.putExtra(ExFileBroadcastReceiver.DIR_PATH_KEY, path)
+        sendBroadcast(intent)
+    }
+
+    private fun sendCopyBroadcastIntent() {
+        val intent = Intent(ExFileBroadcastReceiver.DIR_UPDATE)
+        intent.putExtra(ExFileBroadcastReceiver.DIR_PATH_KEY, "EX_FILE_COPY")
+        sendBroadcast(intent)
+    }
+
+    /*
+    *broadcast is started when a file or folder is written to Uri
+    * */
+    //private fun scheduleBroadcastOnNewFile(path: Uri) {
+    private fun scheduleBroadcastOnNewFile(path: String) {
+        val contentUri: Uri = FileProvider.getUriForFile(this, "com.flimbis.exfile.MyFileProvider", File(path))
+        Toast.makeText(this, "content URI " + contentUri, Toast.LENGTH_SHORT).show()
+        Log.i("TAG_SCHED", "successful job-->" + contentUri)
+
+        val bundle = PersistableBundle()
+        bundle.putString("FILE_PATH", path)
+
+//                .addTriggerContentUri(JobInfo.TriggerContentUri(contentUri, JobInfo.TriggerContentUri.FLAG_NOTIFY_FOR_DESCENDANTS))
+        val componentName = ComponentName(this, ExFileJobService::class.java)
+        val jobInfo = JobInfo.Builder(111, componentName)
+                .setExtras(bundle)
+                .build()
+
+        val jobScheduler: JobScheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+        val resultCode = jobScheduler.schedule(jobInfo)
+
+        if (resultCode == JobScheduler.RESULT_SUCCESS) {
+            Log.i("TAG_SCHED", "successful job-->" + contentUri)
+            //Toast.makeText(this, "successful job", Toast.LENGTH_SHORT).show()
+        } else {
+            Log.i("TAG_SCHED", "failed job")
+            //Toast.makeText(this, "failed job", Toast.LENGTH_SHORT).show()
+        }
+
+    }
+
+    private fun scheduleJob(path: String, name: String, fileType: String) {
+        val bundle = PersistableBundle()
+        bundle.putString("FILE_PATH", path)
+        bundle.putString("FILE_NAME", name)
+        bundle.putString("FILE_TYPE", fileType)
+
+        val componentName = ComponentName(this, ExFileJobService::class.java)
+        val jobInfo = JobInfo.Builder(111, componentName)
+                .setExtras(bundle)
+                .build()
+
+        val jobScheduler: JobScheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+        val resultCode = jobScheduler.schedule(jobInfo)
+
+        if (resultCode == JobScheduler.RESULT_SUCCESS)
+            Log.i("TAG_SCHED", "succesful job")
+        else
+            Log.i("TAG_SCHED", "failed job")
+
     }
 }
