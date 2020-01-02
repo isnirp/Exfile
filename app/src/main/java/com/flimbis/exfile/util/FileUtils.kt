@@ -50,12 +50,22 @@ fun deleteDirectory(path: String): Boolean {
     return file.deleteRecursively()
 }
 
-fun convertFileSizeToMB(sizeInBytes: Long): Double {
-    return (sizeInBytes.toDouble()) / (1024 * 1024)
-}
-
 fun copyFileToDirectory(contentUri: Uri, context: Context){
     val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     val clip: ClipData = ClipData.newUri(context.contentResolver, "URI", contentUri)
     clipboard.primaryClip = clip
+}
+
+fun renameFileAtDirectory(dirPath: String, prevName:String, curName:String): Boolean{
+    val directory = File(dirPath)
+    val fileToRename = File(directory,prevName)
+    val newFile = File(directory, curName)
+
+    //Renames the file denoted by this abstract pathname
+    return fileToRename.renameTo(newFile)
+
+}
+
+fun convertFileSizeToMB(sizeInBytes: Long): Double {
+    return (sizeInBytes.toDouble()) / (1024 * 1024)
 }

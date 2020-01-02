@@ -17,9 +17,14 @@ import android.widget.*
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.FileProvider
 import androidx.core.content.FileProvider.getUriForFile
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.flimbis.exfile.common.BackStackManager
 import com.flimbis.exfile.common.ExFileBroadcastReceiver
+import com.flimbis.exfile.model.FileType
 import com.flimbis.exfile.service.ExFileJobService
 import com.flimbis.exfile.util.*
+import com.flimbis.exfile.view.adapter.BreadcrumbAdapter
 import com.flimbis.exfile.view.dialog.CreateFolderDialog
 import com.flimbis.exfile.view.home.ExFilesFragment.Companion.currentDirectory
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -35,10 +40,14 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
     lateinit var mFileModel: FileModel
     lateinit var clipboard: ClipboardManager
     var actionMode: ActionMode? = null
+    private lateinit var breadcrumbAdapter: BreadcrumbAdapter
+    private val backStackManager = BackStackManager()
+    private lateinit var breadcrumbRecyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme_White)
         super.onCreate(savedInstanceState)
+        window.decorView.systemUiVisibility = window.decorView.systemUiVisibility.or(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
         setContentView(R.layout.activity_main)
 
         val toolbar = findViewById(R.id.toolbar_main) as Toolbar
@@ -60,6 +69,8 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
             fragmentTransaction.commit()//apply fragment
 
         }
+        initViews()
+        initBackStack()
 
         clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         //exFilesFragment.initMultiChoiceMode(this)
@@ -71,6 +82,7 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
 
     override fun onBackPressed() {
         super.onBackPressed()
+        backStackManager.popFromStack()
         if (supportFragmentManager.backStackEntryCount == 0) {
             finish()
         }
@@ -128,12 +140,12 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
                 true
             }
             R.id.menu_copy -> {
-                //Toast.makeText(this, mFileModel.path, Toast.LENGTH_SHORT).show()
-                val contentUri: Uri = FileProvider.getUriForFile(this, "com.flimbis.exfile.MyFileProvider", File(mFileModel.path))
+                Toast.makeText(this, mFileModel.path, Toast.LENGTH_SHORT).show()
+                /*val contentUri: Uri = FileProvider.getUriForFile(this, "com.flimbis.exfile.MyFileProvider", File(mFileModel.path))
                 copyFileToDirectory(contentUri, this)
                 if (clipboard.hasPrimaryClip()) {
                     sendCopyBroadcastIntent()
-                }
+                }*/
 
                 mode?.finish()
                 true
@@ -175,7 +187,7 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
     * */
 
     override fun onItemFileSelected(fileModel: FileModel) {
-        if (fileModel.isDirectory) toFolder(fileModel.path)
+        if (fileModel.isDirectory) toFolder(fileModel)
         else toFileIntent(fileModel.path)
     }
 
@@ -190,6 +202,12 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
         prop_last_modified.text = "23/12/2019"
 
         sheetBehaviour.state = BottomSheetBehavior.STATE_EXPANDED
+    }
+
+    override fun onItemRenameSelected(fileModel: FileModel) {
+        val openCreateFolderDialog = CreateFolderDialog(2)
+        openCreateFolderDialog.setPreviousName(fileModel.name)
+        openCreateFolderDialog.show(supportFragmentManager, "rename to")
     }
 
     override fun onItemViewSelected() {
@@ -247,15 +265,48 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
         if (createFileAtDirectory(currentDirectory!!, name)) sendBroadcastIntent(currentDirectory!!)
         else
             Toast.makeText(this, "Failed to create file ${name}", Toast.LENGTH_SHORT).show()
-
     }
 
-    private fun toFolder(folder: String) {
-        val exFilesFragment = ExFilesFragment.build { path = folder }
+    override fun onRenameFile(prevName: String, name: String) {
+        if (renameFileAtDirectory(currentDirectory!!, prevName, name))
+            sendBroadcastIntent(currentDirectory!!)
+    }
+
+    private fun initViews() {
+        //setSupportActionBar(toolbar)
+        breadcrumbRecyclerView = findViewById<RecyclerView>(R.id.lst_bread_crumb)
+        breadcrumbRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        breadcrumbAdapter = BreadcrumbAdapter()
+        breadcrumbRecyclerView.adapter = breadcrumbAdapter
+        breadcrumbAdapter.onItemClickListener = {
+            supportFragmentManager.popBackStack(it.path, 2);
+            backStackManager.popFromStackTill(it)
+        }
+    }
+
+    private fun updateBreadcrumbData(files: List<FileModel>) {
+        breadcrumbAdapter.updateBreadcrumbList(files)
+        if (files.isNotEmpty()) {
+            breadcrumbRecyclerView.smoothScrollToPosition(files.size - 1)
+        }
+    }
+
+    private fun initBackStack() {
+        backStackManager.onStackChangeListener = {
+            updateBreadcrumbData(it)
+        }
+
+        backStackManager.addToStack(fileModel = FileModel(Environment.getExternalStorageDirectory().absolutePath, true, "/", 0, "exe", 0))
+    }
+
+    private fun toFolder(fileModel: FileModel) {
+        val exFilesFragment = ExFilesFragment.build { path = fileModel.path }
+
+        backStackManager.addToStack(fileModel)
 
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.container, exFilesFragment)
-        fragmentTransaction.addToBackStack(folder)
+        fragmentTransaction.addToBackStack(fileModel.path)
         fragmentTransaction.commit()
 
     }

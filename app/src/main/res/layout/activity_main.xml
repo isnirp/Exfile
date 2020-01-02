@@ -18,10 +18,14 @@
             android:id="@+id/toolbar_main"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:elevation="1dp"
             android:theme="@style/CustomToolbar"
             app:layout_scrollFlags="scroll"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/lst_bread_crumb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

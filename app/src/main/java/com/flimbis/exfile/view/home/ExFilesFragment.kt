@@ -151,7 +151,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
             override fun onMenuItemClick(item: MenuItem?): Boolean {
                 return when (item?.itemId) {
                     R.id.menu_pop_rename -> {
-                        //Todo a dialog that allows file rename
+                        listener?.onItemRenameSelected(fileModel)
                         popup.dismiss()
                         true
                     }
@@ -217,6 +217,8 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
         fun onItemFileSelected(fileModel: FileModel)
 
         fun onItemPropertySelected(fileModel: FileModel)
+
+        fun onItemRenameSelected(fileModel: FileModel)
 
         fun onItemViewSelected()
 

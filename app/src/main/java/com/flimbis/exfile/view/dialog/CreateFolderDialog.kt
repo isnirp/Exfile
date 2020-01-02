@@ -12,6 +12,7 @@ import com.flimbis.exfile.R
 
 class CreateFolderDialog(val type: Int) : DialogFragment() {
     private var listener: OnCreateDialogClickListener? = null
+    private var prevName: String? = null
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
             val builder = AlertDialog.Builder(it)
@@ -19,7 +20,9 @@ class CreateFolderDialog(val type: Int) : DialogFragment() {
             val view = layoutInflater.inflate(R.layout.dialog_create_folder, null)
 
             builder.setView(view)
-            if (type == 0) builder.setTitle("Create Folder") else builder.setTitle("Create File")
+            if (type == 0) builder.setTitle("Create Folder")
+            else if (type == 1) builder.setTitle("Create File")
+            else builder.setTitle("Rename to")
 
             val name = view.findViewById<EditText>(R.id.edt_folder_name)
             val createFolder = view.findViewById<Button>(R.id.bttn_create_folder)
@@ -28,6 +31,7 @@ class CreateFolderDialog(val type: Int) : DialogFragment() {
                     when (type) {
                         0 -> listener!!.onCreateFolder(name.text.toString())
                         1 -> listener!!.onCreateFile(name.text.toString())
+                        2 -> listener!!.onRenameFile(prevName!!, name.text.toString())
                     }
 
                     dialog.cancel()
@@ -35,6 +39,10 @@ class CreateFolderDialog(val type: Int) : DialogFragment() {
             })
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
+    }
+
+    fun setPreviousName(prevName: String) {
+        this.prevName = prevName
     }
 
     override fun onAttach(context: Context) {
@@ -55,5 +63,7 @@ class CreateFolderDialog(val type: Int) : DialogFragment() {
         fun onCreateFolder(name: String)
 
         fun onCreateFile(name: String)
+
+        fun onRenameFile(prevName: String, name: String)
     }
 }
