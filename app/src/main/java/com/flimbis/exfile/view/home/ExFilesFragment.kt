@@ -19,6 +19,7 @@ import com.flimbis.exfile.common.ExFileBroadcastReceiver
 import com.flimbis.exfile.util.getFilesFromPath
 import android.content.Intent
 import android.content.BroadcastReceiver
+import android.net.Uri
 import android.os.Environment
 
 
@@ -147,12 +148,29 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
         val inflater: MenuInflater = popup.menuInflater
         inflater.inflate(R.menu.menu_pop, popup.menu)
 
+        val mimeFilter = listOf(
+                "jpeg",
+                "jpg",
+                "png",
+                "gif"
+        )
+        val shareMenu: MenuItem = popup.menu.findItem(R.id.menu_pop_share)
+        if (fileModel.isDirectory)
+            shareMenu.isVisible = false
+        else {
+            if (fileModel.ext !in mimeFilter) shareMenu.isVisible = false
+        }
+
         popup.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener {
             override fun onMenuItemClick(item: MenuItem?): Boolean {
                 return when (item?.itemId) {
                     R.id.menu_pop_rename -> {
                         listener?.onItemRenameSelected(fileModel)
                         popup.dismiss()
+                        true
+                    }
+                    R.id.menu_pop_share -> {
+                        shareImages(fileModel.path)
                         true
                     }
                     R.id.menu_pop_property -> {
@@ -176,13 +194,23 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
         listener!!.onActionModeActivated(fileModel)
     }
 
-    private fun showMsg(msg: String) {
-        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
-    }
-
     private fun getFileModelList(path: String): List<FileModel> {
         var files: List<File> = getFilesFromPath(path)
         return files.map { FileModel(path = it.path, isDirectory = it.isDirectory, name = it.name, size = it.length(), ext = it.extension, lastModified = it.lastModified()) }
+    }
+
+    private fun shareImages(path: String) {
+
+        val shareIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_STREAM, Uri.parse(path))
+            type = "image/*"
+        }
+        context?.startActivity(Intent.createChooser(shareIntent, resources.getText(R.string.send_to)))
+    }
+
+    private fun showMsg(msg: String) {
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
     }
 
     /*private fun scheduleBroadcastOnNewFile(path: String) {

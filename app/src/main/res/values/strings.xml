@@ -22,4 +22,6 @@
     <string name="menu_action_new_file">New File</string>
     <string name="menu_action_view_list">List</string>
     <string name="menu_action_view_grid">Grid</string>
+    <string name="menu_pop_share">Share</string>
+    <string name="send_to">Send to</string>
 </resources>

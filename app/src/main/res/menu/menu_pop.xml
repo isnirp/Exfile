@@ -5,6 +5,10 @@
         android:icon="@drawable/ic_action_cut"
         android:title="@string/menu_pop_rename" />
     <item
+        android:id="@+id/menu_pop_share"
+        android:icon="@drawable/ic_action_cut"
+        android:title="@string/menu_pop_share" />
+    <item
         android:id="@+id/menu_pop_property"
         android:icon="@drawable/ic_action_copy"
         android:title="@string/menu_pop_prop" />
