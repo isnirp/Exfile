@@ -10,7 +10,7 @@ class ExFileBroadcastReceiver(private val onChange: () -> Unit) : BroadcastRecei
     companion object {
         const val DIR_UPDATE = "com.flimbis.exfile.DIR_UPDATE"
         const val DIR_PATH_KEY = "com.flimbis.exfile.DIR_PATH_KEY"
-        const val DIR_COPY_KEY = "com.flimbis.exfile.DIR_COPY_KEY"
+        const val BROADCAST_TYPE = "com.flimbis.exfile.BROADCAST_TYPE"
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {

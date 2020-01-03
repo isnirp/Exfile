@@ -21,6 +21,7 @@ import android.content.Intent
 import android.content.BroadcastReceiver
 import android.net.Uri
 import android.os.Environment
+import com.google.android.material.snackbar.Snackbar
 
 
 /**
@@ -52,12 +53,25 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
 
         bReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, i: Intent) {
-                if (i.getStringExtra(ExFileBroadcastReceiver.DIR_PATH_KEY) == "EX_FILE_COPY")
-                    listener!!.onClipboardActivated()
-                else
-                    adapter.updateDirectory(getFileModelList(i.getStringExtra(ExFileBroadcastReceiver.DIR_PATH_KEY)))
+                when {
+                    i.getStringExtra(ExFileBroadcastReceiver.BROADCAST_TYPE) == "EX_COPY" -> {
+                        Toast.makeText(context, "copied to clipboard", Toast.LENGTH_SHORT).show()
+                        listener!!.onClipboardActivated()
+                    }
+                    i.getStringExtra(ExFileBroadcastReceiver.BROADCAST_TYPE) == "EX_CREATE" -> {
+                        adapter.updateDirectory(getFileModelList(i.getStringExtra(ExFileBroadcastReceiver.DIR_PATH_KEY)))
+                        showMsg("File created success")
+                    }
+                    i.getStringExtra(ExFileBroadcastReceiver.BROADCAST_TYPE) == "EX_RENAME" -> {
+                        adapter.updateDirectory(getFileModelList(i.getStringExtra(ExFileBroadcastReceiver.DIR_PATH_KEY)))
+                        showMsg("File renamed success")
+                    }
+                    else -> {
+                        adapter.updateDirectory(getFileModelList(i.getStringExtra(ExFileBroadcastReceiver.DIR_PATH_KEY)))
+                        showMsg("File deleted success")
+                    }
+                }
 
-                showMsg("Broadcast Receiver")
             }
         }
     }
@@ -210,7 +224,9 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
     }
 
     private fun showMsg(msg: String) {
-        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+//        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+        Snackbar.make(listFiles, msg, Snackbar.LENGTH_SHORT)
+                .show()
     }
 
     /*private fun scheduleBroadcastOnNewFile(path: String) {

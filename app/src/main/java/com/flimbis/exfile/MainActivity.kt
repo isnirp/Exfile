@@ -134,19 +134,20 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
     //Action mode
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
         return when (item?.itemId) {
-            R.id.menu_cut -> {
+           /* R.id.menu_cut -> {
                 //shareCurrentItem()
                 Toast.makeText(this, currentDirectory!!, Toast.LENGTH_SHORT).show()
                 mode?.finish() // Action picked, so close the CAB
                 true
-            }
+            }*/
             R.id.menu_copy -> {
-                Toast.makeText(this, mFileModel.path, Toast.LENGTH_SHORT).show()
-                /*val contentUri: Uri = FileProvider.getUriForFile(this, "com.flimbis.exfile.MyFileProvider", File(mFileModel.path))
+                //Toast.makeText(this, mFileModel.path, Toast.LENGTH_SHORT).show()
+                val contentUri: Uri = FileProvider.getUriForFile(this, "com.flimbis.exfile.MyFileProvider", File(mFileModel.path))
                 copyFileToDirectory(contentUri, this)
+
                 if (clipboard.hasPrimaryClip()) {
-                    sendCopyBroadcastIntent()
-                }*/
+                    sendBroadcastIntent(currentDirectory!!, "EX_COPY")
+                }
 
                 mode?.finish()
                 true
@@ -261,21 +262,21 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
 
     override fun onCreateFolder(name: String) {
         //scheduleJob(currentPath!!, name, "FOLDER")
-        if (createFolderAtDirectory(currentDirectory!!, name)) sendBroadcastIntent(currentDirectory!!)
+        if (createFolderAtDirectory(currentDirectory!!, name)) sendBroadcastIntent(currentDirectory!!, "EX_CREATE")
         else
             Toast.makeText(this, "Failed to create directory ${name}", Toast.LENGTH_SHORT).show()
     }
 
     override fun onCreateFile(name: String) {
         //scheduleJob(currentPath!!, name, "FILE")
-        if (createFileAtDirectory(currentDirectory!!, name)) sendBroadcastIntent(currentDirectory!!)
+        if (createFileAtDirectory(currentDirectory!!, name)) sendBroadcastIntent(currentDirectory!!, "EX_CREATE")
         else
             Toast.makeText(this, "Failed to create file ${name}", Toast.LENGTH_SHORT).show()
     }
 
     override fun onRenameFile(prevName: String, name: String) {
         if (renameFileAtDirectory(currentDirectory!!, prevName, name))
-            sendBroadcastIntent(currentDirectory!!)
+            sendBroadcastIntent(currentDirectory!!, "EX_RENAME")
     }
 
     override fun onDeleteFile(files: List<FileModel>) {
@@ -287,8 +288,7 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
             }
         }
 
-        sendBroadcastIntent(currentDirectory!!)
-
+        sendBroadcastIntent(currentDirectory!!, "EX_DELETE")
     }
 
     private fun initViews() {
@@ -338,15 +338,10 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
         startActivity(Intent.createChooser(intent, "Select Application"))
     }
 
-    private fun sendBroadcastIntent(path: String) {
+    private fun sendBroadcastIntent(path: String, broadcastType: String) {
         val intent = Intent(ExFileBroadcastReceiver.DIR_UPDATE)
         intent.putExtra(ExFileBroadcastReceiver.DIR_PATH_KEY, path)
-        sendBroadcast(intent)
-    }
-
-    private fun sendCopyBroadcastIntent() {
-        val intent = Intent(ExFileBroadcastReceiver.DIR_UPDATE)
-        intent.putExtra(ExFileBroadcastReceiver.DIR_PATH_KEY, "EX_FILE_COPY")
+        intent.putExtra(ExFileBroadcastReceiver.BROADCAST_TYPE, broadcastType)
         sendBroadcast(intent)
     }
 
