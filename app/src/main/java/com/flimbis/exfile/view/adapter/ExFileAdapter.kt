@@ -20,30 +20,36 @@ class ExFileAdapter(val exfileFragment: ExFilesFragment, val context: Context?) 
         val fileBinding: ItemsFileBinding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.items_file, parent, false)
         val viewHolder = ViewHolder(fileBinding)
 
-        val fileModel: FileModel = items.get(position)
+        val fileModel: FileModel = items[position]
         viewHolder.bind(fileModel)
 
         val view = fileBinding.root
 
         view.setOnClickListener { listener!!.onFileClicked(fileModel) }
-        view.setOnLongClickListener(object : View.OnLongClickListener {
+        /*view.setOnLongClickListener(object : View.OnLongClickListener {
             override fun onLongClick(v: View?): Boolean {
                 exfileFragment.actionModeActivated(fileModel)
                 v?.isSelected = true
                 return true
             }
-        })
+        })*/
+        view.setOnLongClickListener { v ->
+            exfileFragment.actionModeActivated(fileModel)
+            v?.isSelected = true
+            true
+        }
 
-        fileBinding.pop.setOnClickListener(object : View.OnClickListener {
+        /*fileBinding.pop.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View) {
                 listener!!.onPopMenuClicked(v, fileModel)
             }
-        })
+        })*/
+        fileBinding.pop.setOnClickListener { v -> listener!!.onPopMenuClicked(v, fileModel) }
 
         return view
     }
 
-    override fun getItem(position: Int): Any = items.get(position)
+    override fun getItem(position: Int): Any = items[position]
 
     override fun getItemId(position: Int): Long = position.toLong()
 

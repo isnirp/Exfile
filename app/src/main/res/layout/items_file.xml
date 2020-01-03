@@ -93,11 +93,12 @@
                         android:text="@string/cap_size"
                         android:textAppearance="@style/SmallText.Title" />
 
+<!--                    android:text="@{Double.toString(fileModel.size)}"-->
                     <TextView
                         android:id="@+id/txt_file_size"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{Double.toString(fileModel.size)}"
+                        android:text="@{fileModel.size}"
                         android:textAppearance="@style/SmallText" />
 
                 </LinearLayout>

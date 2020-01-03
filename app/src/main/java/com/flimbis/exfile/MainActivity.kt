@@ -26,6 +26,7 @@ import com.flimbis.exfile.service.ExFileJobService
 import com.flimbis.exfile.util.*
 import com.flimbis.exfile.view.adapter.BreadcrumbAdapter
 import com.flimbis.exfile.view.dialog.CreateFolderDialog
+import com.flimbis.exfile.view.dialog.DeleteDialog
 import com.flimbis.exfile.view.home.ExFilesFragment.Companion.currentDirectory
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -34,7 +35,7 @@ import kotlinx.android.synthetic.main.bottom_sheet.*
 import kotlinx.android.synthetic.main.bottom_sheet_views.*
 
 //class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener, AbsListView.MultiChoiceModeListener {
-class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener, ActionMode.Callback, CreateFolderDialog.OnCreateDialogClickListener {
+class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener, ActionMode.Callback, CreateFolderDialog.OnCreateDialogClickListener, DeleteDialog.OnDeleteDialogClickListener {
     lateinit var sheetBehaviour: BottomSheetBehavior<LinearLayout>
 
     lateinit var mFileModel: FileModel
@@ -151,7 +152,7 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
                 true
             }
             R.id.menu_delete -> {
-                if (mFileModel.isDirectory) {
+                /*if (mFileModel.isDirectory) {
                     if (deleteDirectory(mFileModel.path)) sendBroadcastIntent(currentDirectory!!)
                     else
                         Toast.makeText(this, "Failed to delete directory", Toast.LENGTH_SHORT).show()
@@ -159,7 +160,12 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
                     if (deleteFileAtPath(mFileModel.path)) sendBroadcastIntent(currentDirectory!!)
                     else
                         Toast.makeText(this, "Failed to delete file", Toast.LENGTH_SHORT).show()
-                }
+                }*/
+                var filesToDelete = mutableListOf<FileModel>()
+                filesToDelete.add(mFileModel)
+
+                val openDeleteDialog = DeleteDialog(filesToDelete)
+                openDeleteDialog.show(supportFragmentManager, "delete files")
                 mode?.finish() // Action picked, so close the CAB
                 true
             }
@@ -270,6 +276,19 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
     override fun onRenameFile(prevName: String, name: String) {
         if (renameFileAtDirectory(currentDirectory!!, prevName, name))
             sendBroadcastIntent(currentDirectory!!)
+    }
+
+    override fun onDeleteFile(files: List<FileModel>) {
+        for (fileModel in files) {
+            if (fileModel.isDirectory) {
+                deleteDirectory(fileModel.path)
+            } else {
+                deleteFileAtPath(fileModel.path)
+            }
+        }
+
+        sendBroadcastIntent(currentDirectory!!)
+
     }
 
     private fun initViews() {

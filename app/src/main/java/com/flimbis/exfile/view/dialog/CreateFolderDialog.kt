@@ -20,9 +20,11 @@ class CreateFolderDialog(val type: Int) : DialogFragment() {
             val view = layoutInflater.inflate(R.layout.dialog_create_folder, null)
 
             builder.setView(view)
-            if (type == 0) builder.setTitle("Create Folder")
-            else if (type == 1) builder.setTitle("Create File")
-            else builder.setTitle("Rename to")
+            when (type) {
+                0 -> builder.setTitle("Create Folder")
+                1 -> builder.setTitle("Create File")
+                else -> builder.setTitle("Rename to")
+            }
 
             val name = view.findViewById<EditText>(R.id.edt_folder_name)
             val createFolder = view.findViewById<Button>(R.id.bttn_create_folder)
