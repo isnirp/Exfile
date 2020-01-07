@@ -103,7 +103,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), RexFileAdapter.OnFileC
 
         listFiles.adapter = adapter
 
-        tracker = SelectionTracker.Builder<Long>(
+        /*tracker = SelectionTracker.Builder<Long>(
                 "mySelection",
                 listFiles,
                 StableIdKeyProvider(listFiles),
@@ -113,7 +113,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), RexFileAdapter.OnFileC
                 SelectionPredicates.createSelectAnything()
         ).build()
 
-        adapter.tracker = tracker
+        adapter.tracker = tracker*/
 
         return view
     }
@@ -304,8 +304,8 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), RexFileAdapter.OnFileC
 
 
     class Builder {
-        var path: String = Environment.getExternalStorageDirectory().absolutePath
-        //var path: String = " "
+        //var path: String = Environment.getExternalStorageDirectory().absolutePath
+        var path: String = " "
 
         fun build(): ExFilesFragment {
             val fragment = ExFilesFragment()
