@@ -25,6 +25,7 @@ class ExFileAdapter(val exfileFragment: ExFilesFragment, val context: Context?) 
 
         val view = fileBinding.root
 
+
         view.setOnClickListener { listener!!.onFileClicked(fileModel) }
         /*view.setOnLongClickListener(object : View.OnLongClickListener {
             override fun onLongClick(v: View?): Boolean {
@@ -54,6 +55,12 @@ class ExFileAdapter(val exfileFragment: ExFilesFragment, val context: Context?) 
     override fun getItemId(position: Int): Long = position.toLong()
 
     override fun getCount(): Int = items.size
+
+    override fun getItemViewType(position: Int): Int {
+        return super.getItemViewType(position)
+    }
+
+    override fun getViewTypeCount(): Int = 2
 
     fun setFileClickedListener(listener: OnFileClickedListener) {
         this.listener = listener

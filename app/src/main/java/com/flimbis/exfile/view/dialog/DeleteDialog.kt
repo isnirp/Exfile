@@ -28,6 +28,7 @@ class DeleteDialog(val items: List<FileModel>) : DialogFragment() {
             val deleteAction = view.findViewById<Button>(R.id.bttn_delete_files)
             val chkBox = view.findViewById<CheckBox>(R.id.chk_delete)
             val lst = view.findViewById<ListView>(R.id.lst_delete_files)
+
             adapter = DeleteFilesAdapter(items)
             lst.adapter = adapter
 

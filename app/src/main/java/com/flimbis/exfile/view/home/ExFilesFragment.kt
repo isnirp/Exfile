@@ -21,20 +21,30 @@ import android.content.Intent
 import android.content.BroadcastReceiver
 import android.net.Uri
 import android.os.Environment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.flimbis.exfile.view.adapter.RexFileAdapter
 import com.google.android.material.snackbar.Snackbar
+
+import androidx.recyclerview.selection.SelectionPredicates
+import androidx.recyclerview.selection.SelectionTracker
+import androidx.recyclerview.selection.StableIdKeyProvider
+import androidx.recyclerview.selection.StorageStrategy
+import com.flimbis.exfile.view.adapter.MyItemDetailsLookup
 
 
 /**
  * A simple [Fragment] subclass.
  *major lifecycle methods of a fragment to implement; onCreate, onCreateView, onPause
  */
-class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileClickedListener {
+class ExFilesFragment : androidx.fragment.app.Fragment(), RexFileAdapter.OnFileClickedListener {
 
-    private lateinit var listFiles: ListView
-    private lateinit var adapter: ExFileAdapter
+    private lateinit var listFiles: RecyclerView
+    private lateinit var adapter: RexFileAdapter
 
     private var listener: OnFileSelectedListener? = null
     private lateinit var bReceiver: BroadcastReceiver
+    private var tracker: SelectionTracker<Long>? = null
 
     companion object {
         private const val PATH = "com.flimbis.exfile.PATH_FINDER"
@@ -85,12 +95,25 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
 
         listFiles = view.findViewById(R.id.lst_ex_files)
 
-        adapter = ExFileAdapter(this, context)
-        adapter.updateDirectory(getFileModelList(arguments!!.getString(PATH)))
+        listFiles.layoutManager = LinearLayoutManager(context)
 
+        adapter = RexFileAdapter()
+        adapter.updateDirectory(getFileModelList(arguments!!.getString(PATH)))
         adapter.setFileClickedListener(this)
 
         listFiles.adapter = adapter
+
+        tracker = SelectionTracker.Builder<Long>(
+                "mySelection",
+                listFiles,
+                StableIdKeyProvider(listFiles),
+                MyItemDetailsLookup(listFiles),
+                StorageStrategy.createLongStorage()
+        ).withSelectionPredicate(
+                SelectionPredicates.createSelectAnything()
+        ).build()
+
+        adapter.tracker = tracker
 
         return view
     }
@@ -199,10 +222,10 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
         popup.show()
     }
 
-    fun initMultiChoiceMode(listener: AbsListView.MultiChoiceModeListener) {
-        listFiles.choiceMode = ListView.CHOICE_MODE_MULTIPLE_MODAL
-        listFiles.setMultiChoiceModeListener(listener)
-    }
+    /* fun initMultiChoiceMode(listener: AbsListView.MultiChoiceModeListener) {
+         listFiles.choiceMode = ListView.CHOICE_MODE_MULTIPLE_MODAL
+         listFiles.setMultiChoiceModeListener(listener)
+     }*/
 
     fun actionModeActivated(fileModel: FileModel) {
         listener!!.onActionModeActivated(fileModel)

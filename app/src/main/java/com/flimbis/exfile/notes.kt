@@ -13,6 +13,12 @@ package com.flimbis.exfile
 * */
 
 /*
+* RECYCLERVIEW
+*
+* https://developer.android.com/guide/topics/ui/layout/recyclerview
+* */
+
+/*
 * FILE PROVIDER
 *
 * https://developer.android.com/training/secure-file-sharing/retrieve-info
