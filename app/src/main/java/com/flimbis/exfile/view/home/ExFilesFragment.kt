@@ -30,6 +30,7 @@ import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StableIdKeyProvider
 import androidx.recyclerview.selection.StorageStrategy
+import androidx.recyclerview.widget.GridLayoutManager
 import com.flimbis.exfile.view.adapter.MyItemDetailsLookup
 
 
@@ -96,10 +97,13 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), RexFileAdapter.OnFileC
         listFiles = view.findViewById(R.id.lst_ex_files)
 
         listFiles.layoutManager = LinearLayoutManager(context)
+        //listFiles.layoutManager = GridLayoutManager(context,3)
 
         adapter = RexFileAdapter()
+        adapter.setViewType(0)
         adapter.updateDirectory(getFileModelList(arguments!!.getString(PATH)))
         adapter.setFileClickedListener(this)
+
 
         listFiles.adapter = adapter
 
