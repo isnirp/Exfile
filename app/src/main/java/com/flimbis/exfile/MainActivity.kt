@@ -194,7 +194,7 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
     * */
 
     override fun onItemFileSelected(fileModel: FileModel) {
-        if (fileModel.isDirectory) toFolder(fileModel)
+        if (fileModel.isDirectory) toFolder(fileModel.path)
         else toFileIntent(fileModel.path)
     }
 
@@ -217,8 +217,17 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
         openCreateFolderDialog.show(supportFragmentManager, "rename to")
     }
 
-    override fun onItemViewSelected() {
-        Toast.makeText(this, "List View", Toast.LENGTH_SHORT).show()
+    override fun onItemViewSelected(filePath: String, viewType: Int) {
+        //persist viewType
+        upDateViewTypePref(viewType)
+
+        //recreate view
+        val exFilesFragment = ExFilesFragment.build { path = filePath }
+
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.container, exFilesFragment)
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
 
         /*val sheetDialog = BottomSheetDialog(this)
         val sheetView: View = layoutInflater.inflate(R.layout.bottom_sheet_views, null)
@@ -232,10 +241,6 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
 
         sheetDialog.show()*/
 
-    }
-
-    override fun onItemViewGridSelected() {
-        Toast.makeText(this, "Grid View", Toast.LENGTH_SHORT).show()
     }
 
     override fun onItemCreateFolderSelected() {
@@ -318,14 +323,14 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
         backStackManager.addToStack(fileModel = FileModel(Environment.getExternalStorageDirectory().absolutePath, true, "/", 0, "exe", 0))
     }
 
-    private fun toFolder(fileModel: FileModel) {
-        val exFilesFragment = ExFilesFragment.build { path = fileModel.path }
+    private fun toFolder(filePath: String) {
+        val exFilesFragment = ExFilesFragment.build { path = filePath }
 
-        backStackManager.addToStack(fileModel)
+        backStackManager.addToStack(getFileModel(filePath))
 
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.container, exFilesFragment)
-        fragmentTransaction.addToBackStack(fileModel.path)
+        fragmentTransaction.addToBackStack(filePath)
         fragmentTransaction.commit()
 
     }
@@ -336,6 +341,19 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
         intent.data = contentUri
         intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
         startActivity(Intent.createChooser(intent, "Select Application"))
+    }
+
+    private fun getFileModel(path: String): FileModel {
+        var file: File = getFileFromPath(path)
+        return FileModel(path = file.path, isDirectory = file.isDirectory, name = file.name, size = file.length(), ext = file.extension, lastModified = file.lastModified())
+    }
+
+    private fun upDateViewTypePref(viewType: Int){
+        val sharedPref = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE) ?: return
+        with (sharedPref.edit()) {
+            putInt(getString(R.string.view_type_key), viewType)
+            commit()
+        }
     }
 
     private fun sendBroadcastIntent(path: String, broadcastType: String) {

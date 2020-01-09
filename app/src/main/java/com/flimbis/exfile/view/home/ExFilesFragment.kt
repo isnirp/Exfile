@@ -105,11 +105,20 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), RexFileAdapter.OnFileC
 
         listFiles = view.findViewById(R.id.lst_ex_files)
 
-        listFiles.layoutManager = LinearLayoutManager(context)
-        //listFiles.layoutManager = GridLayoutManager(context,3)
+        val sharedPref = context?.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+        val viewType = sharedPref?.getInt(getString(R.string.view_type_key), 0)
+
+        when (viewType) {
+            1 -> {
+                listFiles.layoutManager = GridLayoutManager(context, 3)
+            }
+            else -> {
+                listFiles.layoutManager = LinearLayoutManager(context)
+            }
+        }
 
         adapter = RexFileAdapter { listener!!.onItemFileSelected(it) }
-        adapter.setViewType(0)
+        adapter.setViewType(viewType!!)
         adapter.updateDirectory(getFileModelList(arguments!!.getString(PATH)))
         adapter.setFileClickedListener(this)
 
@@ -164,11 +173,11 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), RexFileAdapter.OnFileC
                 true
             }
             R.id.action_view_list -> {
-                listener!!.onItemViewSelected()
+                listener!!.onItemViewSelected(path = arguments!!.getString(PATH))
                 true
             }
             R.id.action_view_grid -> {
-                listener!!.onItemViewGridSelected()
+                listener!!.onItemViewSelected(path = arguments!!.getString(PATH), viewType = 1)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -245,10 +254,6 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), RexFileAdapter.OnFileC
         return files.map { FileModel(path = it.path, isDirectory = it.isDirectory, name = it.name, size = it.length(), ext = it.extension, lastModified = it.lastModified()) }
     }
 
-    private fun getFileModel(path: String): FileModel {
-        var file: File = getFileFromPath(path)
-        return FileModel(path = file.path, isDirectory = file.isDirectory, name = file.name, size = file.length(), ext = file.extension, lastModified = file.lastModified())
-    }
 
     private fun shareImages(path: String) {
 
@@ -301,9 +306,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), RexFileAdapter.OnFileC
 
         fun onItemRenameSelected(fileModel: FileModel)
 
-        fun onItemViewSelected()
-
-        fun onItemViewGridSelected()
+        fun onItemViewSelected(path: String, viewType: Int = 0)
 
         fun onItemCreateFolderSelected()
 
