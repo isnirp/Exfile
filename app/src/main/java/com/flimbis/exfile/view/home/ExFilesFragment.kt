@@ -31,6 +31,7 @@ import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StableIdKeyProvider
 import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.GridLayoutManager
+import com.flimbis.exfile.util.getFileFromPath
 import com.flimbis.exfile.view.adapter.MyItemDetailsLookup
 
 
@@ -49,7 +50,15 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), RexFileAdapter.OnFileC
 
     companion object {
         private const val PATH = "com.flimbis.exfile.PATH_FINDER"
+
+        /*
+        * apply
+        * inline fun <T> T.apply(block: T.() -> Unit): T
+        * Calls the specified function block with this value as its receiver and returns this(the object) value
+        * usage: initialising objects eg; Person().apply{name=Prince}
+        * */
         fun build(block: Builder.() -> Unit) = Builder().apply(block).build()
+
         var currentDirectory: String? = null //tracks file path (directory)
     }
 
@@ -99,7 +108,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), RexFileAdapter.OnFileC
         listFiles.layoutManager = LinearLayoutManager(context)
         //listFiles.layoutManager = GridLayoutManager(context,3)
 
-        adapter = RexFileAdapter()
+        adapter = RexFileAdapter { listener!!.onItemFileSelected(it) }
         adapter.setViewType(0)
         adapter.updateDirectory(getFileModelList(arguments!!.getString(PATH)))
         adapter.setFileClickedListener(this)
@@ -180,10 +189,6 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), RexFileAdapter.OnFileC
         listener = null
     }
 
-    override fun onFileClicked(fileModel: FileModel) {
-        listener!!.onItemFileSelected(fileModel)
-    }
-
     override fun onPopMenuClicked(v: View, fileModel: FileModel) {
         val popup = PopupMenu(context!!, v)
         val inflater: MenuInflater = popup.menuInflater
@@ -238,6 +243,11 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), RexFileAdapter.OnFileC
     private fun getFileModelList(path: String): List<FileModel> {
         var files: List<File> = getFilesFromPath(path)
         return files.map { FileModel(path = it.path, isDirectory = it.isDirectory, name = it.name, size = it.length(), ext = it.extension, lastModified = it.lastModified()) }
+    }
+
+    private fun getFileModel(path: String): FileModel {
+        var file: File = getFileFromPath(path)
+        return FileModel(path = file.path, isDirectory = file.isDirectory, name = file.name, size = file.length(), ext = file.extension, lastModified = file.lastModified())
     }
 
     private fun shareImages(path: String) {

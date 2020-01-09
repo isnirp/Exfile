@@ -21,7 +21,7 @@ import android.graphics.Bitmap
 import com.flimbis.exfile.databinding.ItemsFileGridBinding
 
 
-class RexFileAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class RexFileAdapter(private val itemClick:(FileModel)->Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var items = listOf<FileModel>()
     private var listener: OnFileClickedListener? = null
     private var viewType: Int = 0
@@ -38,11 +38,11 @@ class RexFileAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return when (viewType) {
             LIST_VIEW -> {
                 val fileBinding: ItemsFileBinding = inflate(LayoutInflater.from(parent?.ctx), R.layout.items_file, parent, false)
-                RexViewHolder(fileBinding)
+                RexViewHolder(fileBinding, itemClick)
             }
             else -> {
                 val gridFileBinding: ItemsFileGridBinding = inflate(LayoutInflater.from(parent?.ctx), R.layout.items_file_grid, parent, false)
-                RexGridViewHolder(gridFileBinding)
+                RexGridViewHolder(gridFileBinding, itemClick)
             }
         }
 
@@ -99,13 +99,14 @@ class RexFileAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
-    inner class RexViewHolder(private val binding: ItemsFileBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class RexViewHolder(private val binding: ItemsFileBinding, private val itemClick:(FileModel)->Unit) : RecyclerView.ViewHolder(binding.root) {
 
         fun bindView(fileModel: FileModel, isActivated: Boolean = false) {
             binding.fileModel = FileViewModel(fileModel)
             itemView.isActivated = isActivated
 
-            binding.root.setOnClickListener { listener!!.onFileClicked(fileModel) }
+//            binding.root.setOnClickListener { listener!!.onFileClicked(fileModel) }
+            binding.root.setOnClickListener { itemClick(fileModel) }
             binding.pop.setOnClickListener { v -> listener!!.onPopMenuClicked(v, fileModel) }
 
             renderImages(fileModel.path, fileModel.ext, binding.imgFile)
@@ -119,13 +120,14 @@ class RexFileAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 }
     }
 
-    inner class RexGridViewHolder(private val binding: ItemsFileGridBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class RexGridViewHolder(private val binding: ItemsFileGridBinding, private val itemClick:(FileModel)->Unit) : RecyclerView.ViewHolder(binding.root) {
 
         fun bindView(fileModel: FileModel, isActivated: Boolean = false) {
             binding.fileModel = FileViewModel(fileModel)
             itemView.isActivated = isActivated
 
-            binding.root.setOnClickListener { listener!!.onFileClicked(fileModel) }
+//            binding.root.setOnClickListener { listener!!.onFileClicked(fileModel) }
+            binding.root.setOnClickListener { itemClick(fileModel) }
 
             renderImages(fileModel.path, fileModel.ext, binding.imgFile)
         }
@@ -137,7 +139,7 @@ class RexFileAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     interface OnFileClickedListener {
-        fun onFileClicked(fileModel: FileModel)
+        //fun onFileClicked(fileModel: FileModel)
 
         fun onPopMenuClicked(v: View, fileModel: FileModel)
     }

@@ -19,6 +19,11 @@ fun getFilesFromPath(path: String): List<File> {
     return file.listFiles().toList()
 }
 
+fun getFileFromPath(path: String): File {
+    val file = File(path)
+    return file
+}
+
 fun createFolderAtDirectory(path: String, folderName: String): Boolean {
     val file = File(path, folderName)//Creates a new File instance from a parent pathname string and a child pathname string
     return try {
@@ -50,15 +55,15 @@ fun deleteDirectory(path: String): Boolean {
     return file.deleteRecursively()
 }
 
-fun copyFileToDirectory(contentUri: Uri, context: Context){
+fun copyFileToDirectory(contentUri: Uri, context: Context) {
     val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     val clip: ClipData = ClipData.newUri(context.contentResolver, "URI", contentUri)
     clipboard.primaryClip = clip
 }
 
-fun renameFileAtDirectory(dirPath: String, prevName:String, curName:String): Boolean{
+fun renameFileAtDirectory(dirPath: String, prevName: String, curName: String): Boolean {
     val directory = File(dirPath)
-    val fileToRename = File(directory,prevName)
+    val fileToRename = File(directory, prevName)
     val newFile = File(directory, curName)
 
     //Renames the file denoted by this abstract pathname
