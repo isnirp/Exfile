@@ -51,7 +51,7 @@ class FileViewModel(val fileModel: FileModel) : BaseObservable() {
             if (imgUrl in mimeFilter) {
                 Picasso.get().load(Uri.parse(imgUrl)).placeholder(R.drawable.ic_action_folder).into(v)
             } else v.setImageResource(R.drawable.ic_action_folder)*/
-            v.setImageResource(R.drawable.ic_action_folder)
+            v.setImageResource(R.drawable.ic_folder)
         }
 
         @BindingAdapter("app:imageSrc")
@@ -67,7 +67,7 @@ class FileViewModel(val fileModel: FileModel) : BaseObservable() {
             if (imgUrl in mimeFilter) {
                 Picasso.get().load(Uri.parse(imgUrl)).placeholder(R.drawable.ic_action_folder).into(v)
             } else v.setImageResource(R.drawable.ic_action_folder)*/
-            v.setImageResource(R.drawable.ic_action_folder)
+            v.setImageResource(R.drawable.ic_folder)
         }
     }
 }

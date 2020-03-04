@@ -47,7 +47,8 @@ class BreadcrumbAdapter() : androidx.recyclerview.widget.RecyclerView.Adapter<Br
     inner class FileViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView), View.OnClickListener {
         fun bind(fileModel: FileModel) {
             val path = itemView.findViewById<TextView>(R.id.txt_breadcrumb)
-            path.text = fileModel.name
+            if (fileModel.name == "exHome") path.text = "/"
+            else path.text = fileModel.name
 
         }
 

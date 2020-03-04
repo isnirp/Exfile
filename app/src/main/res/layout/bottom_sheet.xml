@@ -23,7 +23,7 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_action_folder" />
+            android:src="@drawable/ic_folder" />
 
         <TextView
             android:layout_width="match_parent"

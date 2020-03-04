@@ -51,11 +51,12 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
         window.decorView.systemUiVisibility = window.decorView.systemUiVisibility.or(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
         setContentView(R.layout.activity_main)
 
-        val toolbar = findViewById(R.id.toolbar_main) as Toolbar
+        val toolbar = findViewById<Toolbar>(R.id.toolbar_main)
         setSupportActionBar(toolbar)
 
         if (savedInstanceState == null) {
             val exFilesFragment = ExFilesFragment.build { path = Environment.getExternalStorageDirectory().absolutePath }
+            //val exFilesFragment = ExFilesFragment.build { path = "/" }
 
             //transactions; add, remove, replace
             val fragmentTransaction = supportFragmentManager.beginTransaction()
@@ -67,6 +68,7 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
             * In other words, it will pop your back stack until it finds the fragment that was added by the name in addToBackStack(String name)
             * */
             fragmentTransaction.addToBackStack(Environment.getExternalStorageDirectory().absolutePath)
+            //fragmentTransaction.addToBackStack("/")
             fragmentTransaction.commit()//apply fragment
 
         }
@@ -134,12 +136,12 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
     //Action mode
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
         return when (item?.itemId) {
-           /* R.id.menu_cut -> {
-                //shareCurrentItem()
-                Toast.makeText(this, currentDirectory!!, Toast.LENGTH_SHORT).show()
-                mode?.finish() // Action picked, so close the CAB
-                true
-            }*/
+            /* R.id.menu_cut -> {
+                 //shareCurrentItem()
+                 Toast.makeText(this, currentDirectory!!, Toast.LENGTH_SHORT).show()
+                 mode?.finish() // Action picked, so close the CAB
+                 true
+             }*/
             R.id.menu_copy -> {
                 //Toast.makeText(this, mFileModel.path, Toast.LENGTH_SHORT).show()
                 val contentUri: Uri = FileProvider.getUriForFile(this, "com.flimbis.exfile.MyFileProvider", File(mFileModel.path))
@@ -162,7 +164,7 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
                     else
                         Toast.makeText(this, "Failed to delete file", Toast.LENGTH_SHORT).show()
                 }*/
-                var filesToDelete = mutableListOf<FileModel>()
+                val filesToDelete = mutableListOf<FileModel>()
                 filesToDelete.add(mFileModel)
 
                 val openDeleteDialog = DeleteDialog(filesToDelete)
@@ -300,10 +302,12 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
         //setSupportActionBar(toolbar)
         breadcrumbRecyclerView = findViewById<RecyclerView>(R.id.lst_bread_crumb)
         breadcrumbRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
         breadcrumbAdapter = BreadcrumbAdapter()
         breadcrumbRecyclerView.adapter = breadcrumbAdapter
+
         breadcrumbAdapter.onItemClickListener = {
-            supportFragmentManager.popBackStack(it.path, 2);
+            supportFragmentManager.popBackStack(it.path, 2)
             backStackManager.popFromStackTill(it)
         }
     }
@@ -320,7 +324,7 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
             updateBreadcrumbData(it)
         }
 
-        backStackManager.addToStack(fileModel = FileModel(Environment.getExternalStorageDirectory().absolutePath, true, "/", 0, "exe", 0))
+        backStackManager.addToStack(fileModel = FileModel("exPath", true, "exHome", 0, "exe", 0))
     }
 
     private fun toFolder(filePath: String) {
@@ -348,9 +352,10 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
         return FileModel(path = file.path, isDirectory = file.isDirectory, name = file.name, size = file.length(), ext = file.extension, lastModified = file.lastModified())
     }
 
-    private fun upDateViewTypePref(viewType: Int){
-        val sharedPref = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE) ?: return
-        with (sharedPref.edit()) {
+    private fun upDateViewTypePref(viewType: Int) {
+        val sharedPref = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+                ?: return
+        with(sharedPref.edit()) {
             putInt(getString(R.string.view_type_key), viewType)
             commit()
         }

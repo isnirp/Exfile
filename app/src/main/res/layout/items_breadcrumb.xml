@@ -2,18 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:paddingLeft="5dp"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp">
 
     <ImageView
         android:id="@+id/img_breadcrumb"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:background="#ccc"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_navigate_next" />
 
     <TextView
         android:id="@+id/txt_breadcrumb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="home"
-        android:textColor="#000"/>
+        android:textAppearance="@style/SmallText" />
 </LinearLayout>

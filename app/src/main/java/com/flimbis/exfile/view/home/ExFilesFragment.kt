@@ -120,8 +120,8 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), RexFileAdapter.OnFileC
         adapter = RexFileAdapter { listener!!.onItemFileSelected(it) }
         adapter.setViewType(viewType!!)
         adapter.updateDirectory(getFileModelList(arguments!!.getString(PATH)))
-        adapter.setFileClickedListener(this)
 
+        adapter.setFileClickedListener(this)
 
         listFiles.adapter = adapter
 
@@ -160,10 +160,10 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), RexFileAdapter.OnFileC
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
-            R.id.action_search -> {
+            /*R.id.action_search -> {
                 listener!!.onItemSearchSelected()
                 true
-            }
+            }*/
             R.id.action_new_folder -> {
                 listener!!.onItemCreateFolderSelected()
                 true

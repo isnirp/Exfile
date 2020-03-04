@@ -11,36 +11,42 @@
             type="com.flimbis.exfile.viewmodel.FileViewModel" />
     </data>
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/lnr_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="16dp"
-        android:paddingTop="10dp"
-        android:paddingRight="16dp"
-        android:paddingBottom="10dp">
+        android:gravity="center"
+        android:layout_marginBottom="6dp"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
 
-        <!-- app:imageSrc="@{fileModel.path}"-->
-        <ImageView
-            android:id="@+id/img_file"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_action_folder" />
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/img_cover"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:scaleType="centerCrop" />
+            <!-- app:imageSrc="@{fileModel.path}"-->
+            <ImageView
+                android:id="@+id/img_file"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:layout_gravity="bottom|right"
+                android:src="@drawable/ic_folder" />
+
+        </FrameLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/img_file"
-            android:orientation="vertical">
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:text="@{fileModel.name}"
+            android:textAppearance="@style/CustomTitle" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@{fileModel.name}"
-                android:textAppearance="@style/CustomTitle" />
-        </LinearLayout>
-
-    </RelativeLayout>
+    </LinearLayout>
 </layout>

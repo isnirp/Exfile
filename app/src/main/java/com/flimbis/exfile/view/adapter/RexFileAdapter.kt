@@ -19,6 +19,11 @@ import com.squareup.picasso.Picasso
 import android.graphics.BitmapFactory
 import android.graphics.Bitmap
 import com.flimbis.exfile.databinding.ItemsFileGridBinding
+import com.amulyakhare.textdrawable.util.ColorGenerator
+import com.amulyakhare.textdrawable.TextDrawable
+import android.graphics.Color
+
+
 
 
 class RexFileAdapter(private val itemClick:(FileModel)->Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -28,11 +33,23 @@ class RexFileAdapter(private val itemClick:(FileModel)->Unit) : RecyclerView.Ada
     private val LIST_VIEW = 0
     private val GRID_VIEW = 1
 
+    private var builder: TextDrawable.IBuilder? = null
+    private var generator: ColorGenerator? = null
+
     var tracker: SelectionTracker<Long>? = null
 
-    /*init {
-        setHasStableIds(true)
-    }*/
+    init {
+        //setHasStableIds(true)
+
+        builder = TextDrawable.builder()
+                .beginConfig()
+                .textColor(Color.WHITE)
+                .toUpperCase()
+                .endConfig()
+                .round();
+
+        generator = ColorGenerator.MATERIAL;
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -130,6 +147,11 @@ class RexFileAdapter(private val itemClick:(FileModel)->Unit) : RecyclerView.Ada
             binding.root.setOnClickListener { itemClick(fileModel) }
 
             renderImages(fileModel.path, fileModel.ext, binding.imgFile)
+
+            val mColor = generator!!.getRandomColor()
+            val mDrawable = builder!!.build(fileModel.name.substring(0, 1), mColor)
+
+            binding.imgCover.setImageDrawable(mDrawable)
         }
 
     }

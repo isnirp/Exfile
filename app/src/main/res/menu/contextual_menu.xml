@@ -6,7 +6,7 @@
 <!--        android:title="@string/menu_cut" />-->
     <item
         android:id="@+id/menu_copy"
-        android:icon="@drawable/ic_action_copy"
+        android:icon="@drawable/ic_file_copy"
         android:title="@string/menu_copy" />
     <item
         android:id="@+id/menu_delete"
