@@ -30,6 +30,7 @@ class RexFileAdapter(private val itemClick:(FileModel)->Unit) : RecyclerView.Ada
     private var items = listOf<FileModel>()
     private var listener: OnFileClickedListener? = null
     private var viewType: Int = 0
+    private val HOME_VIEW = 33
     private val LIST_VIEW = 0
     private val GRID_VIEW = 1
 
@@ -55,11 +56,14 @@ class RexFileAdapter(private val itemClick:(FileModel)->Unit) : RecyclerView.Ada
         return when (viewType) {
             LIST_VIEW -> {
                 val fileBinding: ItemsFileBinding = inflate(LayoutInflater.from(parent?.ctx), R.layout.items_file, parent, false)
-                RexViewHolder(fileBinding, itemClick)
+                RexListViewHolder(fileBinding, itemClick)
             }
-            else -> {
+            GRID_VIEW -> {
                 val gridFileBinding: ItemsFileGridBinding = inflate(LayoutInflater.from(parent?.ctx), R.layout.items_file_grid, parent, false)
                 RexGridViewHolder(gridFileBinding, itemClick)
+            }else -> {
+                val view = LayoutInflater.from(parent?.ctx).inflate(R.layout.items_home, parent, false)
+                RexViewHolder(view)
             }
         }
 
@@ -69,18 +73,21 @@ class RexFileAdapter(private val itemClick:(FileModel)->Unit) : RecyclerView.Ada
 
     override fun getItemViewType(position: Int): Int {
         return when (viewType) {
+            0 -> {
+                LIST_VIEW
+            }
             1 -> {
                 GRID_VIEW
             }
             else -> {
-                LIST_VIEW
+                HOME_VIEW
             }
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (viewType == LIST_VIEW) {
-            val lstHolder = holder as RexViewHolder
+            val lstHolder = holder as RexListViewHolder
             lstHolder.bindView(items[position])
         } else {
             val lstGridHolder = holder as RexGridViewHolder
@@ -116,7 +123,11 @@ class RexFileAdapter(private val itemClick:(FileModel)->Unit) : RecyclerView.Ada
         }
     }
 
-    inner class RexViewHolder(private val binding: ItemsFileBinding, private val itemClick:(FileModel)->Unit) : RecyclerView.ViewHolder(binding.root) {
+    inner class RexViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
+
+    }
+
+    inner class RexListViewHolder(private val binding: ItemsFileBinding, private val itemClick:(FileModel)->Unit) : RecyclerView.ViewHolder(binding.root) {
 
         fun bindView(fileModel: FileModel, isActivated: Boolean = false) {
             binding.fileModel = FileViewModel(fileModel)

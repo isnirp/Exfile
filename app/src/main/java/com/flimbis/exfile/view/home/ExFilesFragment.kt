@@ -105,21 +105,29 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), RexFileAdapter.OnFileC
 
         listFiles = view.findViewById(R.id.lst_ex_files)
 
-        val sharedPref = context?.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
-        val viewType = sharedPref?.getInt(getString(R.string.view_type_key), 0)
-
-        when (viewType) {
-            1 -> {
-                listFiles.layoutManager = GridLayoutManager(context, 3)
-            }
-            else -> {
-                listFiles.layoutManager = LinearLayoutManager(context)
-            }
-        }
-
         adapter = RexFileAdapter { listener!!.onItemFileSelected(it) }
-        adapter.setViewType(viewType!!)
-        adapter.updateDirectory(getFileModelList(arguments!!.getString(PATH)))
+        //check if home
+        if (arguments!!.getString(PATH) == "exPath") {
+            listFiles.layoutManager = LinearLayoutManager(context)
+
+            adapter.setViewType(33)
+        } else {
+            val sharedPref = context?.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+            val viewType = sharedPref?.getInt(getString(R.string.view_type_key), 0)
+
+            when (viewType) {
+                1 -> {
+                    listFiles.layoutManager = GridLayoutManager(context, 3)
+                }
+                else -> {
+                    listFiles.layoutManager = LinearLayoutManager(context)
+                }
+            }
+
+            adapter.setViewType(viewType!!)
+            adapter.updateDirectory(getFileModelList(arguments!!.getString(PATH)))
+
+        }
 
         adapter.setFileClickedListener(this)
 

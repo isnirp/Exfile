@@ -55,8 +55,8 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
         setSupportActionBar(toolbar)
 
         if (savedInstanceState == null) {
-            val exFilesFragment = ExFilesFragment.build { path = Environment.getExternalStorageDirectory().absolutePath }
-            //val exFilesFragment = ExFilesFragment.build { path = "/" }
+            //val exFilesFragment = ExFilesFragment.build { path = Environment.getExternalStorageDirectory().absolutePath }
+            val exFilesFragment = ExFilesFragment.build { path = "exPath" }
 
             //transactions; add, remove, replace
             val fragmentTransaction = supportFragmentManager.beginTransaction()
@@ -67,8 +67,8 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
             *
             * In other words, it will pop your back stack until it finds the fragment that was added by the name in addToBackStack(String name)
             * */
-            fragmentTransaction.addToBackStack(Environment.getExternalStorageDirectory().absolutePath)
-            //fragmentTransaction.addToBackStack("/")
+            //fragmentTransaction.addToBackStack(Environment.getExternalStorageDirectory().absolutePath)
+            fragmentTransaction.addToBackStack("exPath")
             fragmentTransaction.commit()//apply fragment
 
         }
