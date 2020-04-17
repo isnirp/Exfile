@@ -10,13 +10,12 @@ import com.flimbis.exfile.databinding.ItemsHomeBinding
 import com.flimbis.exfile.model.FileModel
 import com.flimbis.exfile.viewmodel.FileViewModel
 
-class HomeAdapter : RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
+class HomeAdapter(private val itemClick: (String)->Unit) : RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
     private var items = listOf<FileModel>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        //val homBinding = ItemsHomeBinding.inflate(LayoutInflater.from(parent?.ctx), parent, false)
         val homeBinding = DataBindingUtil.inflate<ItemsHomeBinding>(LayoutInflater.from(parent?.ctx), R.layout.items_home, parent, false)
-        return ViewHolder(homeBinding)
+        return ViewHolder(homeBinding, itemClick)
     }
 
     override fun getItemCount(): Int = items.size
@@ -29,9 +28,10 @@ class HomeAdapter : RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
         this.items = items
     }
 
-    class ViewHolder(private val binding: ItemsHomeBinding) : RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder(private val binding: ItemsHomeBinding, private val itemClick: (String)->Unit) : RecyclerView.ViewHolder(binding.root) {
         fun bindView(fileModel: FileModel){
             binding.fileModel = FileViewModel(fileModel)
+            binding.root.setOnClickListener { itemClick }
         }
     }
 }
