@@ -22,7 +22,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.flimbis.exfile.view.adapter.ExFileAdapter
 import com.google.android.material.snackbar.Snackbar
 
-import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.GridLayoutManager
 
 
@@ -34,10 +33,8 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
 
     private lateinit var listFiles: RecyclerView
     private lateinit var adapter: ExFileAdapter
-
     private var listener: OnFileSelectedListener? = null
     private lateinit var bReceiver: BroadcastReceiver
-    private var tracker: SelectionTracker<Long>? = null
 
     companion object {
         private const val PATH = "com.flimbis.exfile.PATH_FINDER"
@@ -97,44 +94,24 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
         listFiles = view.findViewById(R.id.lst_ex_files)
 
         adapter = ExFileAdapter { listener!!.onItemFileSelected(it) }
-        //check if home
-        if (arguments!!.getString(PATH) == "exPath") {
-            listFiles.layoutManager = LinearLayoutManager(context)
 
-            adapter.setViewType(33)
-        } else {
-            val sharedPref = context?.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
-            val viewType = sharedPref?.getInt(getString(R.string.view_type_key), 0)
+        val sharedPref = context?.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+        val viewType = sharedPref?.getInt(getString(R.string.view_type_key), 0)
 
-            when (viewType) {
-                1 -> {
-                    listFiles.layoutManager = GridLayoutManager(context, 3)
-                }
-                else -> {
-                    listFiles.layoutManager = LinearLayoutManager(context)
-                }
+        when (viewType) {
+            1 -> {
+                listFiles.layoutManager = GridLayoutManager(context, 3)
             }
-
-            adapter.setViewType(viewType!!)
-            adapter.updateDirectory(getFileModelList(arguments!!.getString(PATH)))
-
+            else -> {
+                listFiles.layoutManager = LinearLayoutManager(context)
+            }
         }
 
+        adapter.setViewType(viewType!!)
+        adapter.updateDirectory(getFileModelList(arguments!!.getString(PATH)))
         adapter.setFileClickedListener(this)
 
         listFiles.adapter = adapter
-
-        /*tracker = SelectionTracker.Builder<Long>(
-                "mySelection",
-                listFiles,
-                StableIdKeyProvider(listFiles),
-                MyItemDetailsLookup(listFiles),
-                StorageStrategy.createLongStorage()
-        ).withSelectionPredicate(
-                SelectionPredicates.createSelectAnything()
-        ).build()
-
-        adapter.tracker = tracker*/
 
         return view
     }
@@ -159,10 +136,6 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
-            /*R.id.action_search -> {
-                listener!!.onItemSearchSelected()
-                true
-            }*/
             R.id.action_new_folder -> {
                 listener!!.onItemCreateFolderSelected()
                 true
@@ -239,20 +212,10 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
         popup.show()
     }
 
-    /* fun initMultiChoiceMode(listener: AbsListView.MultiChoiceModeListener) {
-         listFiles.choiceMode = ListView.CHOICE_MODE_MULTIPLE_MODAL
-         listFiles.setMultiChoiceModeListener(listener)
-     }*/
-
-    fun actionModeActivated(fileModel: FileModel) {
-        listener!!.onActionModeActivated(fileModel)
-    }
-
     private fun getFileModelList(path: String): List<FileModel> {
         var files: List<File> = getFilesFromPath(path)
         return files.map { FileModel(path = it.path, isDirectory = it.isDirectory, name = it.name, size = it.length(), ext = it.extension, lastModified = it.lastModified()) }
     }
-
 
     private fun shareImages(path: String) {
 
@@ -265,7 +228,6 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
     }
 
     private fun showMsg(msg: String) {
-//        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
         Snackbar.make(listFiles, msg, Snackbar.LENGTH_SHORT)
                 .show()
     }
@@ -317,7 +279,6 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
 
         fun onActionModeActivated(fileModel: FileModel)
     }
-
 
     class Builder {
         //var path: String = Environment.getExternalStorageDirectory().absolutePath
