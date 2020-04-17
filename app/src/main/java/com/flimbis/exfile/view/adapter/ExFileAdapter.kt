@@ -1,11 +1,9 @@
 package com.flimbis.exfile.view.adapter
 
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.databinding.DataBindingUtil
 import androidx.databinding.DataBindingUtil.*
 import androidx.recyclerview.widget.RecyclerView
 import com.flimbis.exfile.R
@@ -14,34 +12,23 @@ import com.flimbis.exfile.databinding.ItemsFileBinding
 import com.flimbis.exfile.model.FileModel
 import com.flimbis.exfile.viewmodel.FileViewModel
 import androidx.recyclerview.selection.ItemDetailsLookup
-import androidx.recyclerview.selection.SelectionTracker
-import com.squareup.picasso.Picasso
 import android.graphics.BitmapFactory
-import android.graphics.Bitmap
 import com.flimbis.exfile.databinding.ItemsFileGridBinding
 import com.amulyakhare.textdrawable.util.ColorGenerator
 import com.amulyakhare.textdrawable.TextDrawable
 import android.graphics.Color
 
-
-
-
-class ExFileAdapter(private val itemClick:(FileModel)->Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ExFileAdapter(private val itemClick: (FileModel) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var items = listOf<FileModel>()
     private var listener: OnFileClickedListener? = null
     private var viewType: Int = 0
-    private val HOME_VIEW = 33
     private val LIST_VIEW = 0
     private val GRID_VIEW = 1
 
     private var builder: TextDrawable.IBuilder? = null
     private var generator: ColorGenerator? = null
 
-    var tracker: SelectionTracker<Long>? = null
-
     init {
-        //setHasStableIds(true)
-
         builder = TextDrawable.builder()
                 .beginConfig()
                 .textColor(Color.WHITE)
@@ -54,16 +41,13 @@ class ExFileAdapter(private val itemClick:(FileModel)->Unit) : RecyclerView.Adap
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            LIST_VIEW -> {
-                val fileBinding: ItemsFileBinding = inflate(LayoutInflater.from(parent?.ctx), R.layout.items_file, parent, false)
-                RexListViewHolder(fileBinding, itemClick)
-            }
             GRID_VIEW -> {
                 val gridFileBinding: ItemsFileGridBinding = inflate(LayoutInflater.from(parent?.ctx), R.layout.items_file_grid, parent, false)
                 RexGridViewHolder(gridFileBinding, itemClick)
-            }else -> {
-                val view = LayoutInflater.from(parent?.ctx).inflate(R.layout.items_home, parent, false)
-                RexViewHolder(view)
+            }
+            else -> {
+                val fileBinding: ItemsFileBinding = inflate(LayoutInflater.from(parent?.ctx), R.layout.items_file, parent, false)
+                RexListViewHolder(fileBinding, itemClick)
             }
         }
 
@@ -73,14 +57,11 @@ class ExFileAdapter(private val itemClick:(FileModel)->Unit) : RecyclerView.Adap
 
     override fun getItemViewType(position: Int): Int {
         return when (viewType) {
-            0 -> {
-                LIST_VIEW
-            }
             1 -> {
                 GRID_VIEW
             }
             else -> {
-                HOME_VIEW
+                LIST_VIEW
             }
         }
     }
@@ -93,10 +74,6 @@ class ExFileAdapter(private val itemClick:(FileModel)->Unit) : RecyclerView.Adap
             val lstGridHolder = holder as RexGridViewHolder
             lstGridHolder.bindView(items[position])
         }
-
-        /*tracker?.let {
-            lstHolder.bindView(items[position], it.isSelected(position.toLong()))
-        }*/
     }
 
     fun updateDirectory(items: List<FileModel>) {
@@ -117,28 +94,20 @@ class ExFileAdapter(private val itemClick:(FileModel)->Unit) : RecyclerView.Adap
         )
 
         if (ext in mimeFilter) {
-            //Picasso.get().load(Uri.parse(img)).placeholder(R.drawable.ic_action_folder).into(v)
             v.setImageBitmap(BitmapFactory.decodeFile(img))
-
         }
     }
 
-    inner class RexViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
-
-    }
-
-    inner class RexListViewHolder(private val binding: ItemsFileBinding, private val itemClick:(FileModel)->Unit) : RecyclerView.ViewHolder(binding.root) {
+    inner class RexListViewHolder(private val binding: ItemsFileBinding, private val itemClick: (FileModel) -> Unit) : RecyclerView.ViewHolder(binding.root) {
 
         fun bindView(fileModel: FileModel, isActivated: Boolean = false) {
             binding.fileModel = FileViewModel(fileModel)
             itemView.isActivated = isActivated
 
-//            binding.root.setOnClickListener { listener!!.onFileClicked(fileModel) }
             binding.root.setOnClickListener { itemClick(fileModel) }
             binding.pop.setOnClickListener { v -> listener!!.onPopMenuClicked(v, fileModel) }
 
             renderImages(fileModel.path, fileModel.ext!!, binding.imgFile)
-
         }
 
         fun getItemDetails(): ItemDetailsLookup.ItemDetails<Long> =
@@ -148,18 +117,17 @@ class ExFileAdapter(private val itemClick:(FileModel)->Unit) : RecyclerView.Adap
                 }
     }
 
-    inner class RexGridViewHolder(private val binding: ItemsFileGridBinding, private val itemClick:(FileModel)->Unit) : RecyclerView.ViewHolder(binding.root) {
+    inner class RexGridViewHolder(private val binding: ItemsFileGridBinding, private val itemClick: (FileModel) -> Unit) : RecyclerView.ViewHolder(binding.root) {
 
         fun bindView(fileModel: FileModel, isActivated: Boolean = false) {
             binding.fileModel = FileViewModel(fileModel)
             itemView.isActivated = isActivated
 
-//            binding.root.setOnClickListener { listener!!.onFileClicked(fileModel) }
             binding.root.setOnClickListener { itemClick(fileModel) }
 
             renderImages(fileModel.path, fileModel.ext!!, binding.imgFile)
 
-            val mColor = generator!!.getRandomColor()
+            val mColor = generator!!.randomColor
             val mDrawable = builder!!.build(fileModel.name.substring(0, 1), mColor)
 
             binding.imgCover.setImageDrawable(mDrawable)
@@ -172,8 +140,6 @@ class ExFileAdapter(private val itemClick:(FileModel)->Unit) : RecyclerView.Adap
     }
 
     interface OnFileClickedListener {
-        //fun onFileClicked(fileModel: FileModel)
-
         fun onPopMenuClicked(v: View, fileModel: FileModel)
     }
 }
