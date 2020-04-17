@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".view.home.ExFilesFragment">
+    tools:context=".view.ExFilesFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/lst_ex_files"

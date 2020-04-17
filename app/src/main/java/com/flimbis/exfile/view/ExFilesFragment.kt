@@ -1,17 +1,14 @@
-package com.flimbis.exfile.view.home
+package com.flimbis.exfile.view
 
 
 import android.content.Context
 import android.os.Bundle
 import android.view.*
-import android.widget.AbsListView
 import androidx.fragment.app.Fragment
-import android.widget.ListView
 import android.widget.Toast
 
 import com.flimbis.exfile.R
 import com.flimbis.exfile.model.FileModel
-import com.flimbis.exfile.view.adapter.ExFileAdapter
 import java.io.File
 import androidx.appcompat.widget.PopupMenu
 import android.content.IntentFilter
@@ -20,29 +17,23 @@ import com.flimbis.exfile.util.getFilesFromPath
 import android.content.Intent
 import android.content.BroadcastReceiver
 import android.net.Uri
-import android.os.Environment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.flimbis.exfile.view.adapter.RexFileAdapter
+import com.flimbis.exfile.view.adapter.ExFileAdapter
 import com.google.android.material.snackbar.Snackbar
 
-import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
-import androidx.recyclerview.selection.StableIdKeyProvider
-import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.GridLayoutManager
-import com.flimbis.exfile.util.getFileFromPath
-import com.flimbis.exfile.view.adapter.MyItemDetailsLookup
 
 
 /**
  * A simple [Fragment] subclass.
  *major lifecycle methods of a fragment to implement; onCreate, onCreateView, onPause
  */
-class ExFilesFragment : androidx.fragment.app.Fragment(), RexFileAdapter.OnFileClickedListener {
+class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileClickedListener {
 
     private lateinit var listFiles: RecyclerView
-    private lateinit var adapter: RexFileAdapter
+    private lateinit var adapter: ExFileAdapter
 
     private var listener: OnFileSelectedListener? = null
     private lateinit var bReceiver: BroadcastReceiver
@@ -105,7 +96,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), RexFileAdapter.OnFileC
 
         listFiles = view.findViewById(R.id.lst_ex_files)
 
-        adapter = RexFileAdapter { listener!!.onItemFileSelected(it) }
+        adapter = ExFileAdapter { listener!!.onItemFileSelected(it) }
         //check if home
         if (arguments!!.getString(PATH) == "exPath") {
             listFiles.layoutManager = LinearLayoutManager(context)

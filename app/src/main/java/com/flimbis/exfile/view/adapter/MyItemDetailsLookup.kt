@@ -9,7 +9,7 @@ class MyItemDetailsLookup(private val recyclerView: RecyclerView) :
     override fun getItemDetails(event: MotionEvent): ItemDetails<Long>? {
         val view = recyclerView.findChildViewUnder(event.x, event.y)
         if (view != null) {
-            return (recyclerView.getChildViewHolder(view) as RexFileAdapter.RexListViewHolder)
+            return (recyclerView.getChildViewHolder(view) as ExFileAdapter.RexListViewHolder)
                     .getItemDetails()
         }
         return null

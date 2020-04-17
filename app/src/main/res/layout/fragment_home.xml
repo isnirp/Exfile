@@ -3,12 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.ListFilesFragment">
+    tools:context=".view.HomeFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/lst_files"
+        android:id="@+id/lst_home"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="match_parent" />
 
 </RelativeLayout>

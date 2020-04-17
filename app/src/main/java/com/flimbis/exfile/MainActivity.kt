@@ -5,9 +5,8 @@ import android.app.job.JobScheduler
 import android.content.*
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
 import com.flimbis.exfile.model.FileModel
-import com.flimbis.exfile.view.home.ExFilesFragment
+import com.flimbis.exfile.view.ExFilesFragment
 
 import android.net.Uri
 import android.os.PersistableBundle
@@ -21,18 +20,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.flimbis.exfile.common.BackStackManager
 import com.flimbis.exfile.common.ExFileBroadcastReceiver
-import com.flimbis.exfile.model.FileType
 import com.flimbis.exfile.service.ExFileJobService
 import com.flimbis.exfile.util.*
 import com.flimbis.exfile.view.adapter.BreadcrumbAdapter
 import com.flimbis.exfile.view.dialog.CreateFolderDialog
 import com.flimbis.exfile.view.dialog.DeleteDialog
-import com.flimbis.exfile.view.home.ExFilesFragment.Companion.currentDirectory
+import com.flimbis.exfile.view.ExFilesFragment.Companion.currentDirectory
+import com.flimbis.exfile.view.HomeFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.io.File
 import kotlinx.android.synthetic.main.bottom_sheet.*
-import kotlinx.android.synthetic.main.bottom_sheet_views.*
 
 //class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener, AbsListView.MultiChoiceModeListener {
 class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener, ActionMode.Callback, CreateFolderDialog.OnCreateDialogClickListener, DeleteDialog.OnDeleteDialogClickListener {
@@ -56,11 +53,12 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
 
         if (savedInstanceState == null) {
             //val exFilesFragment = ExFilesFragment.build { path = Environment.getExternalStorageDirectory().absolutePath }
-            val exFilesFragment = ExFilesFragment.build { path = "exPath" }
+           // val exFilesFragment = ExFilesFragment.build { path = "exPath" }
+            val homeFragment = HomeFragment()
 
             //transactions; add, remove, replace
             val fragmentTransaction = supportFragmentManager.beginTransaction()
-            fragmentTransaction.add(R.id.container, exFilesFragment)
+            fragmentTransaction.add(R.id.container, homeFragment)
             /*
             *The tag string in addToBackStack(String name) gives a way to locate the back stack for later pop directly to that location.
             *It meant to be used in the method popToBackStack(String name, int flags)

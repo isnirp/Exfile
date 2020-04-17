@@ -19,11 +19,11 @@ class FileViewModel(val fileModel: FileModel) : BaseObservable() {
 
     fun getSize(): String = String.format("%.2f", convertFileSizeToMB(fileModel.size)) + "MB"
 
-    fun getExt(): String = fileModel.ext
+    fun getExt(): String = fileModel.ext!!
 
     fun getPath(): String = fileModel.path
 
-    fun getLastModified(): String = formatLastModified(fileModel.lastModified)
+    fun getLastModified(): String = formatLastModified(fileModel.lastModified!!)
 
 
     //check users location and fix date format
@@ -38,7 +38,7 @@ class FileViewModel(val fileModel: FileModel) : BaseObservable() {
     }
 
     companion object {
-        @BindingAdapter("app:imageSrc")
+        //@BindingAdapter("app:imageSrc")
         @JvmStatic
         fun setImageResource(v: ImageView, imageSrc: Int) {
 
@@ -54,7 +54,7 @@ class FileViewModel(val fileModel: FileModel) : BaseObservable() {
             v.setImageResource(R.drawable.ic_folder)
         }
 
-        @BindingAdapter("app:imageSrc")
+        //@BindingAdapter("app:imageSrc")
         @JvmStatic
         fun setImageResource(v: ImageView, imageSrc: String) {
 

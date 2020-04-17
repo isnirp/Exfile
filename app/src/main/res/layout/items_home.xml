@@ -1,30 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <ImageView
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:background="#ff3300" />
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="fileModel"
+            type="com.flimbis.exfile.viewmodel.FileViewModel" />
+    </data>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/txt_home_title"
+        <ImageView
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:background="#ff3300" />
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Main Storage"
-            android:textAppearance="@style/CustomTitle" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/txt_home_size"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="size" />
+            <TextView
+                android:id="@+id/txt_home_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Main Storage"
+                android:textAppearance="@style/CustomTitle" />
+
+            <TextView
+                android:id="@+id/txt_home_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="size" />
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</layout>
