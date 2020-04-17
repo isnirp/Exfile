@@ -93,7 +93,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
 
         listFiles = view.findViewById(R.id.lst_ex_files)
 
-        adapter = ExFileAdapter { listener!!.onItemFileSelected(it) }
+        adapter = ExFileAdapter()
 
         val sharedPref = context?.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
         val viewType = sharedPref?.getInt(getString(R.string.view_type_key), 0)
@@ -168,6 +168,10 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
     override fun onDetach() {
         super.onDetach()
         listener = null
+    }
+
+    override fun onFileClicked(fileModel: FileModel) {
+        listener!!.onItemFileSelected(fileModel)
     }
 
     override fun onPopMenuClicked(v: View, fileModel: FileModel) {
