@@ -31,8 +31,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import java.io.File
 import kotlinx.android.synthetic.main.bottom_sheet.*
 
-//class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener, AbsListView.MultiChoiceModeListener {
-class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener, ActionMode.Callback, CreateFolderDialog.OnCreateDialogClickListener, DeleteDialog.OnDeleteDialogClickListener {
+class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener, ActionMode.Callback,
+        CreateFolderDialog.OnCreateDialogClickListener, DeleteDialog.OnDeleteDialogClickListener, HomeFragment.OnHomeItemsClickListener {
     lateinit var sheetBehaviour: BottomSheetBehavior<LinearLayout>
 
     lateinit var mFileModel: FileModel
@@ -52,10 +52,7 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
         setSupportActionBar(toolbar)
 
         if (savedInstanceState == null) {
-            //val exFilesFragment = ExFilesFragment.build { path = Environment.getExternalStorageDirectory().absolutePath }
-            // val exFilesFragment = ExFilesFragment.build { path = "exPath" }
             val homeFragment = HomeFragment()
-
             //transactions; add, remove, replace
             val fragmentTransaction = supportFragmentManager.beginTransaction()
             fragmentTransaction.add(R.id.container, homeFragment)
@@ -296,8 +293,16 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
         sendBroadcastIntent(currentDirectory!!, "EX_DELETE")
     }
 
+    override fun onHomeItemClicked(filePath: String) {
+        val exFilesFragment = ExFilesFragment.build { path = filePath }
+
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.container, exFilesFragment)
+        fragmentTransaction.addToBackStack(filePath)
+        fragmentTransaction.commit()
+    }
+
     private fun initViews() {
-        //setSupportActionBar(toolbar)
         breadcrumbRecyclerView = findViewById<RecyclerView>(R.id.lst_bread_crumb)
         breadcrumbRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 

@@ -1,5 +1,6 @@
 package com.flimbis.exfile.view
 
+import android.content.Context
 import android.os.Bundle
 import android.os.Environment
 import androidx.fragment.app.Fragment
@@ -26,16 +27,15 @@ private const val ARG_PARAM2 = "param2"
 class HomeFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
-    private var param2: String? = null
     private var items = mutableListOf<FileModel>()
     private lateinit var listFiles: RecyclerView
     private lateinit var adapter: HomeAdapter
+    private var listener: OnHomeItemsClickListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
         }
     }
 
@@ -49,7 +49,7 @@ class HomeFragment : Fragment() {
         listFiles = view.findViewById(R.id.lst_home)
         listFiles.layoutManager = LinearLayoutManager(context)
 
-        adapter = HomeAdapter()
+        adapter = HomeAdapter { listener!!.onHomeItemClicked(it) }
         adapter.updateHomeItems(items)
 
         listFiles.adapter = adapter
@@ -68,12 +68,26 @@ class HomeFragment : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(path: String) =
                 HomeFragment().apply {
                     arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                        putString(ARG_PARAM2, param2)
+                        putString(ARG_PARAM1, path)
                     }
                 }
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        if (context is OnHomeItemsClickListener) listener = context
+        else throw RuntimeException(context.toString() + " must implement OnHomeItemsClickListener")
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        listener = null
+    }
+
+    interface OnHomeItemsClickListener {
+        fun onHomeItemClicked(path: String)
     }
 }

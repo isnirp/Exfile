@@ -13,30 +13,45 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingTop="10dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="10dp">
 
-        <ImageView
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:background="#ff3300" />
+        <RelativeLayout
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_centerVertical="true"
+            android:background="@drawable/ic_img_background">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_folder" />
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingLeft="5dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/txt_home_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Main Storage"
+                android:text="@{fileModel.name}"
                 android:textAppearance="@style/CustomTitle" />
 
             <TextView
                 android:id="@+id/txt_home_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="size" />
+                android:text="@{fileModel.size}"
+                android:textAppearance="@style/SmallText" />
         </LinearLayout>
     </LinearLayout>
 </layout>
