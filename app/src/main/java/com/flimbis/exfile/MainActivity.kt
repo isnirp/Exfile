@@ -52,26 +52,13 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
         setSupportActionBar(toolbar)
 
         if (savedInstanceState == null) {
-            val homeFragment = HomeFragment()
-            //transactions; add, remove, replace
-            val fragmentTransaction = supportFragmentManager.beginTransaction()
-            fragmentTransaction.add(R.id.container, homeFragment)
-            /*
-            *The tag string in addToBackStack(String name) gives a way to locate the back stack for later pop directly to that location.
-            *It meant to be used in the method popToBackStack(String name, int flags)
-            *
-            * In other words, it will pop your back stack until it finds the fragment that was added by the name in addToBackStack(String name)
-            * */
-            //fragmentTransaction.addToBackStack(Environment.getExternalStorageDirectory().absolutePath)
-            fragmentTransaction.addToBackStack("exPath")
-            fragmentTransaction.commit()//apply fragment
-
+            displayHomeFragment()
         }
+
         initViews()
         initBackStack()
 
         clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        //exFilesFragment.initMultiChoiceMode(this)
 
         val bottomSheet = findViewById<LinearLayout>(R.id.lnr_bottom_sheet)
         sheetBehaviour = BottomSheetBehavior.from(bottomSheet)
@@ -294,12 +281,8 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
     }
 
     override fun onHomeItemClicked(filePath: String) {
-        val exFilesFragment = ExFilesFragment.build { path = filePath }
-
-        val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.container, exFilesFragment)
-        fragmentTransaction.addToBackStack(filePath)
-        fragmentTransaction.commit()
+        displayExFilesFragment(filePath)
+        backStackManager.addToStack(getFileModel(filePath))
     }
 
     private fun initViews() {
@@ -330,16 +313,34 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
         backStackManager.addToStack(fileModel = FileModel("exPath", true, "exHome", 0, "exe", 0))
     }
 
-    private fun toFolder(filePath: String) {
-        val exFilesFragment = ExFilesFragment.build { path = filePath }
+    private fun displayHomeFragment() {
+        val homeFragment = HomeFragment()
+        //transactions; add, remove, replace
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.add(R.id.container, homeFragment)
+        /*
+        *The tag string in addToBackStack(String name) gives a way to locate the back stack for later pop directly to that location.
+        *It meant to be used in the method popToBackStack(String name, int flags)
+        *
+        * In other words, it will pop your back stack until it finds the fragment that was added by the name in addToBackStack(String name)
+        * */
+        //fragmentTransaction.addToBackStack(Environment.getExternalStorageDirectory().absolutePath)
+        fragmentTransaction.addToBackStack("exPath")
+        fragmentTransaction.commit()//apply fragment
+    }
 
-        backStackManager.addToStack(getFileModel(filePath))
+    private fun displayExFilesFragment(filePath: String) {
+        val exFilesFragment = ExFilesFragment.build { path = filePath }
 
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.container, exFilesFragment)
         fragmentTransaction.addToBackStack(filePath)
         fragmentTransaction.commit()
+    }
 
+    private fun toFolder(filePath: String) {
+        displayExFilesFragment(filePath)
+        backStackManager.addToStack(getFileModel(filePath))
     }
 
     private fun toFileIntent(path: String) {

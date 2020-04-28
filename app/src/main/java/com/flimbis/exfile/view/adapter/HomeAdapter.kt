@@ -35,7 +35,7 @@ class HomeAdapter(private val itemClick: (String) -> Unit) : RecyclerView.Adapte
     override fun getItemCount(): Int = items.size
 
     override fun getItemViewType(position: Int): Int {
-        return when (position) {
+        return when (0) {
             1 -> recent
             else -> menu
         }

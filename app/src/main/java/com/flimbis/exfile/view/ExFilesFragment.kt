@@ -285,16 +285,12 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
     }
 
     class Builder {
-        //var path: String = Environment.getExternalStorageDirectory().absolutePath
         var path: String = " "
 
-        fun build(): ExFilesFragment {
-            val fragment = ExFilesFragment()
-            val args = Bundle()
-            args.putString(PATH, path)
-            fragment.arguments = args
-            return fragment
+        fun build(): ExFilesFragment = ExFilesFragment().apply {
+            arguments = Bundle().apply { putString(PATH, path) }
         }
+
     }
 
 }
