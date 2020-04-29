@@ -45,7 +45,7 @@ class HomeFragment : Fragment() {
         listFiles = view.findViewById(R.id.lst_home)
         listFiles.layoutManager = LinearLayoutManager(context)
 
-        adapter = HomeAdapter { listener!!.onHomeItemClicked(it) }
+        adapter = HomeAdapter { listener?.onHomeItemClicked(it) }
         adapter.updateHomeItems(items)
 
         listFiles.adapter = adapter

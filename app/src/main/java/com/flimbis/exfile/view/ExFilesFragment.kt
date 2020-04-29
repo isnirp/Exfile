@@ -66,7 +66,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
                 when {
                     i.getStringExtra(ExFileBroadcastReceiver.BROADCAST_TYPE) == "EX_COPY" -> {
                         Toast.makeText(context, "copied to clipboard", Toast.LENGTH_SHORT).show()
-                        listener!!.onClipboardActivated()
+                        listener?.onClipboardActivated()
                     }
                     i.getStringExtra(ExFileBroadcastReceiver.BROADCAST_TYPE) == "EX_CREATE" -> {
                         adapter.updateDirectory(getFileModelList(i.getStringExtra(ExFileBroadcastReceiver.DIR_PATH_KEY)))
@@ -107,7 +107,11 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
             }
         }
 
-        adapter.setViewType(viewType!!)
+        /*
+        * let; extension function on anytype
+        * if viewType is not null execute the function
+        * */
+        viewType?.let { adapter.setViewType(viewType) }
         adapter.updateDirectory(getFileModelList(arguments!!.getString(PATH)))
         adapter.setFileClickedListener(this)
 
@@ -137,19 +141,19 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             R.id.action_new_folder -> {
-                listener!!.onItemCreateFolderSelected()
+                listener?.onItemCreateFolderSelected()
                 true
             }
             R.id.action_new_file -> {
-                listener!!.onItemCreateFileSelected()
+                listener?.onItemCreateFileSelected()
                 true
             }
             R.id.action_view_list -> {
-                listener!!.onItemViewSelected(path = arguments!!.getString(PATH))
+                listener?.onItemViewSelected(path = arguments!!.getString(PATH))
                 true
             }
             R.id.action_view_grid -> {
-                listener!!.onItemViewSelected(path = arguments!!.getString(PATH), viewType = 1)
+                listener?.onItemViewSelected(path = arguments!!.getString(PATH), viewType = 1)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -171,7 +175,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
     }
 
     override fun onFileClicked(fileModel: FileModel) {
-        listener!!.onItemFileSelected(fileModel)
+        listener?.onItemFileSelected(fileModel)
     }
 
     override fun onPopMenuClicked(v: View, fileModel: FileModel) {
