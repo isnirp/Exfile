@@ -56,6 +56,8 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
     * */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        setHasOptionsMenu(true)
         //update current path
         currentDirectory = arguments!!.getString(PATH)
 
@@ -88,8 +90,6 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_files_ex, container, false)
-
-        setHasOptionsMenu(true)
 
         listFiles = view.findViewById(R.id.lst_ex_files)
 
