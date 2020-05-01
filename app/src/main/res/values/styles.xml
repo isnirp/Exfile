@@ -31,6 +31,17 @@
 
     </style>
 
+    <!--default theme-->
+    <style name="AppTheme.Dark">
+        <item name="themePrimary">@color/darkPrimary</item>
+        <item name="themePrimaryDark">@color/darkPrimaryDark</item>
+        <item name="themeAccent">@color/darkAccent</item>
+        <item name="themeBackground">@color/dark_background_holo_light</item>
+        <item name="themeTextColor">@color/darkText</item>
+        <item name="themeTextColorSecondary">@color/darkTextSecondary</item>
+        <item name="themeTextColorDull">@color/darkDull</item>
+    </style>
+
 <!--    <style name="CustomTitle" parent="TextAppearance.AppCompat.Title">-->
     <style name="CustomTitle">
 <!--        <item name="android:textAllCaps">true</item>-->

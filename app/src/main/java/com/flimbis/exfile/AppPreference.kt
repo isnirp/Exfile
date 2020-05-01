@@ -18,7 +18,7 @@ class AppPreference(private val context: Activity) {
 
     fun getCustomTheme(): Int {
         val theme = pref.getString("theme", light)
-        return if (theme == dark) R.style.Theme_Dark
-        else R.style.Theme_Light
+        return if (theme == dark) R.style.AppTheme_Dark
+        else R.style.AppTheme_White
     }
 }
