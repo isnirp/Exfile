@@ -37,7 +37,7 @@ class DeleteDialog(val items: List<FileModel>) : DialogFragment() {
             deleteAction.setOnClickListener {
                 listener!!.onDeleteFile(items)
 
-                dialog.cancel()
+                dialog?.cancel()
             }
 
             builder.create()

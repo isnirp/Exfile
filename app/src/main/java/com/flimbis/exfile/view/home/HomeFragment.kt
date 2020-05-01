@@ -1,4 +1,4 @@
-package com.flimbis.exfile.view
+package com.flimbis.exfile.view.home
 
 import android.content.Context
 import android.os.Bundle
@@ -53,13 +53,13 @@ class HomeFragment : Fragment() {
         return view
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater?.inflate(R.menu.menu_home, menu)
+        inflater.inflate(R.menu.menu_home, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.action_settings -> {
                 Toast.makeText(context, "settings", Toast.LENGTH_SHORT).show()
                 true
@@ -68,7 +68,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         listener = context as? OnHomeItemsClickListener
         if (listener == null)
@@ -81,6 +81,6 @@ class HomeFragment : Fragment() {
     }
 
     interface OnHomeItemsClickListener {
-        fun onHomeItemClicked(path: String)
+        fun onHomeItemClicked(filePath: String)
     }
 }

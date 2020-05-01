@@ -17,17 +17,17 @@ class ExFileJobService : JobService() {
     override fun onStartJob(params: JobParameters?): Boolean {
         //Toast.makeText(this, "ExFileJobService", Toast.LENGTH_SHORT).show()
         val bundle = params?.extras
-        val path = bundle!!.getString("FILE_PATH")
-        val name = bundle!!.getString("FILE_NAME")
-        val fileType = bundle!!.getString("FILE_TYPE")
+        val path = bundle?.getString("FILE_PATH")
+        val name = bundle?.getString("FILE_NAME")
+        val fileType = bundle?.getString("FILE_TYPE")
 
 
         Log.i("TAG_SERVICE", "Service Started")
 
         if (fileType == "FOLDER") {
-            if (createFolderAtDirectory(path, name)) sendBroadcastToApp(path)
+            if (createFolderAtDirectory(path!!, name!!)) sendBroadcastToApp(path)
         } else {
-            if (createFileAtDirectory(path, name)) sendBroadcastToApp(path)
+            if (createFileAtDirectory(path!!, name!!)) sendBroadcastToApp(path)
         }
 
         jobFinished(params, false)

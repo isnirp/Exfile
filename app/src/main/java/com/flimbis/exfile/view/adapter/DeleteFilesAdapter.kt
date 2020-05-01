@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import com.flimbis.exfile.R
-import com.flimbis.exfile.ctx
 import com.flimbis.exfile.model.FileModel
+import com.flimbis.exfile.util.ctx
 import kotlinx.android.synthetic.main.items_delete.view.*
 
 class DeleteFilesAdapter(val items: List<FileModel>) : BaseAdapter() {

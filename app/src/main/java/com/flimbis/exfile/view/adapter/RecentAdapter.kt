@@ -5,9 +5,9 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.flimbis.exfile.R
-import com.flimbis.exfile.ctx
 import com.flimbis.exfile.databinding.ItemsFileRecentBinding
 import com.flimbis.exfile.model.FileModel
+import com.flimbis.exfile.util.ctx
 import com.flimbis.exfile.viewmodel.FileViewModel
 
 class RecentAdapter(private val items: List<FileModel>) : RecyclerView.Adapter<RecentAdapter.ViewHolder>() {

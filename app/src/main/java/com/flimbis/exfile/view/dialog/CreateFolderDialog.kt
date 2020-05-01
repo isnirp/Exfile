@@ -36,7 +36,7 @@ class CreateFolderDialog(val type: Int) : DialogFragment() {
                         2 -> listener!!.onRenameFile(prevName!!, name.text.toString())
                     }
 
-                    dialog.cancel()
+                    dialog?.cancel()
                 }
             })
             builder.create()

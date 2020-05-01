@@ -26,7 +26,7 @@ import com.flimbis.exfile.view.adapter.BreadcrumbAdapter
 import com.flimbis.exfile.view.dialog.CreateFolderDialog
 import com.flimbis.exfile.view.dialog.DeleteDialog
 import com.flimbis.exfile.view.ExFilesFragment.Companion.currentDirectory
-import com.flimbis.exfile.view.HomeFragment
+import com.flimbis.exfile.view.home.HomeFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import java.io.File
 import kotlinx.android.synthetic.main.bottom_sheet.*

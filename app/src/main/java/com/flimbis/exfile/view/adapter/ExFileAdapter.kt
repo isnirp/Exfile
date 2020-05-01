@@ -7,7 +7,6 @@ import android.widget.ImageView
 import androidx.databinding.DataBindingUtil.*
 import androidx.recyclerview.widget.RecyclerView
 import com.flimbis.exfile.R
-import com.flimbis.exfile.ctx
 import com.flimbis.exfile.databinding.ItemsFileBinding
 import com.flimbis.exfile.model.FileModel
 import com.flimbis.exfile.viewmodel.FileViewModel
@@ -17,6 +16,7 @@ import com.flimbis.exfile.databinding.ItemsFileGridBinding
 import com.amulyakhare.textdrawable.util.ColorGenerator
 import com.amulyakhare.textdrawable.TextDrawable
 import android.graphics.Color
+import com.flimbis.exfile.util.ctx
 
 class ExFileAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var items = listOf<FileModel>()

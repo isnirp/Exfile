@@ -17,6 +17,7 @@ import com.flimbis.exfile.util.getFilesFromPath
 import android.content.Intent
 import android.content.BroadcastReceiver
 import android.net.Uri
+import android.os.Environment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.flimbis.exfile.view.adapter.ExFileAdapter
@@ -112,7 +113,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
         * if viewType is not null execute the function
         * */
         viewType?.let { adapter.setViewType(viewType) }
-        adapter.updateDirectory(getFileModelList(arguments!!.getString(PATH)))
+        adapter.updateDirectory(getFileModelList(arguments?.getString(PATH)?: Environment.getExternalStorageDirectory().absolutePath))
         adapter.setFileClickedListener(this)
 
         listFiles.adapter = adapter
@@ -133,13 +134,13 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
         context?.unregisterReceiver(bReceiver)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater?.inflate(R.menu.menu_main, menu)
+        inflater.inflate(R.menu.menu_main, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.action_new_folder -> {
                 listener?.onItemCreateFolderSelected()
                 true
@@ -149,11 +150,11 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
                 true
             }
             R.id.action_view_list -> {
-                listener?.onItemViewSelected(path = arguments!!.getString(PATH))
+                listener?.onItemViewSelected(arguments!!.getString(PATH))
                 true
             }
             R.id.action_view_grid -> {
-                listener?.onItemViewSelected(path = arguments!!.getString(PATH), viewType = 1)
+                listener?.onItemViewSelected(arguments!!.getString(PATH), viewType = 1)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -275,7 +276,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
 
         fun onItemRenameSelected(fileModel: FileModel)
 
-        fun onItemViewSelected(path: String, viewType: Int = 0)
+        fun onItemViewSelected(filePath: String, viewType: Int = 0)
 
         fun onItemCreateFolderSelected()
 

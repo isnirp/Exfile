@@ -7,9 +7,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.flimbis.exfile.R
-import com.flimbis.exfile.ctx
 import com.flimbis.exfile.databinding.ItemsHomeBinding
 import com.flimbis.exfile.model.FileModel
+import com.flimbis.exfile.util.ctx
 import com.flimbis.exfile.viewmodel.FileViewModel
 import kotlinx.android.synthetic.main.list_recent.*
 import kotlinx.android.synthetic.main.list_recent.view.*
