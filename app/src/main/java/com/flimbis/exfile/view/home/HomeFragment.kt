@@ -1,6 +1,7 @@
 package com.flimbis.exfile.view.home
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
 import android.view.*
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.flimbis.exfile.R
 import com.flimbis.exfile.model.FileModel
 import com.flimbis.exfile.view.adapter.HomeAdapter
+import com.flimbis.exfile.view.settings.SettingsActivity
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -61,7 +63,8 @@ class HomeFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_settings -> {
-                Toast.makeText(context, "settings", Toast.LENGTH_SHORT).show()
+                val intentSettings = Intent(context, SettingsActivity::class.java)
+                startActivity(intentSettings)
                 true
             }
             else -> true

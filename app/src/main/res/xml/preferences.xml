@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="Theme">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory app:title="Theme">
         <ListPreference
-            android:defaultValue="Light"
-            android:entries="@array/themeArray"
-            android:entryValues="@array/themeValues"
-            android:key="themePref"
-            android:title="@string/pref_theme" />
+            app:defaultValue="Light"
+            app:entries="@array/themeArray"
+            app:entryValues="@array/themeValues"
+            app:key="themePref"
+            app:title="@string/pref_theme" />
     </PreferenceCategory>
     <Preference
-        android:key="aboutPref"
-        android:title="@string/pref_about" />
+        app:key="aboutPref"
+        app:title="@string/pref_about" />
 </PreferenceScreen>
