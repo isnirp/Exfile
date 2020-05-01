@@ -3,7 +3,6 @@ package com.flimbis.exfile
 import android.app.job.JobInfo
 import android.app.job.JobScheduler
 import android.content.*
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.flimbis.exfile.model.FileModel
 import com.flimbis.exfile.view.ExFilesFragment
@@ -31,7 +30,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import java.io.File
 import kotlinx.android.synthetic.main.bottom_sheet.*
 
-class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener, ActionMode.Callback,
+class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, ActionMode.Callback,
         CreateFolderDialog.OnCreateDialogClickListener, DeleteDialog.OnDeleteDialogClickListener, HomeFragment.OnHomeItemsClickListener {
     lateinit var sheetBehaviour: BottomSheetBehavior<LinearLayout>
 
@@ -43,7 +42,6 @@ class MainActivity : AppCompatActivity(), ExFilesFragment.OnFileSelectedListener
     private lateinit var breadcrumbRecyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.AppTheme_White)
         super.onCreate(savedInstanceState)
         window.decorView.systemUiVisibility = window.decorView.systemUiVisibility.or(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
         setContentView(R.layout.activity_main)

@@ -1,10 +1,10 @@
 package com.flimbis.exfile.view.settings
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.flimbis.exfile.BaseActivity
 import com.flimbis.exfile.R
 
-class SettingsActivity : AppCompatActivity() {
+class SettingsActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
