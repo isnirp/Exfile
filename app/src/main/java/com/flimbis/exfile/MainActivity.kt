@@ -3,6 +3,7 @@ package com.flimbis.exfile
 import android.app.job.JobInfo
 import android.app.job.JobScheduler
 import android.content.*
+import android.content.pm.PackageManager
 import android.os.Bundle
 import com.flimbis.exfile.model.FileModel
 import com.flimbis.exfile.view.ExFilesFragment
@@ -13,6 +14,8 @@ import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.FileProvider.getUriForFile
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,6 +32,7 @@ import com.flimbis.exfile.view.home.HomeFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import java.io.File
 import kotlinx.android.synthetic.main.bottom_sheet.*
+import java.util.jar.Manifest
 
 class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, ActionMode.Callback,
         CreateFolderDialog.OnCreateDialogClickListener, DeleteDialog.OnDeleteDialogClickListener, HomeFragment.OnHomeItemsClickListener {
@@ -40,6 +44,7 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
     private lateinit var breadcrumbAdapter: BreadcrumbAdapter
     private val backStackManager = BackStackManager()
     private lateinit var breadcrumbRecyclerView: RecyclerView
+    private val MY_PERMISSIONS = 33
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +53,8 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar_main)
         setSupportActionBar(toolbar)
+
+        requirePermission()
 
         if (savedInstanceState == null) {
             displayHomeFragment()
@@ -61,6 +68,10 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
         val bottomSheet = findViewById<LinearLayout>(R.id.lnr_bottom_sheet)
         sheetBehaviour = BottomSheetBehavior.from(bottomSheet)
 
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     override fun onBackPressed() {
@@ -281,6 +292,11 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
     override fun onHomeItemClicked(filePath: String) {
         displayExFilesFragment(filePath)
         backStackManager.addToStack(getFileModel(filePath))
+    }
+
+    private fun requirePermission() {
+        ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE), MY_PERMISSIONS)
     }
 
     private fun initViews() {
