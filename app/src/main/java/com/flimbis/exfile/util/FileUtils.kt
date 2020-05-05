@@ -71,6 +71,10 @@ fun renameFileAtDirectory(dirPath: String, prevName: String, curName: String): B
 
 }
 
+fun convertFileSizeToKB(sizeInBytes: Long): Double {
+    return (sizeInBytes.toDouble()) / 1024
+}
+
 fun convertFileSizeToMB(sizeInBytes: Long): Double {
-    return (sizeInBytes.toDouble()) / (1024 * 1024)
+    return convertFileSizeToKB(sizeInBytes) / 1024
 }

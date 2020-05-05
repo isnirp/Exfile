@@ -25,6 +25,7 @@ package com.flimbis.exfile
 * https://developer.android.com/reference/android/support/v4/content/FileProvider
 * https://www.codevoila.com/post/46/android-tutorial-android-external-storage
 * https://developer.android.com/reference/android/os/Environment
+* https://stackoverflow.com/questions/10202805/how-do-i-get-file-size-of-temp-file-in-android
 * */
 //FileProvider is a special subclass of ContentProvider
 // facilitates secure sharing of files associated with an app by creating a content:// Uri for a file instead of a file:/// Uri.
