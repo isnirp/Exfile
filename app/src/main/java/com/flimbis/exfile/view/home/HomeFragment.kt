@@ -40,8 +40,8 @@ class HomeFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
         var items = listOf<FileModel>(
-                FileModel(path = Environment.getExternalStorageDirectory().absolutePath, isDirectory = true, name = "Main Storage", size = 0, ext = null, lastModified = null),
-                FileModel(path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath, isDirectory = true, name = "Download", size = 0, ext = null, lastModified = null)
+                FileModel(path = Environment.getExternalStorageDirectory().absolutePath, isDirectory = true, isWritable = true, name = "Main Storage", size = 0, ext = null, lastModified = null),
+                FileModel(path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath, isDirectory = true, isWritable = true, name = "Download", size = 0, ext = null, lastModified = null)
         )
 
         listFiles = view.findViewById(R.id.lst_home)

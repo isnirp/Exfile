@@ -324,7 +324,7 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
             updateBreadcrumbData(it)
         }
 
-        backStackManager.addToStack(fileModel = FileModel("exPath", true, "exHome", 0, "exe", 0))
+        backStackManager.addToStack(fileModel = FileModel("exPath", true, true, "exHome", 0, "exe", 0))
     }
 
     private fun displayHomeFragment() {
@@ -367,7 +367,7 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
 
     private fun getFileModel(path: String): FileModel {
         var file: File = getFileFromPath(path)
-        return FileModel(path = file.path, isDirectory = file.isDirectory, name = file.name, size = file.length(), ext = file.extension, lastModified = file.lastModified())
+        return FileModel(path = file.path, isDirectory = file.isDirectory, isWritable = true, name = file.name, size = file.length(), ext = file.extension, lastModified = file.lastModified())
     }
 
     private fun upDateViewTypePref(viewType: Int) {

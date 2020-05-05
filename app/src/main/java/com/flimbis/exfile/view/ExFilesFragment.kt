@@ -113,7 +113,8 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
         * if viewType is not null execute the function
         * */
         viewType?.let { adapter.setViewType(viewType) }
-        adapter.updateDirectory(getFileModelList(arguments?.getString(PATH)?: Environment.getExternalStorageDirectory().absolutePath))
+        adapter.updateDirectory(getFileModelList(arguments?.getString(PATH)
+                ?: Environment.getExternalStorageDirectory().absolutePath))
         adapter.setFileClickedListener(this)
 
         listFiles.adapter = adapter
@@ -223,7 +224,11 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
 
     private fun getFileModelList(path: String): List<FileModel> {
         var files: List<File> = getFilesFromPath(path)
-        return files.map { FileModel(path = it.path, isDirectory = it.isDirectory, name = it.name, size = it.length(), ext = it.extension, lastModified = it.lastModified()) }
+        return files.filter { !it.isHidden }
+                .map {
+                    FileModel(path = it.path, isDirectory = it.isDirectory, isWritable = it.canWrite(),
+                            name = it.name, size = it.length(), ext = it.extension, lastModified = it.lastModified())
+                }
     }
 
     private fun shareImages(path: String) {
