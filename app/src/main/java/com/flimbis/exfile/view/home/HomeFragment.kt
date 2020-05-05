@@ -41,7 +41,7 @@ class HomeFragment : Fragment() {
 
         var items = listOf<FileModel>(
                 FileModel(path = Environment.getExternalStorageDirectory().absolutePath, isDirectory = true, name = "Main Storage", size = 0, ext = null, lastModified = null),
-                FileModel(path = Environment.getExternalStorageDirectory().absolutePath, isDirectory = true, name = "Downloads", size = 0, ext = null, lastModified = null)
+                FileModel(path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath, isDirectory = true, name = "Download", size = 0, ext = null, lastModified = null)
         )
 
         listFiles = view.findViewById(R.id.lst_home)

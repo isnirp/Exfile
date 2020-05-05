@@ -23,10 +23,17 @@ package com.flimbis.exfile
 *
 * https://developer.android.com/training/secure-file-sharing/retrieve-info
 * https://developer.android.com/reference/android/support/v4/content/FileProvider
+* https://www.codevoila.com/post/46/android-tutorial-android-external-storage
+* https://developer.android.com/reference/android/os/Environment
 * */
 //FileProvider is a special subclass of ContentProvider
 // facilitates secure sharing of files associated with an app by creating a content:// Uri for a file instead of a file:/// Uri.
 //A content URI allows you to grant read and write access using temporary access permissions.
+//Environment.getExternalStorageDirectory(); returns top-level directory of the primary external storage.
+//Context.getExternalFilesDir(String type); Returns the absolute path to the directory on the primary shared or external storage device
+// where the application can place persistent files it owns.
+//type can be; Environment.DIRECTORY_MUSIC, Environment.DIRECTORY_PICTURES
+//Environment.getExternalStoragePublicDirectory(String type); returns a top-level shared or external storage directory for placing files of a particular type.
 
 /*
 * JOB SCHEDULER
