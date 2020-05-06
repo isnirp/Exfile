@@ -5,7 +5,7 @@
         <item>Dark</item>
     </string-array>
     <string-array name="themeValues">
-        <item>LIGHT</item>
-        <item>DARK</item>
+        <item>LIGHT_THEME</item>
+        <item>DARK_THEME</item>
     </string-array>
 </resources>

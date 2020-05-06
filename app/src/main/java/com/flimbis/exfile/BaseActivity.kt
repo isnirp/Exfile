@@ -13,7 +13,7 @@ open class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
     }
 
-    fun setAppTheme() {
+    private fun setAppTheme() {
         setTheme(AppPreference(this).getCustomTheme())
     }
 }

@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
-    <PreferenceCategory app:title="Theme">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory app:title="Appearance">
         <ListPreference
-            app:defaultValue="Light"
+            android:defaultValue="0"
             app:entries="@array/themeArray"
             app:entryValues="@array/themeValues"
             app:key="themePref"
-            app:title="@string/pref_theme" />
+            app:title="@string/pref_theme"
+            app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
-    <Preference
-        app:key="aboutPref"
-        app:title="@string/pref_about" />
+    <PreferenceCategory app:title="About">
+        <Preference
+            app:key="aboutPref"
+            app:title="@string/pref_about" />
+    </PreferenceCategory>
 </PreferenceScreen>
