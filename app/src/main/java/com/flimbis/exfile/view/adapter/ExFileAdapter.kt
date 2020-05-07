@@ -85,17 +85,10 @@ class ExFileAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         this.viewType = i
     }
 
-    fun renderImages(img: String, ext: String, v: ImageView) {
-        val mimeFilter = listOf(
-                "jpeg",
-                "jpg",
-                "png",
-                "gif"
-        )
-
-        if (ext in mimeFilter) {
-            v.setImageBitmap(BitmapFactory.decodeFile(img))
-        }
+    fun renderImages(img: String, v: ImageView) {
+        //display images in CircleImageView
+        v.visibility = View.VISIBLE
+        v.setImageBitmap(BitmapFactory.decodeFile(img))
     }
 
     inner class RexListViewHolder(private val binding: ItemsFileBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -107,7 +100,23 @@ class ExFileAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             binding.root.setOnClickListener { listener!!.onFileClicked(fileModel) }
             binding.pop.setOnClickListener { v -> listener!!.onPopMenuClicked(v, fileModel) }
 
-            renderImages(fileModel.path, fileModel.ext!!, binding.imgFile)
+            if (!fileModel.isDirectory) {
+                val mimeFilter = listOf(
+                        "jpeg",
+                        "jpg",
+                        "png",
+                        "gif"
+                )
+
+                if (fileModel.ext in mimeFilter) {
+                    //turn off default
+                    binding.imgFile.visibility = View.GONE
+                    //display images in CircleImageView
+                    renderImages(fileModel.path, binding.imgFilePics)
+                } else {
+                    binding.imgFile.setImageResource(R.drawable.ic_drive_file)
+                }
+            }
         }
 
         fun getItemDetails(): ItemDetailsLookup.ItemDetails<Long> =
@@ -125,12 +134,31 @@ class ExFileAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
             binding.root.setOnClickListener { listener!!.onFileClicked(fileModel) }
 
-            renderImages(fileModel.path, fileModel.ext!!, binding.imgFile)
+            if (!fileModel.isDirectory) {
+                val mimeFilter = listOf(
+                        "jpeg",
+                        "jpg",
+                        "png",
+                        "gif"
+                )
 
-            val mColor = generator!!.randomColor
-            val mDrawable = builder!!.build(fileModel.name.substring(0, 1), mColor)
+                if (fileModel.ext in mimeFilter) {
+                    //display images in CircleImageView
+                    renderImages(fileModel.path, binding.imgCover)
+                    binding.imgFile.setImageResource(R.drawable.ic_drive_file)
+                } else {
+                    val mColor = generator!!.randomColor
+                    val mDrawable = builder!!.build(fileModel.name.substring(0, 1), mColor)
 
-            binding.imgCover.setImageDrawable(mDrawable)
+                    binding.imgCover.setImageDrawable(mDrawable)
+                    binding.imgFile.setImageResource(R.drawable.ic_drive_file)
+                }
+            } else {
+                val mColor = generator!!.randomColor
+                val mDrawable = builder!!.build(fileModel.name.substring(0, 1), mColor)
+
+                binding.imgCover.setImageDrawable(mDrawable)
+            }
         }
 
     }
