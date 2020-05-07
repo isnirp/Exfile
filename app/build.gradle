@@ -67,5 +67,7 @@ dependencies {
     //preference
     implementation "androidx.preference:preference:1.1.0"
     implementation "androidx.preference:preference-ktx:1.1.0"
+    //circle view
+    implementation 'de.hdodenhof:circleimageview:1.2.2'
 
 }
