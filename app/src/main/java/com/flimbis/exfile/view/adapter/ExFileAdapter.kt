@@ -42,11 +42,11 @@ class ExFileAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             GRID_VIEW -> {
-                val gridFileBinding: ItemsFileGridBinding = inflate(LayoutInflater.from(parent?.ctx), R.layout.items_file_grid, parent, false)
+                val gridFileBinding: ItemsFileGridBinding = inflate(LayoutInflater.from(parent.ctx), R.layout.items_file_grid, parent, false)
                 RexGridViewHolder(gridFileBinding)
             }
             else -> {
-                val fileBinding: ItemsFileBinding = inflate(LayoutInflater.from(parent?.ctx), R.layout.items_file, parent, false)
+                val fileBinding: ItemsFileBinding = inflate(LayoutInflater.from(parent.ctx), R.layout.items_file, parent, false)
                 RexListViewHolder(fileBinding)
             }
         }

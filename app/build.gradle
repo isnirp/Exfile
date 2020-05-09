@@ -34,7 +34,10 @@ android {
             applicationIdSuffix ".beta"
         }
     }
-
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
     dataBinding {
         enabled = true
     }

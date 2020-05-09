@@ -7,7 +7,7 @@ import android.content.SharedPreferences
 class AppPreference(private val context: Activity) {
     private val light = "LIGHT_THEME"
     private val dark = "DARK_THEME"
-    private val pref: SharedPreferences = context?.getSharedPreferences("com.flimbis.exfile.apppref", Context.MODE_PRIVATE)
+    private val pref: SharedPreferences = context.getSharedPreferences("com.flimbis.exfile.apppref", Context.MODE_PRIVATE)
     private val editor: SharedPreferences.Editor = pref.edit()
 
     fun setCustomTheme(theme: String) {
