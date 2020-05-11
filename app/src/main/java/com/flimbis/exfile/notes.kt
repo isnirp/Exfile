@@ -27,14 +27,23 @@ package com.flimbis.exfile
 * https://developer.android.com/reference/android/os/Environment
 * https://stackoverflow.com/questions/10202805/how-do-i-get-file-size-of-temp-file-in-android
 * */
-//FileProvider is a special subclass of ContentProvider
-// facilitates secure sharing of files associated with an app by creating a content:// Uri for a file instead of a file:/// Uri.
-//A content URI allows you to grant read and write access using temporary access permissions.
-//Environment.getExternalStorageDirectory(); returns top-level directory of the primary external storage.
-//Context.getExternalFilesDir(String type); Returns the absolute path to the directory on the primary shared or external storage device
-// where the application can place persistent files it owns.
-//type can be; Environment.DIRECTORY_MUSIC, Environment.DIRECTORY_PICTURES
-//Environment.getExternalStoragePublicDirectory(String type); returns a top-level shared or external storage directory for placing files of a particular type.
+/*
+* #FileProvider is a special subclass of ContentProvider
+* #FileProvider generates contentURI for files
+* #A content URI allows you to grant read and write access using temporary access permissions.
+* #FileProvider can only generate a content URI for files in directories that you specify beforehand in an xml
+*
+* */
+/*
+FileProvider is a special subclass of ContentProvider
+ facilitates secure sharing of files associated with an app by creating a content:// Uri for a file instead of a file:/// Uri.
+A content URI allows you to grant read and write access using temporary access permissions.
+Environment.getExternalStorageDirectory(); returns top-level directory of the primary external storage.
+Context.getExternalFilesDir(String type); Returns the absolute path to the directory on the primary shared or external storage device
+ where the application can place persistent files it owns.
+type can be; Environment.DIRECTORY_MUSIC, Environment.DIRECTORY_PICTURES
+Environment.getExternalStoragePublicDirectory(String type); returns a top-level shared or external storage directory for placing files of a particular type.
+*/
 
 /*
 * JOB SCHEDULER
