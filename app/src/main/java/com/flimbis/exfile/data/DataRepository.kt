@@ -3,7 +3,7 @@ package com.flimbis.exfile.data
 import java.io.File
 
 class DataRepository {
-    fun getFileList(path: String): List<FileEntity> {
+    fun getFileEntityList(path: String): List<FileEntity> {
         val file = File(path)//Creates a new File instance by converting the given pathname string into an abstract pathname.
         //listFiles(); Returns an array of abstract path names denoting the files in the directory denoted by this abstract pathname.
         return file.listFiles().toList()
