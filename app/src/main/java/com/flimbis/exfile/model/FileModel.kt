@@ -1,14 +1,11 @@
 package com.flimbis.exfile.model
 
+import java.util.*
+
 data class FileModel(val path: String,
-                     val isDirectory: Boolean,
+                     val type: String,
                      val isWritable: Boolean,
                      val name: String,
-                     val size: Long = 0,
+                     val size: Double = 0.0,
                      val ext: String?,
-                     val lastModified: Long?)
-
-enum class FileType(val type: String) {
-    DIRECTORY("folder"),
-    FILE("file")
-}
+                     val lastModified: Date?)
