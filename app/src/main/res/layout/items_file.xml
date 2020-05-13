@@ -7,7 +7,7 @@
 
         <variable
             name="fileModel"
-            type="com.flimbis.exfile.viewmodel.FileViewModel" />
+            type="com.flimbis.exfile.model.FileModel" />
     </data>
 
     <RelativeLayout
@@ -121,7 +121,7 @@
                         android:id="@+id/txt_file_size"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{fileModel.size}"
+                        android:text="@{String.valueOf(fileModel.size)}"
                         android:textAppearance="@style/SmallText" />
 
                 </LinearLayout>
@@ -142,7 +142,7 @@
                         android:id="@+id/txt_file_lastModified"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@{fileModel.lastModified}"
+                        android:text="@{String.valueOf(fileModel.lastModified)}"
                         android:textAppearance="@style/SmallText" />
 
                 </LinearLayout>

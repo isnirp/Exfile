@@ -7,7 +7,7 @@
 
         <variable
             name="fileModel"
-            type="com.flimbis.exfile.viewmodel.FileViewModel" />
+            type="com.flimbis.exfile.model.FileModel" />
     </data>
 
     <LinearLayout
@@ -50,7 +50,7 @@
                 android:id="@+id/txt_home_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{fileModel.size}"
+                android:text="@{String.valueOf(fileModel.size)}"
                 android:textAppearance="@style/SmallText" />
         </LinearLayout>
     </LinearLayout>

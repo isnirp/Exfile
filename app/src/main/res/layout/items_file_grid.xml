@@ -8,7 +8,7 @@
 
         <variable
             name="fileModel"
-            type="com.flimbis.exfile.viewmodel.FileViewModel" />
+            type="com.flimbis.exfile.model.FileModel" />
     </data>
 
     <LinearLayout
