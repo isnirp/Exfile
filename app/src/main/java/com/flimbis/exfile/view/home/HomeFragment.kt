@@ -5,14 +5,18 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
 import android.view.*
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.flimbis.exfile.R
+import com.flimbis.exfile.data.DataRepository
+import com.flimbis.exfile.databinding.FragmentHomeBinding
 import com.flimbis.exfile.model.FileModel
 import com.flimbis.exfile.view.adapter.HomeAdapter
 import com.flimbis.exfile.view.settings.SettingsActivity
+import com.flimbis.exfile.viewmodel.FileViewModel
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -36,7 +40,11 @@ class HomeFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
+        val fragmentHomeBinding = DataBindingUtil.inflate<FragmentHomeBinding>(layoutInflater, R.layout.fragment_home, container, false)
+        val view = fragmentHomeBinding.root
+
+        val data = DataRepository()
+        fragmentHomeBinding.fileViewModel = FileViewModel(data)
 
         var items = listOf<FileModel>(
                 FileModel(path = Environment.getExternalStorageDirectory().absolutePath, type = "folder", isWritable = true, name = "Main Storage", size = 0.0, ext = null, lastModified = null),
