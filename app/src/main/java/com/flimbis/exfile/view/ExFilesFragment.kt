@@ -40,6 +40,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
     private lateinit var adapter: ExFileAdapter
     private var listener: OnFileSelectedListener? = null
     private lateinit var bReceiver: BroadcastReceiver
+    private lateinit var viewModel: FileViewModel
 
     companion object {
         private const val PATH = "com.flimbis.exfile.PATH_FINDER"
@@ -94,11 +95,12 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        val fragmentFilesExBinding = DataBindingUtil.inflate<FragmentFilesExBinding>(layoutInflater, R.layout.fragment_files_ex, container, false)
-        val view = fragmentFilesExBinding.root
+        val binding = DataBindingUtil.inflate<FragmentFilesExBinding>(layoutInflater, R.layout.fragment_files_ex, container, false)
+        val view = binding.root
 
         val data = DataRepository()
-        fragmentFilesExBinding.fileViewModel = FileViewModel(data)
+        viewModel = FileViewModel(data)
+        binding.fileViewModel = viewModel
 
         listFiles = view.findViewById(R.id.lst_ex_files)
 
@@ -200,7 +202,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
                 "gif"
         )
         val shareMenu: MenuItem = popup.menu.findItem(R.id.menu_pop_share)
-        if (fileModel.isDirectory)
+        if (fileModel.type == "folder")
             shareMenu.isVisible = false
         else {
             if (fileModel.ext !in mimeFilter) shareMenu.isVisible = false
@@ -231,12 +233,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
     }
 
     private fun getFileModelList(path: String): List<FileModel> {
-        var files: List<File> = getFilesFromPath(path)
-        return files.filter { !it.isHidden }
-                .map {
-                    FileModel(path = it.path, isDirectory = it.isDirectory, isWritable = it.canWrite(),
-                            name = it.name, size = it.length(), ext = it.extension, lastModified = it.lastModified())
-                }
+        return viewModel.getFiles(path)
     }
 
     private fun shareImages(path: String) {
