@@ -187,7 +187,7 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
     * */
 
     override fun onItemFileSelected(fileModel: FileModel) {
-        if (fileModel.isDirectory) toFolder(fileModel.path)
+        if (fileModel.type == "folder") toFolder(fileModel.path)
         else toFileIntent(fileModel.path)
     }
 
@@ -279,7 +279,7 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
 
     override fun onDeleteFile(files: List<FileModel>) {
         for (fileModel in files) {
-            if (fileModel.isDirectory) {
+            if (fileModel.type == "folder") {
                 deleteDirectory(fileModel.path)
             } else {
                 deleteFileAtPath(fileModel.path)
@@ -291,7 +291,7 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
 
     override fun onHomeItemClicked(filePath: String) {
         displayExFilesFragment(filePath)
-        backStackManager.addToStack(getFileModel(filePath))
+        //backStackManager.addToStack(getFileModel(filePath))
     }
 
     private fun requirePermission() {
@@ -324,7 +324,7 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
             updateBreadcrumbData(it)
         }
 
-        backStackManager.addToStack(fileModel = FileModel("exPath", true, true, "exHome", 0, "exe", 0))
+        backStackManager.addToStack(fileModel = FileModel("exPath", "folder", true, "exHome", 0.0, "exe", null))
     }
 
     private fun displayHomeFragment() {
@@ -354,7 +354,7 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
 
     private fun toFolder(filePath: String) {
         displayExFilesFragment(filePath)
-        backStackManager.addToStack(getFileModel(filePath))
+        //backStackManager.addToStack(getFileModel(filePath))
     }
 
     private fun toFileIntent(path: String) {
@@ -365,9 +365,8 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
         startActivity(Intent.createChooser(intent, "Select Application"))
     }
 
-    private fun getFileModel(path: String): FileModel {
-        var file: File = getFileFromPath(path)
-        return FileModel(path = file.path, isDirectory = file.isDirectory, isWritable = true, name = file.name, size = file.length(), ext = file.extension, lastModified = file.lastModified())
+    private fun getFileModel(path: String): FileModel? {
+        return null
     }
 
     private fun upDateViewTypePref(viewType: Int) {
