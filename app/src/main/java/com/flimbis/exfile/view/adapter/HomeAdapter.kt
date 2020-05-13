@@ -10,8 +10,6 @@ import com.flimbis.exfile.R
 import com.flimbis.exfile.databinding.ItemsHomeBinding
 import com.flimbis.exfile.model.FileModel
 import com.flimbis.exfile.util.ctx
-import com.flimbis.exfile.viewmodel.FileViewModel
-import kotlinx.android.synthetic.main.list_recent.*
 import kotlinx.android.synthetic.main.list_recent.view.*
 
 class HomeAdapter(private val itemClick: (String) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -61,7 +59,7 @@ class HomeAdapter(private val itemClick: (String) -> Unit) : RecyclerView.Adapte
 
     class MenuViewHolder(private val binding: ItemsHomeBinding, private val itemClick: (String) -> Unit) : RecyclerView.ViewHolder(binding.root) {
         fun bindView(fileModel: FileModel) {
-            binding.fileModel = FileViewModel(fileModel)
+            binding.fileModel = fileModel
             binding.root.setOnClickListener { itemClick(fileModel.path) }
         }
     }
