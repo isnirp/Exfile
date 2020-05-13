@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.flimbis.exfile.R
 import com.flimbis.exfile.databinding.ItemsFileBinding
 import com.flimbis.exfile.model.FileModel
-import com.flimbis.exfile.viewmodel.FileViewModel
 import androidx.recyclerview.selection.ItemDetailsLookup
 import android.graphics.BitmapFactory
 import com.flimbis.exfile.databinding.ItemsFileGridBinding
@@ -94,13 +93,13 @@ class ExFileAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     inner class RexListViewHolder(private val binding: ItemsFileBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bindView(fileModel: FileModel, isActivated: Boolean = false) {
-            binding.fileModel = FileViewModel(fileModel)
+            binding.fileModel = fileModel
             itemView.isActivated = isActivated
 
             binding.root.setOnClickListener { listener!!.onFileClicked(fileModel) }
             binding.pop.setOnClickListener { v -> listener!!.onPopMenuClicked(v, fileModel) }
 
-            if (!fileModel.isDirectory) {
+            if (fileModel.type == "folder") {
                 val mimeFilter = listOf(
                         "jpeg",
                         "jpg",
@@ -129,12 +128,12 @@ class ExFileAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     inner class RexGridViewHolder(private val binding: ItemsFileGridBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bindView(fileModel: FileModel, isActivated: Boolean = false) {
-            binding.fileModel = FileViewModel(fileModel)
+            binding.fileModel = fileModel
             itemView.isActivated = isActivated
 
             binding.root.setOnClickListener { listener!!.onFileClicked(fileModel) }
 
-            if (!fileModel.isDirectory) {
+            if (fileModel.type == "folder") {
                 val mimeFilter = listOf(
                         "jpeg",
                         "jpg",
