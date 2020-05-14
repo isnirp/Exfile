@@ -25,7 +25,7 @@ class RecentAdapter(private val items: List<FileModel>) : RecyclerView.Adapter<R
 
     class ViewHolder(private val binding: ItemsFileRecentBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bindViews(fileModel: FileModel) {
-            binding.fileModel = FileViewModel(fileModel)
+            binding.fileModel = fileModel
         }
     }
 }
