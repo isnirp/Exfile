@@ -60,6 +60,8 @@ class HomeAdapter(private val itemClick: (String) -> Unit) : RecyclerView.Adapte
     class MenuViewHolder(private val binding: ItemsHomeBinding, private val itemClick: (String) -> Unit) : RecyclerView.ViewHolder(binding.root) {
         fun bindView(fileModel: FileModel) {
             binding.fileModel = fileModel
+            // forces the bindings to run immediately instead of delaying them until the next frame
+            binding.executePendingBindings()
             binding.root.setOnClickListener { itemClick(fileModel.path) }
         }
     }

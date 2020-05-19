@@ -69,6 +69,7 @@ Environment.getExternalStoragePublicDirectory(String type); returns a top-level 
 /*
 * https://medium.com/androiddevelopers/android-data-binding-recyclerview-db7c40d9f0e4
 * https://www.vogella.com/tutorials/AndroidDatabinding/article.html
+* https://medium.com/androiddevelopers/android-data-binding-recyclerview-db7c40d9f0e4
 * */
 
 
