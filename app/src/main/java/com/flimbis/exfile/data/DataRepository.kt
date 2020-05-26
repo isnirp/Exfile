@@ -13,6 +13,16 @@ class DataRepository {
                 }
     }
 
+    fun deleteFileDirectory(path: String): Boolean {
+        val file = File(path)
+        return file.deleteRecursively()
+    }
+
+    fun deleteFileAtPath(path: String): Boolean {
+        val file = File(path)
+        return file.delete()
+    }
+
     private fun getFileType(isDirectory: Boolean): Int {
         return if (isDirectory) 0 else 1
     }
