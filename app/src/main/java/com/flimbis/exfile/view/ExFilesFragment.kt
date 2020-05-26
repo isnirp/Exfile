@@ -123,8 +123,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
         * if viewType is not null execute the function
         * */
         viewType?.let { adapter.setViewType(viewType) }
-        adapter.updateDirectory(getFileModelList(arguments?.getString(PATH)
-                ?: Environment.getExternalStorageDirectory().absolutePath))
+        adapter.updateDirectory(getFileModelList(arguments!!.getString(PATH)))
         adapter.setFileClickedListener(this)
 
         listFiles.adapter = adapter

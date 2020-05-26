@@ -99,7 +99,7 @@ class ExFileAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             binding.root.setOnClickListener { listener!!.onFileClicked(fileModel) }
             binding.pop.setOnClickListener { v -> listener!!.onPopMenuClicked(v, fileModel) }
 
-            if (fileModel.type == "folder") {
+            if (fileModel.type != "folder") {
                 val mimeFilter = listOf(
                         "jpeg",
                         "jpg",
@@ -133,7 +133,7 @@ class ExFileAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
             binding.root.setOnClickListener { listener!!.onFileClicked(fileModel) }
 
-            if (fileModel.type == "folder") {
+            if (fileModel.type != "folder") {
                 val mimeFilter = listOf(
                         "jpeg",
                         "jpg",
