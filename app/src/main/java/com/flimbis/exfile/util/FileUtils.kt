@@ -78,3 +78,7 @@ fun convertFileSizeToKB(sizeInBytes: Long): Double {
 fun convertFileSizeToMB(sizeInBytes: Long): Double {
     return convertFileSizeToKB(sizeInBytes) / 1024
 }
+
+fun convertFileSizeToGB(sizeInBytes: Long): Double {
+    return convertFileSizeToMB(sizeInBytes) / 1024
+}
