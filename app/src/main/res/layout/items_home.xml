@@ -51,7 +51,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{String.valueOf(obj.size)}"
-                android:textAppearance="@style/SmallText" />
+                android:textAppearance="@style/SmallText"
+                android:visibility="gone"/>
         </LinearLayout>
     </LinearLayout>
 </layout>

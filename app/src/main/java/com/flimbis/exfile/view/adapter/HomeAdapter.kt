@@ -60,6 +60,9 @@ class HomeAdapter(private val itemClick: (String) -> Unit) : RecyclerView.Adapte
     class MenuViewHolder(private val binding: ItemsHomeBinding, private val itemClick: (String) -> Unit) : BaseViewHolder(binding) {
         fun bindView(fileModel: FileModel) {
             this.bind(fileModel)
+            if (fileModel.size != null) {
+                binding.txtHomeSize.visibility = View.VISIBLE
+            }
             binding.root.setOnClickListener { itemClick(fileModel.path) }
         }
     }

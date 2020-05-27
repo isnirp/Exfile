@@ -14,6 +14,7 @@ import com.flimbis.exfile.R
 import com.flimbis.exfile.data.DataRepository
 import com.flimbis.exfile.databinding.FragmentHomeBinding
 import com.flimbis.exfile.model.FileModel
+import com.flimbis.exfile.util.convertFileSizeToMB
 import com.flimbis.exfile.view.adapter.HomeAdapter
 import com.flimbis.exfile.view.settings.SettingsActivity
 import com.flimbis.exfile.viewmodel.FileViewModel
@@ -47,7 +48,7 @@ class HomeFragment : Fragment() {
         fragmentHomeBinding.fileViewModel = FileViewModel(data)
 
         var items = listOf<FileModel>(
-                FileModel(path = Environment.getExternalStorageDirectory().absolutePath, type = "folder", isWritable = true, name = "Main Storage", size = 0.0, ext = null, lastModified = null),
+                FileModel(path = Environment.getExternalStorageDirectory().absolutePath, type = "folder", isWritable = true, name = "Main Storage", size = convertFileSizeToMB(Environment.getExternalStorageDirectory().length()), ext = null, lastModified = null),
                 FileModel(path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath, type = "folder", isWritable = true, name = "Download", size = 0.0, ext = null, lastModified = null)
         )
 
