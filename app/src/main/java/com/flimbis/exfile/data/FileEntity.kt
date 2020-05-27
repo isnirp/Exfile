@@ -7,5 +7,5 @@ data class FileEntity(
         val name: String,
         val size: Long = 0,
         val ext: String?,
-        val lastModified: Long?
+        val lastModified: Long
 )

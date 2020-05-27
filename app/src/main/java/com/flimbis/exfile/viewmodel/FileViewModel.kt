@@ -5,6 +5,7 @@ import com.flimbis.exfile.data.DataRepository
 import com.flimbis.exfile.data.FileEntity
 import com.flimbis.exfile.model.FileModel
 import com.flimbis.exfile.util.convertFileSizeToMB
+import com.flimbis.exfile.util.convertLastModified
 
 class FileViewModel(private val repository: DataRepository) : BaseObservable() {
     fun getFiles(path: String): List<FileModel> {
@@ -20,7 +21,7 @@ class FileViewModel(private val repository: DataRepository) : BaseObservable() {
                 fileEntity.name,
                 convertFileSizeToMB(fileEntity.size),
                 fileEntity.ext,
-                null
+                convertLastModified(fileEntity.lastModified)
         )
     }
 
