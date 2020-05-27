@@ -6,6 +6,6 @@ data class FileModel(val path: String,
                      val type: String,
                      val isWritable: Boolean,
                      val name: String,
-                     val size: Double = 0.0,
+                     val size: Double?,
                      val ext: String?,
                      val lastModified: Date?)
