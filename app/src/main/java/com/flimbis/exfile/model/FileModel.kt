@@ -8,4 +8,4 @@ data class FileModel(val path: String,
                      val name: String,
                      val size: Double?,
                      val ext: String?,
-                     val lastModified: Date?)
+                     val lastModified: String?)
