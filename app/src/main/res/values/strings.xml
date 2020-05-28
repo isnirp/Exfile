@@ -30,4 +30,5 @@
     <string name="pref_about">About</string>
     <string name="pref_theme">Theme</string>
     <string name="about">A File Explorer</string>
+    <string name="generic_size">%.2f</string>
 </resources>
