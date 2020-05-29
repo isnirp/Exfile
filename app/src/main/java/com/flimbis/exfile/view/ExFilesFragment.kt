@@ -18,6 +18,7 @@ import android.content.Intent
 import android.content.BroadcastReceiver
 import android.net.Uri
 import android.os.Environment
+import android.util.Log
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -64,8 +65,6 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
         super.onCreate(savedInstanceState)
 
         setHasOptionsMenu(true)
-        //update current path
-        currentDirectory = arguments!!.getString(PATH)
 
         bReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, i: Intent) {
@@ -98,6 +97,9 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
         val binding = DataBindingUtil.inflate<FragmentFilesExBinding>(layoutInflater, R.layout.fragment_files_ex, container, false)
         val view = binding.root
 
+        //update current path
+        currentDirectory = arguments!!.getString(PATH)
+
         val data = DataRepository()
         viewModel = FileViewModel(data)
         binding.fileViewModel = viewModel
@@ -125,6 +127,8 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
         viewType?.let { adapter.setViewType(viewType) }
         adapter.updateDirectory(getFileModelList(arguments!!.getString(PATH)))
         adapter.setFileClickedListener(this)
+        Log.i("TAG_PATH", arguments!!.getString(PATH))
+        Log.i("TAG_CURRENT_DIR",currentDirectory)
 
         listFiles.adapter = adapter
 

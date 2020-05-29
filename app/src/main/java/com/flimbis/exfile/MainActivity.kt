@@ -76,7 +76,7 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
 
     override fun onBackPressed() {
         super.onBackPressed()
-        backStackManager.popFromStack()
+        //backStackManager.popFromStack()
         if (supportFragmentManager.backStackEntryCount == 0) {
             finish()
         }
