@@ -76,7 +76,11 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
 
     override fun onBackPressed() {
         super.onBackPressed()
-        //backStackManager.popFromStack()
+
+        if (supportFragmentManager.backStackEntryCount > 1 ) {
+            backStackManager.popFromStack()
+        }
+
         if (supportFragmentManager.backStackEntryCount == 0) {
             finish()
         }
@@ -187,7 +191,7 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
     * */
 
     override fun onItemFileSelected(fileModel: FileModel) {
-        if (fileModel.type == "folder") toFolder(fileModel.path)
+        if (fileModel.type == "folder") toFolder(fileModel)
         else toFileIntent(fileModel.path)
     }
 
@@ -215,12 +219,13 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
         upDateViewTypePref(viewType)
 
         //recreate view
-        val exFilesFragment = ExFilesFragment.build { path = filePath }
+        displayExFilesFragment(filePath)
+        /*val exFilesFragment = ExFilesFragment.build { path = filePath }
 
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.container, exFilesFragment)
         fragmentTransaction.addToBackStack(null)
-        fragmentTransaction.commit()
+        fragmentTransaction.commit()*/
 
         /*val sheetDialog = BottomSheetDialog(this)
         val sheetView: View = layoutInflater.inflate(R.layout.bottom_sheet_views, null)
@@ -291,7 +296,7 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
 
     override fun onHomeItemClicked(filePath: String) {
         displayExFilesFragment(filePath)
-        //backStackManager.addToStack(getFileModel(filePath))
+        backStackManager.addToStack(getFileModel(filePath))
     }
 
     private fun requirePermission() {
@@ -352,9 +357,9 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
         fragmentTransaction.commit()
     }
 
-    private fun toFolder(filePath: String) {
-        displayExFilesFragment(filePath)
-        //backStackManager.addToStack(getFileModel(filePath))
+    private fun toFolder(fileModel: FileModel) {
+        displayExFilesFragment(fileModel.path)
+        backStackManager.addToStack(fileModel)
     }
 
     private fun toFileIntent(path: String) {
@@ -365,8 +370,24 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
         startActivity(Intent.createChooser(intent, "Select Application"))
     }
 
-    private fun getFileModel(path: String): FileModel? {
-        return null
+    private fun getFileModel(path: String): FileModel {
+        return toModel(getFileFromPath(path))
+    }
+
+    private fun toModel(file: File): FileModel {
+        return FileModel(
+                file.path,
+                getFileType(file.isDirectory),
+                file.canWrite(),
+                file.name,
+                convertFileSizeToMB(file.length()),
+                file.extension,
+                convertLastModified(file.lastModified())
+        )
+    }
+
+    private fun getFileType(isDirectory: Boolean): String {
+        return if (isDirectory) "folder" else "file"
     }
 
     private fun upDateViewTypePref(viewType: Int) {
