@@ -128,7 +128,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
         adapter.updateDirectory(getFileModelList(arguments!!.getString(PATH)))
         adapter.setFileClickedListener(this)
         Log.i("TAG_PATH", arguments!!.getString(PATH))
-        Log.i("TAG_CURRENT_DIR",currentDirectory)
+        Log.i("TAG_CURRENT_DIR", currentDirectory)
 
         listFiles.adapter = adapter
 
@@ -191,6 +191,10 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
 
     override fun onFileClicked(fileModel: FileModel) {
         listener?.onItemFileSelected(fileModel)
+    }
+
+    override fun onFileLongClicked(fileModel: FileModel) {
+        listener!!.onActionModeActivated(fileModel)
     }
 
     override fun onPopMenuClicked(v: View, fileModel: FileModel) {

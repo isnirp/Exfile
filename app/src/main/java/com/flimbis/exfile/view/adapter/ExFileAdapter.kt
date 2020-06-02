@@ -23,6 +23,9 @@ class ExFileAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var viewType: Int = 0
     private val LIST_VIEW = 0
     private val GRID_VIEW = 1
+    //actionmode
+    private var isActionMode = false
+    private var selectedItems = listOf<FileModel>()
 
     private var builder: TextDrawable.IBuilder? = null
     private var generator: ColorGenerator? = null
@@ -98,6 +101,10 @@ class ExFileAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
             binding.root.setOnClickListener { listener!!.onFileClicked(fileModel) }
             binding.pop.setOnClickListener { v -> listener!!.onPopMenuClicked(v, fileModel) }
+            binding.root.setOnLongClickListener {
+                listener!!.onFileLongClicked(fileModel)
+                true
+            }
 
             if (fileModel.type != "folder") {
                 val mimeFilter = listOf(
@@ -168,6 +175,8 @@ class ExFileAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     interface OnFileClickedListener {
         fun onFileClicked(fileModel: FileModel)
+
+        fun onFileLongClicked(fileModel: FileModel)
 
         fun onPopMenuClicked(v: View, fileModel: FileModel)
     }

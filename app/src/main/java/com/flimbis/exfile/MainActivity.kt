@@ -77,7 +77,7 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
     override fun onBackPressed() {
         super.onBackPressed()
 
-        if (supportFragmentManager.backStackEntryCount > 0 ) {
+        if (supportFragmentManager.backStackEntryCount > 0) {
             backStackManager.popFromStack()
         }
 
@@ -86,48 +86,6 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
         }
     }
 
-    /*
-    * contextual action bar
-    * */
-    /*override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
-        return when (item?.itemId) {
-            R.id.menu_cut -> {
-                //shareCurrentItem()
-                mode?.finish() // Action picked, so close the CAB
-                true
-            }
-            R.id.menu_copy -> {
-                mode?.finish()
-                true
-            }
-            R.id.menu_delete -> {
-                //deleteSelectedItems()
-                mode?.finish() // Action picked, so close the CAB
-                true
-            }
-            else -> false
-        }
-    }
-
-    override fun onItemCheckedStateChanged(mode: ActionMode?, position: Int, id: Long, checked: Boolean) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-        mode?.setTitle("Actions")
-        val inflater: MenuInflater? = mode?.menuInflater
-        inflater?.inflate(R.menu.contextual_menu, menu)
-
-        return true
-    }
-
-    override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-        return false
-    }
-
-    override fun onDestroyActionMode(mode: ActionMode?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }*/
     //Action mode
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
         return when (item?.itemId) {
