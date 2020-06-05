@@ -42,9 +42,13 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
     private var listener: OnFileSelectedListener? = null
     private lateinit var bReceiver: BroadcastReceiver
     private lateinit var viewModel: FileViewModel
+    private var items = listOf<FileModel>()
+    private var selectedItems = mutableListOf<FileModel>() //for contextual bar
 
     companion object {
         private const val PATH = "com.flimbis.exfile.PATH_FINDER"
+        //actionmode
+        var isActionMode = false
 
         /*
         * apply
@@ -125,7 +129,9 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
         * if viewType is not null execute the function
         * */
         viewType?.let { adapter.setViewType(viewType) }
-        adapter.updateDirectory(getFileModelList(arguments!!.getString(PATH)))
+        // get items at path
+        items = getFileModelList(arguments!!.getString(PATH))
+        adapter.updateDirectory(items)
         adapter.setFileClickedListener(this)
         Log.i("TAG_PATH", arguments!!.getString(PATH))
         Log.i("TAG_CURRENT_DIR", currentDirectory)
@@ -256,6 +262,13 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
     private fun showMsg(msg: String) {
         Snackbar.make(listFiles, msg, Snackbar.LENGTH_SHORT)
                 .show()
+    }
+
+    fun trackSelectedItems(position: Int){
+        if(!selectedItems.contains(items.get(position)))
+            selectedItems.add(items.get(position))
+        else
+            selectedItems.remove(items.get(position))
     }
 
     /*private fun scheduleBroadcastOnNewFile(path: String) {

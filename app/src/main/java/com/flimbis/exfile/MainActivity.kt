@@ -219,6 +219,7 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
     override fun onActionModeActivated(fileModel: FileModel) {
         actionMode = startActionMode(this)
         this.mFileModel = fileModel
+        ExFilesFragment.isActionMode = true
     }
 
     override fun onCreateFolder(name: String) {

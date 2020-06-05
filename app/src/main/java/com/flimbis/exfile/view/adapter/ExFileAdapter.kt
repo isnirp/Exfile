@@ -16,6 +16,7 @@ import com.amulyakhare.textdrawable.util.ColorGenerator
 import com.amulyakhare.textdrawable.TextDrawable
 import android.graphics.Color
 import com.flimbis.exfile.util.ctx
+import com.flimbis.exfile.view.ExFilesFragment
 
 class ExFileAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var items = listOf<FileModel>()
@@ -23,9 +24,6 @@ class ExFileAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var viewType: Int = 0
     private val LIST_VIEW = 0
     private val GRID_VIEW = 1
-    //actionmode
-    private var isActionMode = false
-    private var selectedItems = listOf<FileModel>()
 
     private var builder: TextDrawable.IBuilder? = null
     private var generator: ColorGenerator? = null
@@ -100,7 +98,10 @@ class ExFileAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             itemView.isActivated = isActivated
 
             binding.root.setOnClickListener { listener!!.onFileClicked(fileModel) }
-            binding.pop.setOnClickListener { v -> listener!!.onPopMenuClicked(v, fileModel) }
+            binding.pop.setOnClickListener { v ->
+                if(ExFilesFragment.isActionMode == true) //add to selected items
+                    listener!!.onPopMenuClicked(v, fileModel)
+            }
             binding.root.setOnLongClickListener {
                 listener!!.onFileLongClicked(fileModel)
                 true
