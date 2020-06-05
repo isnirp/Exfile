@@ -264,11 +264,11 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
                 .show()
     }
 
-    fun trackSelectedItems(position: Int){
-        if(!selectedItems.contains(items.get(position)))
-            selectedItems.add(items.get(position))
+    fun trackSelectedItems(fileModel: FileModel){
+        if(!selectedItems.contains(fileModel))
+            selectedItems.add(fileModel)
         else
-            selectedItems.remove(items.get(position))
+            selectedItems.remove(fileModel)
     }
 
     /*private fun scheduleBroadcastOnNewFile(path: String) {

@@ -97,11 +97,13 @@ class ExFileAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             binding.fileModel = fileModel
             itemView.isActivated = isActivated
 
-            binding.root.setOnClickListener { listener!!.onFileClicked(fileModel) }
-            binding.pop.setOnClickListener { v ->
-                if(ExFilesFragment.isActionMode == true) //add to selected items
-                    listener!!.onPopMenuClicked(v, fileModel)
+            binding.root.setOnClickListener {
+                if (ExFilesFragment.isActionMode) //add to selected items
+                    ExFilesFragment().trackSelectedItems(fileModel)
+                else
+                    listener!!.onFileClicked(fileModel)
             }
+            binding.pop.setOnClickListener { v -> listener!!.onPopMenuClicked(v, fileModel) }
             binding.root.setOnLongClickListener {
                 listener!!.onFileLongClicked(fileModel)
                 true
