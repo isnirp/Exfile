@@ -28,6 +28,8 @@ class ExFileAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var builder: TextDrawable.IBuilder? = null
     private var generator: ColorGenerator? = null
 
+    private var selectedItems = mutableListOf<FileModel>() //for contextual bar
+
     init {
         builder = TextDrawable.builder()
                 .beginConfig()
@@ -91,6 +93,18 @@ class ExFileAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         v.setImageBitmap(BitmapFactory.decodeFile(img))
     }
 
+    fun trackSelectedItems(fileModel: FileModel) {
+        if (!selectedItems.contains(fileModel)) {
+            selectedItems.add(fileModel)
+            //(activity as AppCompatActivity).supportActionBar!!.title = "items "+ (selectedItems.size + 1)
+            listener!!.selectedItemsInActionMode(selectedItems.size + 1)
+        } else {
+            listener!!.selectedItemsInActionMode(selectedItems.size - 1)
+            selectedItems.remove(fileModel)
+
+        }
+    }
+
     inner class RexListViewHolder(private val binding: ItemsFileBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bindView(fileModel: FileModel, isActivated: Boolean = false) {
@@ -98,9 +112,11 @@ class ExFileAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             itemView.isActivated = isActivated
 
             binding.root.setOnClickListener {
-                if (ExFilesFragment.isActionMode) //add to selected items
-                    ExFilesFragment().trackSelectedItems(fileModel)
-                else
+                if (ExFilesFragment.isActionMode) {
+                    //add to selected items
+                    trackSelectedItems(fileModel)
+                    selectedItems.add(fileModel)
+                } else
                     listener!!.onFileClicked(fileModel)
             }
             binding.pop.setOnClickListener { v -> listener!!.onPopMenuClicked(v, fileModel) }
@@ -182,5 +198,7 @@ class ExFileAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         fun onFileLongClicked(fileModel: FileModel)
 
         fun onPopMenuClicked(v: View, fileModel: FileModel)
+
+        fun selectedItemsInActionMode(size: Int)
     }
 }

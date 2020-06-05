@@ -130,7 +130,7 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
     }
 
     override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-        mode?.setTitle("Actions")
+        mode?.setTitle("items 1")
         val inflater: MenuInflater? = mode?.menuInflater
         inflater?.inflate(R.menu.contextual_menu, menu)
 
@@ -220,6 +220,10 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
         actionMode = startActionMode(this)
         this.mFileModel = fileModel
         ExFilesFragment.isActionMode = true
+    }
+
+    override fun updateActionModeTitle(title: String) {
+        actionMode!!.title = title
     }
 
     override fun onCreateFolder(name: String) {

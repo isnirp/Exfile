@@ -19,6 +19,7 @@ import android.content.BroadcastReceiver
 import android.net.Uri
 import android.os.Environment
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +27,7 @@ import com.flimbis.exfile.view.adapter.ExFileAdapter
 import com.google.android.material.snackbar.Snackbar
 
 import androidx.recyclerview.widget.GridLayoutManager
+import com.flimbis.exfile.MainActivity
 import com.flimbis.exfile.data.DataRepository
 import com.flimbis.exfile.databinding.FragmentFilesExBinding
 import com.flimbis.exfile.viewmodel.FileViewModel
@@ -245,6 +247,10 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
         popup.show()
     }
 
+    override fun selectedItemsInActionMode(size: Int) {
+        listener!!.updateActionModeTitle("items $size")
+    }
+
     private fun getFileModelList(path: String): List<FileModel> {
         return viewModel.getFiles(path)
     }
@@ -264,12 +270,6 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
                 .show()
     }
 
-    fun trackSelectedItems(fileModel: FileModel){
-        if(!selectedItems.contains(fileModel))
-            selectedItems.add(fileModel)
-        else
-            selectedItems.remove(fileModel)
-    }
 
     /*private fun scheduleBroadcastOnNewFile(path: String) {
         val contentUri: Uri = Uri.parse("content://com.flimbis.exfile.MyFileProvider/external_files/Pictures/")
@@ -317,6 +317,8 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
         fun onClipboardActivated()
 
         fun onActionModeActivated(fileModel: FileModel)
+
+        fun updateActionModeTitle(title: String)
     }
 
     class Builder {
