@@ -219,11 +219,14 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
     override fun onActionModeActivated(fileModel: FileModel) {
         actionMode = startActionMode(this)
         this.mFileModel = fileModel
-        ExFilesFragment.isActionMode = true
+    }
+
+    override fun onActionModeDeActivated() {
+        actionMode!!.finish()
     }
 
     override fun updateActionModeTitle(title: String) {
-        actionMode!!.title = title
+        actionMode?.title = title
     }
 
     override fun onCreateFolder(name: String) {

@@ -105,6 +105,13 @@ class ExFileAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             listener!!.selectedItemsInActionMode(selectedItems.size - 1)
             selectedItems.remove(fileModel)
         }
+
+    }
+
+    fun clearSelection(){
+        if(selectedItems.size > 0)
+            selectedItems = mutableListOf<FileModel>()
+        notifyDataSetChanged()
     }
 
     inner class RexListViewHolder(private val binding: ItemsFileBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -122,6 +129,7 @@ class ExFileAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             }
             binding.pop.setOnClickListener { v -> listener!!.onPopMenuClicked(v, fileModel) }
             binding.root.setOnLongClickListener {
+                selectedItems.add(fileModel)
                 it.setBackgroundResource(R.color.selection)
                 listener!!.onFileLongClicked(fileModel)
                 true
@@ -202,5 +210,7 @@ class ExFileAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         fun onPopMenuClicked(v: View, fileModel: FileModel)
 
         fun selectedItemsInActionMode(size: Int)
+
+        //fun removeSelection()
     }
 }

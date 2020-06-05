@@ -9,17 +9,13 @@ import android.widget.Toast
 
 import com.flimbis.exfile.R
 import com.flimbis.exfile.model.FileModel
-import java.io.File
 import androidx.appcompat.widget.PopupMenu
 import android.content.IntentFilter
 import com.flimbis.exfile.common.ExFileBroadcastReceiver
-import com.flimbis.exfile.util.getFilesFromPath
 import android.content.Intent
 import android.content.BroadcastReceiver
 import android.net.Uri
-import android.os.Environment
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,7 +23,6 @@ import com.flimbis.exfile.view.adapter.ExFileAdapter
 import com.google.android.material.snackbar.Snackbar
 
 import androidx.recyclerview.widget.GridLayoutManager
-import com.flimbis.exfile.MainActivity
 import com.flimbis.exfile.data.DataRepository
 import com.flimbis.exfile.databinding.FragmentFilesExBinding
 import com.flimbis.exfile.viewmodel.FileViewModel
@@ -179,6 +174,11 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
                 listener?.onItemViewSelected(arguments!!.getString(PATH), viewType = 1)
                 true
             }
+            android.R.id.home -> {
+                isActionMode = false
+                adapter.clearSelection()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -202,6 +202,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
     }
 
     override fun onFileLongClicked(fileModel: FileModel) {
+        isActionMode = true
         listener!!.onActionModeActivated(fileModel)
     }
 
@@ -248,7 +249,12 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
     }
 
     override fun selectedItemsInActionMode(size: Int) {
-        listener!!.updateActionModeTitle("items $size")
+        if (size == 0) {
+            isActionMode = false
+            adapter.clearSelection()
+            listener!!.onActionModeDeActivated()
+        } else
+            listener!!.updateActionModeTitle("items $size")
     }
 
     private fun getFileModelList(path: String): List<FileModel> {
@@ -317,6 +323,8 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
         fun onClipboardActivated()
 
         fun onActionModeActivated(fileModel: FileModel)
+
+        fun onActionModeDeActivated()
 
         fun updateActionModeTitle(title: String)
     }
