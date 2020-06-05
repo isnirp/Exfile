@@ -26,4 +26,5 @@
 
 <!--    <color name="grey">#D6DBDF</color>-->
     <color name="grey">#d8d8d8</color>
+    <color name="selection">#add8e6</color>
 </resources>

@@ -93,15 +93,17 @@ class ExFileAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         v.setImageBitmap(BitmapFactory.decodeFile(img))
     }
 
-    fun trackSelectedItems(fileModel: FileModel) {
+    fun trackSelectedItems(fileModel: FileModel, view: View) {
         if (!selectedItems.contains(fileModel)) {
+            //view.setBackgroundColor(Color.LTGRAY)
+            view.setBackgroundResource(R.color.selection)
             selectedItems.add(fileModel)
             //(activity as AppCompatActivity).supportActionBar!!.title = "items "+ (selectedItems.size + 1)
             listener!!.selectedItemsInActionMode(selectedItems.size + 1)
         } else {
+            view.setBackgroundColor(Color.TRANSPARENT)
             listener!!.selectedItemsInActionMode(selectedItems.size - 1)
             selectedItems.remove(fileModel)
-
         }
     }
 
@@ -114,13 +116,13 @@ class ExFileAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             binding.root.setOnClickListener {
                 if (ExFilesFragment.isActionMode) {
                     //add to selected items
-                    trackSelectedItems(fileModel)
-                    selectedItems.add(fileModel)
+                    trackSelectedItems(fileModel, it)
                 } else
                     listener!!.onFileClicked(fileModel)
             }
             binding.pop.setOnClickListener { v -> listener!!.onPopMenuClicked(v, fileModel) }
             binding.root.setOnLongClickListener {
+                it.setBackgroundResource(R.color.selection)
                 listener!!.onFileLongClicked(fileModel)
                 true
             }
