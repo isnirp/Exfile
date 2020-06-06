@@ -99,17 +99,17 @@ class ExFileAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             view.setBackgroundResource(R.color.selection)
             selectedItems.add(fileModel)
             //(activity as AppCompatActivity).supportActionBar!!.title = "items "+ (selectedItems.size + 1)
-            listener!!.selectedItemsInActionMode(selectedItems.size + 1)
+            listener!!.selectedItemsInActionMode(fileModel, selectedItems.size + 1)
         } else {
             view.setBackgroundColor(Color.TRANSPARENT)
-            listener!!.selectedItemsInActionMode(selectedItems.size - 1)
+            listener!!.selectedItemsInActionMode(fileModel, selectedItems.size - 1)
             selectedItems.remove(fileModel)
         }
 
     }
 
-    fun clearSelection(){
-        if(selectedItems.size > 0)
+    fun clearSelection() {
+        if (selectedItems.size > 0)
             selectedItems = mutableListOf<FileModel>()
         notifyDataSetChanged()
     }
@@ -209,7 +209,7 @@ class ExFileAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         fun onPopMenuClicked(v: View, fileModel: FileModel)
 
-        fun selectedItemsInActionMode(size: Int)
+        fun selectedItemsInActionMode(fileModel: FileModel, size: Int)
 
         //fun removeSelection()
     }

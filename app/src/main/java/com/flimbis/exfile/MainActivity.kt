@@ -39,6 +39,7 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
     lateinit var sheetBehaviour: BottomSheetBehavior<LinearLayout>
 
     lateinit var mFileModel: FileModel
+    private var selectedItems = mutableListOf<FileModel>() //for contextual bar
     lateinit var clipboard: ClipboardManager
     var actionMode: ActionMode? = null
     private lateinit var breadcrumbAdapter: BreadcrumbAdapter
@@ -87,9 +88,9 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
     }
 
     override fun dispatchKeyEvent(event: KeyEvent?): Boolean {
-        if (actionMode !=null){
-            if(event?.keyCode == KeyEvent.KEYCODE_BACK && event?.action == KeyEvent.ACTION_UP)
-                //ExFilesFragment.actionModeDismiss = 1
+        if (actionMode != null) {
+            if (event?.keyCode == KeyEvent.KEYCODE_BACK && event?.action == KeyEvent.ACTION_UP)
+            //ExFilesFragment.actionModeDismiss = 1
                 Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show()
         }
         return super.dispatchKeyEvent(event)
@@ -126,10 +127,10 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
                     else
                         Toast.makeText(this, "Failed to delete file", Toast.LENGTH_SHORT).show()
                 }*/
-                val filesToDelete = mutableListOf<FileModel>()
-                filesToDelete.add(mFileModel)
+                // val filesToDelete = mutableListOf<FileModel>()
+                // filesToDelete.add(mFileModel)
 
-                val openDeleteDialog = DeleteDialog(filesToDelete)
+                val openDeleteDialog = DeleteDialog(selectedItems)
                 openDeleteDialog.show(supportFragmentManager, "delete files")
                 mode?.finish() // Action picked, so close the CAB
                 true
@@ -227,15 +228,18 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
 
     override fun onActionModeActivated(fileModel: FileModel) {
         actionMode = startActionMode(this)
-        this.mFileModel = fileModel
+        // this.mFileModel = fileModel
+        selectedItems.add(fileModel)
     }
 
     override fun onActionModeDeActivated() {
         actionMode!!.finish()
+        selectedItems = mutableListOf<FileModel>()
     }
 
-    override fun updateActionModeTitle(title: String) {
+    override fun updateActionModeSelection(fileModel: FileModel, title: String) {
         actionMode?.title = title
+        selectedItems.add(fileModel)
     }
 
     override fun onCreateFolder(name: String) {

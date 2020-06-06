@@ -142,7 +142,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
     override fun onResume() {
         super.onResume()
         context?.registerReceiver(bReceiver, IntentFilter(ExFileBroadcastReceiver.DIR_UPDATE))
-        if(actionModeDismiss == 1)
+        if (actionModeDismiss == 1)
             adapter.clearSelection()
     }
 
@@ -251,13 +251,13 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
         popup.show()
     }
 
-    override fun selectedItemsInActionMode(size: Int) {
+    override fun selectedItemsInActionMode(fileModel: FileModel, size: Int) {
         if (size == 0) {
             isActionMode = false
             adapter.clearSelection()
             listener!!.onActionModeDeActivated()
         } else
-            listener!!.updateActionModeTitle("$size")
+            listener!!.updateActionModeSelection(fileModel, "$size")
     }
 
     private fun getFileModelList(path: String): List<FileModel> {
@@ -329,7 +329,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
 
         fun onActionModeDeActivated()
 
-        fun updateActionModeTitle(title: String)
+        fun updateActionModeSelection(fileModel: FileModel, title: String)
     }
 
     class Builder {
