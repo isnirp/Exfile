@@ -86,6 +86,15 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
         }
     }
 
+    override fun dispatchKeyEvent(event: KeyEvent?): Boolean {
+        if (actionMode !=null){
+            if(event?.keyCode == KeyEvent.KEYCODE_BACK && event?.action == KeyEvent.ACTION_UP)
+                //ExFilesFragment.actionModeDismiss = 1
+                Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show()
+        }
+        return super.dispatchKeyEvent(event)
+    }
+
     //Action mode
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
         return when (item?.itemId) {
@@ -95,7 +104,7 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
                  mode?.finish() // Action picked, so close the CAB
                  true
              }*/
-            R.id.menu_copy -> {
+            /*R.id.menu_copy -> {
                 //Toast.makeText(this, mFileModel.path, Toast.LENGTH_SHORT).show()
                 val contentUri: Uri = FileProvider.getUriForFile(this, "com.flimbis.exfile.MyFileProvider", File(mFileModel.path))
                 copyFileToDirectory(contentUri, this)
@@ -106,7 +115,7 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
 
                 mode?.finish()
                 true
-            }
+            }*/
             R.id.menu_delete -> {
                 /*if (mFileModel.isDirectory) {
                     if (deleteDirectory(mFileModel.path)) sendBroadcastIntent(currentDirectory!!)
@@ -423,4 +432,5 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
             Log.i("TAG_SCHED", "failed job")
 
     }
+
 }

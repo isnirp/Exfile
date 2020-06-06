@@ -46,6 +46,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
         private const val PATH = "com.flimbis.exfile.PATH_FINDER"
         //actionmode
         var isActionMode = false
+        var actionModeDismiss = 0
 
         /*
         * apply
@@ -141,6 +142,8 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
     override fun onResume() {
         super.onResume()
         context?.registerReceiver(bReceiver, IntentFilter(ExFileBroadcastReceiver.DIR_UPDATE))
+        if(actionModeDismiss == 1)
+            adapter.clearSelection()
     }
 
     /*
@@ -254,7 +257,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
             adapter.clearSelection()
             listener!!.onActionModeDeActivated()
         } else
-            listener!!.updateActionModeTitle("items $size")
+            listener!!.updateActionModeTitle("$size")
     }
 
     private fun getFileModelList(path: String): List<FileModel> {

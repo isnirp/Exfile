@@ -4,10 +4,10 @@
 <!--        android:id="@+id/menu_cut"-->
 <!--        android:icon="@drawable/ic_action_cut"-->
 <!--        android:title="@string/menu_cut" />-->
-    <item
-        android:id="@+id/menu_copy"
-        android:icon="@drawable/ic_file_copy"
-        android:title="@string/menu_copy" />
+<!--    <item-->
+<!--        android:id="@+id/menu_copy"-->
+<!--        android:icon="@drawable/ic_file_copy"-->
+<!--        android:title="@string/menu_copy" />-->
     <item
         android:id="@+id/menu_delete"
         android:icon="@drawable/ic_action_delete"
