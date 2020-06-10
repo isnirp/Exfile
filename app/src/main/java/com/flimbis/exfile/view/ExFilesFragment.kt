@@ -70,15 +70,15 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
 
         setHasOptionsMenu(true)
 
-        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+        /*activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 //if (MainActivity.isInActionMode){
-                    //Toast.makeText(context, "Exfile", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Exfile", Toast.LENGTH_SHORT).show()
                     //adapter.clearSelection()
                     //listener!!.onActionModeDeActivated()
                 //}
             }
-        })
+        })*/
 
         bReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, i: Intent) {
@@ -266,7 +266,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
             listener!!.onActionModeDeActivated()
         } else
             listener!!.updateActionModeSelection(fileModel, "$size")
-        
+
     }
 
     private fun getFileModelList(path: String): List<FileModel> {

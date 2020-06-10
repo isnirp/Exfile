@@ -27,7 +27,8 @@ class SettingsActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             android.R.id.home -> {
-                NavUtils.navigateUpFromSameTask(this)
+                // NavUtils.navigateUpFromSameTask(this)
+                onBackPressed()
                 true
             }
             else -> super.onOptionsItemSelected(item)
