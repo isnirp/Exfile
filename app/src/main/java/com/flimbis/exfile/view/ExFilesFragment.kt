@@ -16,6 +16,7 @@ import android.content.Intent
 import android.content.BroadcastReceiver
 import android.net.Uri
 import android.util.Log
+import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +24,7 @@ import com.flimbis.exfile.view.adapter.ExFileAdapter
 import com.google.android.material.snackbar.Snackbar
 
 import androidx.recyclerview.widget.GridLayoutManager
+import com.flimbis.exfile.MainActivity
 import com.flimbis.exfile.data.DataRepository
 import com.flimbis.exfile.databinding.FragmentFilesExBinding
 import com.flimbis.exfile.viewmodel.FileViewModel
@@ -45,7 +47,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
     companion object {
         private const val PATH = "com.flimbis.exfile.PATH_FINDER"
         //actionmode
-        var isActionMode = false
+        //var isActionMode = false
         var actionModeDismiss = 0
 
         /*
@@ -67,6 +69,16 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
         super.onCreate(savedInstanceState)
 
         setHasOptionsMenu(true)
+
+        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                //if (MainActivity.isInActionMode){
+                    //Toast.makeText(context, "Exfile", Toast.LENGTH_SHORT).show()
+                    //adapter.clearSelection()
+                    //listener!!.onActionModeDeActivated()
+                //}
+            }
+        })
 
         bReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, i: Intent) {
@@ -142,7 +154,8 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
     override fun onResume() {
         super.onResume()
         context?.registerReceiver(bReceiver, IntentFilter(ExFileBroadcastReceiver.DIR_UPDATE))
-        if (actionModeDismiss == 1)
+        //if (actionModeDismiss == 1)
+        if (MainActivity.isInActionMode)
             adapter.clearSelection()
     }
 
@@ -177,11 +190,6 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
                 listener?.onItemViewSelected(arguments!!.getString(PATH), viewType = 1)
                 true
             }
-            android.R.id.home -> {
-                isActionMode = false
-                adapter.clearSelection()
-                true
-            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -205,7 +213,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
     }
 
     override fun onFileLongClicked(fileModel: FileModel) {
-        isActionMode = true
+        //isActionMode = true
         listener!!.onActionModeActivated(fileModel)
     }
 
@@ -252,12 +260,13 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
     }
 
     override fun selectedItemsInActionMode(fileModel: FileModel, size: Int) {
-        if (size == 0) {
-            isActionMode = false
+        if (0 == size ) {
+            //isActionMode = false
             adapter.clearSelection()
             listener!!.onActionModeDeActivated()
         } else
             listener!!.updateActionModeSelection(fileModel, "$size")
+        
     }
 
     private fun getFileModelList(path: String): List<FileModel> {

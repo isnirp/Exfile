@@ -15,6 +15,7 @@ import com.flimbis.exfile.databinding.ItemsFileGridBinding
 import com.amulyakhare.textdrawable.util.ColorGenerator
 import com.amulyakhare.textdrawable.TextDrawable
 import android.graphics.Color
+import com.flimbis.exfile.MainActivity
 import com.flimbis.exfile.util.ctx
 import com.flimbis.exfile.view.ExFilesFragment
 
@@ -97,9 +98,9 @@ class ExFileAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         if (!selectedItems.contains(fileModel)) {
             //view.setBackgroundColor(Color.LTGRAY)
             view.setBackgroundResource(R.color.selection)
+            listener!!.selectedItemsInActionMode(fileModel, selectedItems.size + 1)
             selectedItems.add(fileModel)
             //(activity as AppCompatActivity).supportActionBar!!.title = "items "+ (selectedItems.size + 1)
-            listener!!.selectedItemsInActionMode(fileModel, selectedItems.size + 1)
         } else {
             view.setBackgroundColor(Color.TRANSPARENT)
             listener!!.selectedItemsInActionMode(fileModel, selectedItems.size - 1)
@@ -109,8 +110,7 @@ class ExFileAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     fun clearSelection() {
-        if (selectedItems.size > 0)
-            selectedItems = mutableListOf<FileModel>()
+        selectedItems = mutableListOf<FileModel>()
         notifyDataSetChanged()
     }
 
@@ -121,7 +121,8 @@ class ExFileAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             itemView.isActivated = isActivated
 
             binding.root.setOnClickListener {
-                if (ExFilesFragment.isActionMode) {
+                //if (ExFilesFragment.isActionMode) {
+                if (MainActivity.isInActionMode) {
                     //add to selected items
                     trackSelectedItems(fileModel, it)
                 } else

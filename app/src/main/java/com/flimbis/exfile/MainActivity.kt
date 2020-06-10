@@ -47,6 +47,10 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
     private lateinit var breadcrumbRecyclerView: RecyclerView
     private val MY_PERMISSIONS = 33
 
+    companion object {
+        var isInActionMode = false
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.decorView.systemUiVisibility = window.decorView.systemUiVisibility.or(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
@@ -77,7 +81,6 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
 
     override fun onBackPressed() {
         super.onBackPressed()
-
         if (supportFragmentManager.backStackEntryCount > 0) {
             backStackManager.popFromStack()
         }
@@ -85,15 +88,6 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
         if (supportFragmentManager.backStackEntryCount == 0) {
             finish()
         }
-    }
-
-    override fun dispatchKeyEvent(event: KeyEvent?): Boolean {
-        if (actionMode != null) {
-            if (event?.keyCode == KeyEvent.KEYCODE_BACK && event?.action == KeyEvent.ACTION_UP)
-            //ExFilesFragment.actionModeDismiss = 1
-                Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show()
-        }
-        return super.dispatchKeyEvent(event)
     }
 
     //Action mode
@@ -117,6 +111,7 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
                 mode?.finish()
                 true
             }*/
+
             R.id.menu_delete -> {
                 /*if (mFileModel.isDirectory) {
                     if (deleteDirectory(mFileModel.path)) sendBroadcastIntent(currentDirectory!!)
@@ -140,9 +135,9 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
     }
 
     override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-        mode?.setTitle("items 1")
         val inflater: MenuInflater? = mode?.menuInflater
         inflater?.inflate(R.menu.contextual_menu, menu)
+        mode?.setTitle("1")
 
         return true
     }
@@ -152,7 +147,10 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
     }
 
     override fun onDestroyActionMode(mode: ActionMode?) {
+        isInActionMode = false
         actionMode = null
+        //selectedItems = mutableListOf<FileModel>()
+        //onBackPressed()
     }
     /*
     * contextual action bar ends
@@ -227,9 +225,10 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
     }
 
     override fun onActionModeActivated(fileModel: FileModel) {
+        isInActionMode = true
         actionMode = startActionMode(this)
         // this.mFileModel = fileModel
-        selectedItems.add(fileModel)
+        //selectedItems.add(fileModel)
     }
 
     override fun onActionModeDeActivated() {
@@ -239,7 +238,7 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
 
     override fun updateActionModeSelection(fileModel: FileModel, title: String) {
         actionMode?.title = title
-        selectedItems.add(fileModel)
+        //selectedItems.add(fileModel)
     }
 
     override fun onCreateFolder(name: String) {
