@@ -1,8 +1,10 @@
 package com.flimbis.exfile.view.settings
 
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Button
@@ -28,7 +30,12 @@ class AboutActivity : BaseActivity() {
         version.text = "version - " + getVersionName(this)
 
         val privacy = findViewById<Button>(R.id.bttn_privacy)
-        privacy.setOnClickListener { Toast.makeText(this, "Privacy", Toast.LENGTH_SHORT).show() }
+        privacy.setOnClickListener {
+            val url = "https://isnirp.github.io/flimbis-apps/privacy/exfile.html"
+            val intnt = Intent(Intent.ACTION_VIEW)
+            intnt.data = Uri.parse(url)
+            startActivity(intnt)
+        }
 
     }
 
