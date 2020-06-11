@@ -5,8 +5,6 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.net.Uri
 import android.util.Log
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.core.content.FileProvider
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -21,10 +19,7 @@ fun getFilesFromPath(path: String): List<File> {
     return file.listFiles().toList()
 }
 
-fun getFileFromPath(path: String): File {
-    val file = File(path)
-    return file
-}
+fun getFileFromPath(path: String): File = File(path)
 
 fun createFolderAtDirectory(path: String, folderName: String): Boolean {
     val file = File(path, folderName)//Creates a new File instance from a parent pathname string and a child pathname string
@@ -73,18 +68,6 @@ fun renameFileAtDirectory(dirPath: String, prevName: String, curName: String): B
 
 }
 
-fun convertFileSizeToKB(sizeInBytes: Long): Double {
-    return (sizeInBytes.toDouble()) / 1024
-}
-
-fun convertFileSizeToMB(sizeInBytes: Long): Double {
-    return convertFileSizeToKB(sizeInBytes) / 1024
-}
-
-fun convertFileSizeToGB(sizeInBytes: Long): Double {
-    return convertFileSizeToMB(sizeInBytes) / 1024
-}
-
 fun convertLastModified(lastModified: Long): String {
-   return SimpleDateFormat("dd-MM-yyyy").format(Date(lastModified))
+    return SimpleDateFormat("dd-MM-yyyy").format(Date(lastModified))
 }
