@@ -19,7 +19,7 @@ class FileViewModel(private val repository: DataRepository) : BaseObservable() {
                 getFileType(fileEntity.type),
                 fileEntity.isWritable,
                 fileEntity.name,
-                convertFileSizeToMB(fileEntity.size),
+                fileEntity.size.toDouble(),
                 fileEntity.ext,
                 convertLastModified(fileEntity.lastModified)
         )

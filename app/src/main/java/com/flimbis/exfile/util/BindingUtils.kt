@@ -1,14 +1,14 @@
 package com.flimbis.exfile.util
 
-fun displaySize(size: Double): String {
-    val kb = 1024
-    val mb = 1024 * kb
-    val gb = 1024 * mb
+fun displaySize(sizeInBytes: Double): String {
+    //val kb = 1024.0
 
-    return when {
-        size * gb > gb -> "${String.format("%.2f", size)} gb"
-        size * mb > mb -> "${String.format("%.2f", size)} mb"
-        else -> "${String.format("%.2f", size)} kb"
-    }
+    val sizeKB = sizeInBytes / 1024.0
+    val sizeMB = sizeInBytes / (1024.0 * 1024.0)
 
+    //"${String.format("%.2f", sizeKB)} kb"
+    return if (sizeInBytes < (1024 * 1024))
+        String.format("%.2f", sizeKB) + " kb"
+    else
+        String.format("%.2f", sizeMB) + " mb"
 }
