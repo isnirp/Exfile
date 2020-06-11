@@ -344,7 +344,7 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
 
     private fun toFileIntent(path: String) {
         val intent = Intent(Intent.ACTION_VIEW)
-        val contentUri: Uri = getUriForFile(this, "com.flimbis.exfile.MyFileProvider", File(path))
+        val contentUri: Uri = getUriForFile(this, "com.flimbis.exfile.fileProvider", File(path))
         intent.data = contentUri
         intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
         startActivity(Intent.createChooser(intent, "Select Application"))
