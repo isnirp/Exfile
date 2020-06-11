@@ -4,28 +4,30 @@ import androidx.databinding.BaseObservable
 import com.flimbis.exfile.data.DataRepository
 import com.flimbis.exfile.data.FileEntity
 import com.flimbis.exfile.model.FileModel
-import com.flimbis.exfile.util.convertFileSizeToMB
 import com.flimbis.exfile.util.convertLastModified
+import com.flimbis.exfile.util.getFilesFromPath
+import java.io.File
 
-class FileViewModel(private val repository: DataRepository) : BaseObservable() {
+class FileViewModel() : BaseObservable() {
+    
     fun getFiles(path: String): List<FileModel> {
-        return repository.getFileEntityList(path)
+        return getFilesFromPath(path)
                 .map { toModel(it) }
     }
 
-    private fun toModel(fileEntity: FileEntity): FileModel {
+    private fun toModel(file: File): FileModel {
         return FileModel(
-                fileEntity.path,
-                getFileType(fileEntity.type),
-                fileEntity.isWritable,
-                fileEntity.name,
-                fileEntity.size.toDouble(),
-                fileEntity.ext,
-                convertLastModified(fileEntity.lastModified)
+                file.path,
+                getFileType(file.isDirectory),
+                file.canWrite(),
+                file.name,
+                file.length().toDouble(),
+                file.extension,
+                convertLastModified(file.lastModified())
         )
     }
 
-    private fun getFileType(type: Int): String {
-        return if (type == 0) "folder" else "file"
+    private fun getFileType(isDir: Boolean): String {
+        return if (isDir) "folder" else "file"
     }
 }
