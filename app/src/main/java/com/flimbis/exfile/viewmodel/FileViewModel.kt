@@ -1,15 +1,13 @@
 package com.flimbis.exfile.viewmodel
 
 import androidx.databinding.BaseObservable
-import com.flimbis.exfile.data.DataRepository
-import com.flimbis.exfile.data.FileEntity
 import com.flimbis.exfile.model.FileModel
 import com.flimbis.exfile.util.convertLastModified
 import com.flimbis.exfile.util.getFilesFromPath
 import java.io.File
 
 class FileViewModel() : BaseObservable() {
-    
+
     fun getFiles(path: String): List<FileModel> {
         return getFilesFromPath(path)
                 .map { toModel(it) }

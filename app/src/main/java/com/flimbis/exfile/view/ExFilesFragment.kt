@@ -16,7 +16,6 @@ import android.content.Intent
 import android.content.BroadcastReceiver
 import android.net.Uri
 import android.util.Log
-import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,7 +24,6 @@ import com.google.android.material.snackbar.Snackbar
 
 import androidx.recyclerview.widget.GridLayoutManager
 import com.flimbis.exfile.MainActivity
-import com.flimbis.exfile.data.DataRepository
 import com.flimbis.exfile.databinding.FragmentFilesExBinding
 import com.flimbis.exfile.viewmodel.FileViewModel
 
@@ -114,8 +112,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
         //update current path
         currentDirectory = arguments!!.getString(PATH)
 
-        val data = DataRepository()
-        viewModel = FileViewModel(data)
+        viewModel = FileViewModel()
         binding.fileViewModel = viewModel
 
         listFiles = view.findViewById(R.id.lst_ex_files)

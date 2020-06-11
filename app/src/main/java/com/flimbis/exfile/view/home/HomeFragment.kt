@@ -11,10 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.flimbis.exfile.R
-import com.flimbis.exfile.data.DataRepository
 import com.flimbis.exfile.databinding.FragmentHomeBinding
 import com.flimbis.exfile.model.FileModel
-import com.flimbis.exfile.util.convertFileSizeToGB
 import com.flimbis.exfile.view.adapter.HomeAdapter
 import com.flimbis.exfile.view.settings.SettingsActivity
 import com.flimbis.exfile.viewmodel.FileViewModel
@@ -44,11 +42,10 @@ class HomeFragment : Fragment() {
         val fragmentHomeBinding = DataBindingUtil.inflate<FragmentHomeBinding>(layoutInflater, R.layout.fragment_home, container, false)
         val view = fragmentHomeBinding.root
 
-        val data = DataRepository()
-        fragmentHomeBinding.fileViewModel = FileViewModel(data)
+        fragmentHomeBinding.fileViewModel = FileViewModel()
 
         var items = listOf<FileModel>(
-                FileModel(path = Environment.getExternalStorageDirectory().absolutePath, type = "folder", isWritable = true, name = "Main Storage", size = convertFileSizeToGB(Environment.getExternalStorageDirectory().length()), ext = null, lastModified = null),
+                FileModel(path = Environment.getExternalStorageDirectory().absolutePath, type = "folder", isWritable = true, name = "Main Storage", size = Environment.getExternalStorageDirectory().length().toDouble(), ext = null, lastModified = null),
                 FileModel(path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath, type = "folder", isWritable = true, name = "Download", size = null, ext = null, lastModified = null)
         )
 

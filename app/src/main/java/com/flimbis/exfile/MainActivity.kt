@@ -3,7 +3,6 @@ package com.flimbis.exfile
 import android.app.job.JobInfo
 import android.app.job.JobScheduler
 import android.content.*
-import android.content.pm.PackageManager
 import android.os.Bundle
 import com.flimbis.exfile.model.FileModel
 import com.flimbis.exfile.view.ExFilesFragment
@@ -15,7 +14,6 @@ import android.view.*
 import android.widget.*
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.FileProvider.getUriForFile
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,7 +30,6 @@ import com.flimbis.exfile.view.home.HomeFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import java.io.File
 import kotlinx.android.synthetic.main.bottom_sheet.*
-import java.util.jar.Manifest
 
 class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, ActionMode.Callback,
         CreateFolderDialog.OnCreateDialogClickListener, DeleteDialog.OnDeleteDialogClickListener, HomeFragment.OnHomeItemsClickListener {
@@ -141,7 +138,7 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
     override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
         val inflater: MenuInflater? = mode?.menuInflater
         inflater?.inflate(R.menu.contextual_menu, menu)
-        mode?.setTitle("1")
+        mode?.title = "1"
 
         return true
     }
@@ -161,6 +158,12 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
     * */
 
     override fun onItemFileSelected(fileModel: FileModel) {
+        // close bottom sheet if opened
+        if (sheetBehaviour.state == BottomSheetBehavior.STATE_EXPANDED) {
+            sheetBehaviour.state = BottomSheetBehavior.STATE_HIDDEN
+            sheetBehaviour.peekHeight = 0
+        }
+
         if (fileModel.type == "folder") toFolder(fileModel)
         else toFileIntent(fileModel.path)
     }
@@ -360,7 +363,7 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
                 getFileType(file.isDirectory),
                 file.canWrite(),
                 file.name,
-                convertFileSizeToMB(file.length()),
+                file.length().toDouble(),
                 file.extension,
                 convertLastModified(file.lastModified())
         )
