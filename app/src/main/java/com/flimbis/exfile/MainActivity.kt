@@ -162,14 +162,12 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
     }
 
     override fun onItemPropertySelected(fileModel: FileModel) {
-
         prop_name.text = fileModel.name
-        prop_type.text = "file"
+        prop_type.text = fileModel.type
         prop_path.text = fileModel.path
-        prop_size.text = fileModel.size.toString()
-        prop_folder_quantity.text = "Empty"
-        prop_created.text = "23/12/2019"
-        prop_last_modified.text = "23/12/2019"
+        prop_size.text = displaySize(fileModel.size!!)
+        prop_folder_quantity.text = "Unknown"
+        prop_last_modified.text = fileModel.lastModified
 
         sheetBehaviour.state = BottomSheetBehavior.STATE_EXPANDED
     }

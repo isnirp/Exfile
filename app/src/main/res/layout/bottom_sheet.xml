@@ -160,7 +160,7 @@
         android:layout_marginBottom="5dp"
         android:background="#e8e8e8" />
 
-    <LinearLayout
+    <!--<LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -180,7 +180,7 @@
             android:layout_weight="2"
             android:text=""
             android:textAppearance="@style/SmallText" />
-    </LinearLayout>
+    </LinearLayout>-->
 
     <LinearLayout
         android:layout_width="match_parent"
