@@ -81,6 +81,10 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
 
     override fun onBackPressed() {
         super.onBackPressed()
+        if (sheetBehaviour.state == BottomSheetBehavior.STATE_EXPANDED) {
+            sheetBehaviour.state = BottomSheetBehavior.STATE_HIDDEN
+            sheetBehaviour.peekHeight = 0
+        }
         if (supportFragmentManager.backStackEntryCount > 0) {
             backStackManager.popFromStack()
         }
