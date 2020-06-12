@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -34,14 +35,17 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_centerInParent="true"
-                android:src="@drawable/ic_folder" />
+                android:src="@drawable/ic_folder"
+                android:visibility="gone" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/img_file_pics"
                 android:layout_width="31dp"
                 android:layout_height="31dp"
                 android:layout_centerInParent="true"
-                android:visibility="gone" />
+                app:ext="@{fileModel.ext}"
+                app:loadImage = "@{fileModel.path}"
+                />
         </RelativeLayout>
 
 

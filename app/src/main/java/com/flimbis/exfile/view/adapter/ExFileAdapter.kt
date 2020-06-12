@@ -116,19 +116,19 @@ class ExFileAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     inner class RexListViewHolder(private val binding: ItemsFileBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bindView(fileModel: FileModel, isActivated: Boolean = false) {
+        fun bindView(fileModel: FileModel) {
             binding.fileModel = fileModel
-            itemView.isActivated = isActivated
 
             binding.root.setOnClickListener {
-                //if (ExFilesFragment.isActionMode) {
                 if (MainActivity.isInActionMode) {
                     //add to selected items
                     trackSelectedItems(fileModel, it)
                 } else
                     listener!!.onFileClicked(fileModel)
             }
+
             binding.pop.setOnClickListener { v -> listener!!.onPopMenuClicked(v, fileModel) }
+
             binding.root.setOnLongClickListener {
                 selectedItems.add(fileModel)
                 it.setBackgroundResource(R.color.selection)
@@ -136,23 +136,6 @@ class ExFileAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 true
             }
 
-            if (fileModel.type != "folder") {
-                val mimeFilter = listOf(
-                        "jpeg",
-                        "jpg",
-                        "png",
-                        "gif"
-                )
-
-                if (fileModel.ext in mimeFilter) {
-                    //turn off default
-                    binding.imgFile.visibility = View.GONE
-                    //display images in CircleImageView
-                    renderImages(fileModel.path, binding.imgFilePics)
-                } else {
-                    binding.imgFile.setImageResource(R.drawable.ic_drive_file)
-                }
-            }
         }
 
         fun getItemDetails(): ItemDetailsLookup.ItemDetails<Long> =
