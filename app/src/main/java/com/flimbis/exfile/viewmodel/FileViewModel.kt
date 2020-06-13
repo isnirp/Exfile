@@ -4,13 +4,17 @@ import androidx.databinding.BaseObservable
 import com.flimbis.exfile.model.FileModel
 import com.flimbis.exfile.util.convertLastModified
 import com.flimbis.exfile.util.getFilesFromPath
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 
 class FileViewModel() : BaseObservable() {
 
-    fun getFiles(path: String): List<FileModel> {
-        return getFilesFromPath(path)
-                .map { toModel(it) }
+    suspend fun getFiles(path: String): List<FileModel> {
+        return withContext(Dispatchers.IO) {
+            getFilesFromPath(path)
+                    .map { toModel(it) }
+        }
     }
 
     private fun toModel(file: File): FileModel {

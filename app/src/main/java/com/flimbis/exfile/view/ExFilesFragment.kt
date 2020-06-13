@@ -26,6 +26,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.flimbis.exfile.MainActivity
 import com.flimbis.exfile.databinding.FragmentFilesExBinding
 import com.flimbis.exfile.viewmodel.FileViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 /**
@@ -78,7 +82,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
             }
         })*/
 
-        bReceiver = object : BroadcastReceiver() {
+        /*bReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, i: Intent) {
                 when {
                     i.getStringExtra(ExFileBroadcastReceiver.BROADCAST_TYPE) == "EX_COPY" -> {
@@ -100,7 +104,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
                 }
 
             }
-        }
+        }*/
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -137,8 +141,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
         * */
         viewType?.let { adapter.setViewType(viewType) }
         // get items at path
-        items = getFileModelList(arguments!!.getString(PATH))
-        adapter.updateDirectory(items)
+        getFileModelList(arguments!!.getString(PATH))
         adapter.setFileClickedListener(this)
         Log.i("TAG_PATH", arguments!!.getString(PATH))
         Log.i("TAG_CURRENT_DIR", currentDirectory)
@@ -150,8 +153,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
 
     override fun onResume() {
         super.onResume()
-        context?.registerReceiver(bReceiver, IntentFilter(ExFileBroadcastReceiver.DIR_UPDATE))
-        //if (actionModeDismiss == 1)
+        //context?.registerReceiver(bReceiver, IntentFilter(ExFileBroadcastReceiver.DIR_UPDATE))
         if (MainActivity.isInActionMode)
             adapter.clearSelection()
     }
@@ -161,7 +163,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
     * */
     override fun onPause() {
         super.onPause()
-        context?.unregisterReceiver(bReceiver)
+        //context?.unregisterReceiver(bReceiver)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -257,7 +259,7 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
     }
 
     override fun selectedItemsInActionMode(fileModel: FileModel, size: Int) {
-        if (0 == size ) {
+        if (0 == size) {
             //isActionMode = false
             adapter.clearSelection()
             listener!!.onActionModeDeActivated()
@@ -266,8 +268,11 @@ class ExFilesFragment : androidx.fragment.app.Fragment(), ExFileAdapter.OnFileCl
 
     }
 
-    private fun getFileModelList(path: String): List<FileModel> {
-        return viewModel.getFiles(path)
+    private fun getFileModelList(path: String) {
+        CoroutineScope(Dispatchers.Main).launch {
+            val items = viewModel.getFiles(path)
+            adapter.updateDirectory(items)
+        }
     }
 
     private fun shareImages(path: String) {
