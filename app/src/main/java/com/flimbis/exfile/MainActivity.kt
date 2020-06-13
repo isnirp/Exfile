@@ -150,8 +150,7 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
     override fun onDestroyActionMode(mode: ActionMode?) {
         isInActionMode = false
         actionMode = null
-        //selectedItems = mutableListOf<FileModel>()
-        //onBackPressed()
+        selectedItems = mutableListOf<FileModel>()
     }
     /*
     * contextual action bar ends
@@ -232,18 +231,16 @@ class MainActivity : BaseActivity(), ExFilesFragment.OnFileSelectedListener, Act
     override fun onActionModeActivated(fileModel: FileModel) {
         isInActionMode = true
         actionMode = startActionMode(this)
-        // this.mFileModel = fileModel
-        //selectedItems.add(fileModel)
+        selectedItems.add(fileModel)
     }
 
     override fun onActionModeDeActivated() {
         actionMode!!.finish()
-        selectedItems = mutableListOf<FileModel>()
     }
 
     override fun updateActionModeSelection(fileModel: FileModel, title: String) {
         actionMode?.title = title
-        //selectedItems.add(fileModel)
+        selectedItems.add(fileModel)
     }
 
     override fun onCreateFolder(name: String) {
